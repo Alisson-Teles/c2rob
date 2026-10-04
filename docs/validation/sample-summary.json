@@ -1,0 +1,19 @@
+{
+  "files": 150,
+  "preprocessing": "none; original .c files",
+  "arch": "stm32f1",
+  "before": {
+    "translation_success": 1,
+    "object_success": 0,
+    "ir_success": 0,
+    "verified_ir_success": 0
+  },
+  "after": {
+    "translation_success": 1,
+    "object_success": 0,
+    "ir_success": 0,
+    "verified_ir_success": 0
+  },
+  "new_translation_successes": [],
+  "lost_translation_successes": []
+}

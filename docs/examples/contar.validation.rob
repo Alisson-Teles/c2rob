@@ -1,0 +1,12 @@
+
+int32 contar(int32 n) {
+	i = int32(0);
+	while i < n {
+		i++;
+	}
+
+	return i;
+}
+
+
+int32 main() { return 0; }

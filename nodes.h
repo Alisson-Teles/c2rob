@@ -14,11 +14,46 @@ using namespace std;
 
 class Type;
 map<string, Type*> declared_types;
+map<string, string> declared_typedefs;
+
+string get_final_type_for(string type) {
+    auto it = declared_types.find(type);
+    if (it != declared_types.end()) {
+        return type;
+    } else if (declared_typedefs.contains(type))
+        return get_final_type_for(declared_typedefs[type]);
+    else
+        return type;
+}
+
+class Strings {
+public:
+    vector<string> strings;
+    
+    string getName() {
+        return strings.back();
+    }
+
+    string getType() {
+        string result;
+        for (size_t i = 0; i + 1 < strings.size(); ++i) {
+            if (!result.empty())
+                result += " ";
+            result += strings[i];
+        }
+        return result;
+    }
+};
 
 class Node {
 protected:
     vector<Node*> children;
     int lineno;
+    // Populated only by validation of native C while expressions.
+    bool hasCheckedExpression = false;
+    string checkedExpression;
+    bool sourceVolatile = false;
+    bool sourceStatic = false;
 
     string identation(int level) {
         string result;
@@ -44,7 +79,7 @@ public:
         return sb;
     }
     void append(Node *n) {
-        children.push_back(n);
+        if (n) children.push_back(n);
     }
     vector<Node*>& getChildren() {
         return children;
@@ -53,6 +88,14 @@ public:
     virtual const string getName() {
         return "";
     }
+    void setCheckedExpression(const string &s) {
+        checkedExpression = s;
+        hasCheckedExpression = true;
+    }
+    void markSourceVolatile() { sourceVolatile = true; }
+    bool isSourceVolatile() const { return sourceVolatile; }
+    void markSourceStatic() { sourceStatic = true; }
+    bool isSourceStatic() const { return sourceStatic; }
 };
 
 class Container : public Node {
@@ -88,6 +131,7 @@ public:
     }
 
     virtual string toStr(int il) override {
+        if (hasCheckedExpression) return checkedExpression;
         return to_string(value);
     }
 };
@@ -101,6 +145,7 @@ public:
     }
 
     virtual string toStr(int il) override {
+        if (hasCheckedExpression) return checkedExpression;
         return to_string(value);
     }
 };
@@ -114,8 +159,16 @@ public:
     }
 
     virtual string toStr(int il) override {
+        if (hasCheckedExpression) return checkedExpression;
         return name;
     }
+    const string &getText() const { return name; }
+};
+
+// Numeric tokens used to share Ident with names and string literals.
+class IntegerToken : public Ident {
+public:
+    IntegerToken(const string &text) : Ident(text) {}
 };
 
 class Return : public Node {
@@ -125,6 +178,7 @@ public:
     Return(Node *e) {
         expr = e;
     }
+    Node *getExpr() const { return expr; }
 
     virtual string toStr(int il) override {
         return identation(il) + "return " + expr->toStr(0) + ";\n";
@@ -137,6 +191,9 @@ protected:
     Node *localsIf = nullptr;
     Node *localsElse = nullptr;
 public:
+    Node *getCondition() const { return cmp; }
+    Node *getIfBody() const { return localsIf; }
+    Node *getElseBody() const { return localsElse; }
     IfStmt(Node *_cmp, Node *_if) {
         cmp = _cmp;
         localsIf = _if;
@@ -163,9 +220,9 @@ public:
         string result = "\n" + identation(il);
         result += "if ";
         
-        result += cmp->toStr(0);
+        result += hasCheckedExpression ? checkedExpression : cmp->toStr(0);
         // if (a) {...} -> if (a != 0) {...}
-        if (cmp->getChildren().size() == 0)
+        if (!hasCheckedExpression && cmp->getChildren().size() == 0)
             result += " != 0";
 
         result += " {\n";
@@ -194,8 +251,11 @@ public:
     }
 
     virtual string toStr(int il) override {
+        if (hasCheckedExpression) return checkedExpression;
         return name + "[" + expr->toStr(il)+ "]";
     }
+    const string &getArrayName() const { return name; }
+    Node *getIndex() const { return expr; }
 };
 
 class LoadArrayField : public Node {
@@ -214,6 +274,24 @@ public:
         result += identation(il) + "aux." + field;
         return result;
     }
+};
+
+class LoadField : public Node {
+protected:
+    string name, field;
+public:
+    LoadField(const string _name, const string _field) {
+        name = _name;
+        field = _field;
+    }
+
+    virtual string toStr(int il) override {
+        if (hasCheckedExpression) return checkedExpression;
+        string result = identation(il) + name + "." + field;
+        return result;
+    }
+    const string &getBaseName() const { return name; }
+    const string &getFieldName() const { return field; }
 };
 
 class VariableDecl : public Node {
@@ -256,21 +334,36 @@ public:
     const string getName() override {
         return name;
     }
+    const string &getTypeName() const { return type; }
+    Node *getValue() const { return value; }
+    Node *getIndex() const { return idx; }
 
     static string convertTypeToRob(string type) {
+        std::regex pointertypes("[a-z0-9]+ ?\\*");
+        if (regex_match(type, pointertypes)) {
+            string tt = convertTypeToRob(type.substr(0, type.length()-1));
+            return tt + "[]";
+        }
+
+        type = get_final_type_for(type);
+
         std::regex inttypes("u?int[0-9]+_t");
         if (regex_match(type, inttypes))
             return type.substr(0, type.length()-2);
         
-        std::regex pointertypes("[a-z0-9]+ ?\\*");
-        if (regex_match(type, pointertypes))
-            return type.substr(0, type.length()-1) + "[]";
-
         if (type == "int" || type == "signed")
             return "int32";
 
+        if (type == "unsigned long") return "uint32";
+
         if (type == "long")
             return "int64";
+
+        // angha bench scalar types
+        if (type == "intptr_t") return "int32";
+        if (type == "uintptr_t") return "uint32";
+        if (type == "scalar_t__") return "int32";
+        if (type == "size_t") return "uint32";
 
         if (type == "unsigned")
             return "uint32";
@@ -357,11 +450,16 @@ class FuncArg : public Node {
 protected:
     string name;
     string type;
+    bool sourcePointer;
 public:
-    FuncArg(const string t, const string n) {
+    FuncArg(const string t, const string n, bool pointer = false) {
         name = n;
         type = t;
+        sourcePointer = pointer;
     }
+    const string getName() override { return name; }
+    const string &getTypeName() const { return type; }
+    bool isSourcePointer() const { return sourcePointer; }
 
     virtual string toStr(int il) override {
         string newType = VariableDecl::convertTypeToRob(type);
@@ -380,6 +478,8 @@ public:
         op = _op;
         value = _value;
     }
+    Node *getLeft() const { return left; }
+    Node *getValue() const { return value; }
 
     virtual string toStr(int il) override {
         string result = identation(il);
@@ -407,7 +507,7 @@ public:
 
     virtual string toStr(int il) override {
         string result = "\ntype ";
-        result += name + "{\n";
+        result += name + " {\n";
         result += fields->toStr(il+1);
         result += "}\n\n";
         return result;
@@ -429,6 +529,9 @@ public:
         name = _name;
         initvalues = _initvalues;
     }
+    const string getName() override { return name; }
+    const string &getTypeName() const { return type; }
+    Node *getValues() const { return initvalues; }
 
     virtual string toStr(int il) override {
         string result = identation(il);
@@ -471,7 +574,14 @@ protected:
     string type;
     Node *args = nullptr;
     Node *commands = nullptr;
+    bool pointerResult = false;
 public:
+    const string getName() override { return name; }
+    const string &getTypeName() const { return type; }
+    Node *getArgs() const { return args; }
+    Node *getBody() const { return commands; }
+    void markPointerResult() { pointerResult = true; }
+    bool hasPointerResult() const { return pointerResult; }
     Function(const string t, const string n, Node *a) {
         name = n;
         type = VariableDecl::convertTypeToRob(t);
@@ -521,6 +631,8 @@ protected:
     Node *args = nullptr;
     bool inExpr = true;
 public:
+    const string getName() override { return name; }
+    Node *getArgs() const { return args; }
     FunctionCall(const string n) {
         name = n;
     }
@@ -535,6 +647,8 @@ public:
     }
 
     virtual string toStr(int il) override {
+        if (hasCheckedExpression)
+            return (inExpr ? "" : identation(il)) + checkedExpression + (inExpr ? "" : ";\n");
         string result;
         
         if (!inExpr)
@@ -558,18 +672,23 @@ class While : public Node {
 protected:
     Node *logicexpr = nullptr;
     Node *commands = nullptr;
+    bool nativeCWhile;
 public:
-    While(Node *expr, Node *comm) {
+    While(Node *expr, Node *comm, bool native = false) {
         logicexpr = expr;
         commands = comm;
+        nativeCWhile = native;
     }
+    Node *getCondition() const { return logicexpr; }
+    Node *getBody() const { return commands; }
+    bool isNativeCWhile() const { return nativeCWhile; }
 
     virtual string toStr(int il) override {
         string result = identation(il);
         result += "while ";
-        result += logicexpr->toStr(0);
+        result += hasCheckedExpression ? checkedExpression : logicexpr->toStr(0);
         result += " {\n";
-        result += commands->toStr(il);
+        if (commands) result += commands->toStr(il);
         result += identation(il);
         result += "}\n\n";
         return result;
@@ -582,6 +701,8 @@ protected:
     string operation;
 
 public:
+    Node *getValue() const { return value; }
+    const string &getOperation() const { return operation; }
     Unary(Node *v, string op) {
        value = v;
        operation = op;
@@ -589,6 +710,7 @@ public:
     }
 
     virtual string toStr(int il) override {
+        if (hasCheckedExpression) return checkedExpression;
         if (operation == "!" || operation == "-" || operation == "~")
             return operation + value->toStr(0);
         else
@@ -614,6 +736,9 @@ protected:
     string operation;
 
 public:
+    Node *getLeft() const { return value1; }
+    Node *getRight() const { return value2; }
+    const string &getOperation() const { return operation; }
     BinaryOp(Node *v1, Node *v2, string op) {
        value1 = v1;
        value2 = v2;
@@ -623,6 +748,7 @@ public:
     }
 
     virtual string toStr(int il) override {
+        if (hasCheckedExpression) return checkedExpression;
         string v1 = value1->toStr(0);
         string v2 = value2->toStr(0);
         if (operation == "and" || operation == "or") {
@@ -661,7 +787,9 @@ private:
 public:
     Parenthesis(Node *n) : node(n) {
     }
+    Node *getValue() const { return node; }
     virtual string toStr(int il) override {
+        if (hasCheckedExpression) return checkedExpression;
         return "(" + node->toStr(0) + ")";
     }
 };

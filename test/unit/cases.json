@@ -1,0 +1,320 @@
+{
+  "for_regression": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "comparison": {
+    "entry": "contar",
+    "inputs": [
+      -1,
+      0,
+      1,
+      5
+    ],
+    "contains": [
+      "while i < n {"
+    ]
+  },
+  "single": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "empty_semicolon": {
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "contains": [
+      "while n < 0 {"
+    ]
+  },
+  "empty_braces": {
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "contains": [
+      "while n < 0 {"
+    ]
+  },
+  "integer": {
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "contains": [
+      "while n != 0 {"
+    ]
+  },
+  "integer_parenthesized": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "arithmetic": {
+    "inputs": [
+      1,
+      2,
+      5
+    ]
+  },
+  "false_condition": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "one_iteration": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "nested": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "mixed": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "for_outer": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "dangling_else": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "logical_integer": {
+    "inputs": [
+      1,
+      2,
+      5
+    ]
+  },
+  "logical_not": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "bitwise_precedence": {
+    "inputs": [
+      0,
+      1,
+      2,
+      3,
+      5
+    ]
+  },
+  "parenthesis_precedence": {
+    "inputs": [
+      0,
+      1,
+      2,
+      5
+    ]
+  },
+  "short_circuit": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "short_circuit_or": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "call_once": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "array_integer": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "local_shadow": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "postfix": {
+    "diagnostic": "pós-incremento/decremento"
+  },
+  "postfix_comparison": {
+    "diagnostic": "pós-incremento/decremento"
+  },
+  "postfix_argument": {
+    "diagnostic": "pós-incremento/decremento"
+  },
+  "pointer": {
+    "diagnostic": "ponteiro"
+  },
+  "qualified_pointer": {
+    "diagnostic": "ponteiro"
+  },
+  "floating": {
+    "diagnostic": "ponto flutuante"
+  },
+  "floating_comparison": {
+    "diagnostic": "ponto flutuante"
+  },
+  "unknown_condition": {
+    "diagnostic": "tipo desconhecido"
+  },
+  "break": {
+    "diagnostic": "não suportado: break"
+  },
+  "continue": {
+    "diagnostic": "não suportado: continue"
+  },
+  "do_while": {
+    "diagnostic": "não suportado: do"
+  },
+  "switch": {
+    "diagnostic": "não suportado: switch"
+  },
+  "goto": {
+    "diagnostic": "não suportado: goto"
+  },
+  "unknown_symbol": {
+    "diagnostic": "Símbolo não reconhecido"
+  },
+  "for_single_regression": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "for_logical_regression": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "negated_integer": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "unsigned_integer": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "bitwise_grouped": {
+    "inputs": [
+      0,
+      1,
+      2,
+      4,
+      5
+    ]
+  },
+  "boolean_arithmetic": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "body_local": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "for_integer_nested": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "body_postfix_value": {
+    "diagnostic": "pós-incremento/decremento"
+  },
+  "body_unknown_call": {
+    "diagnostic": "tipo desconhecido"
+  },
+  "pointer_comparison": {
+    "diagnostic": "ponteiro"
+  },
+  "pointer_return": {
+    "diagnostic": "ponteiro"
+  },
+  "volatile_condition": {
+    "diagnostic": "acesso volatile"
+  },
+  "volatile_body": {
+    "diagnostic": "acesso volatile"
+  },
+  "pointer_parameter_call": {
+    "diagnostic": "ponteiro"
+  },
+  "struct_field": {
+    "inputs": [
+      0,
+      1,
+      5
+    ]
+  },
+  "body_struct_array": {
+    "diagnostic": "vetor de estruturas"
+  },
+  "static_body": {
+    "diagnostic": "local static"
+  },
+  "static_condition": {
+    "diagnostic": "local static"
+  },
+  "partial_struct_body": {
+    "diagnostic": "inicialização parcial"
+  }
+}

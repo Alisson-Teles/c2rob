@@ -1,0 +1,33 @@
+{
+  "tests": 57,
+  "negative_diagnostics": 25,
+  "arm_objects": 32,
+  "verified_ir": 32,
+  "host_comparisons": 32,
+  "host_function_calls": 102,
+  "robcmp_build_type": "RelWithDebInfo",
+  "llvm": "19.1.1",
+  "target": "stm32f1",
+  "test_optimization": "-O0",
+  "main_adapter": true,
+  "audit": {
+    "robcmp_files": 814,
+    "robcmp_changed_files": [],
+    "c2rob_changed_existing_files": [
+      "Makefile",
+      "c2rob.l",
+      "c2rob.y",
+      "nodes.h",
+      "lex.yy.c",
+      "c2rob.tab.h",
+      "c2rob.tab.c",
+      "c2rob"
+    ],
+    "c2rob_preserved_existing_files": 108,
+    "original_archives_sha256": {
+      "01-c2rob.zip": "52b3acca9d1cc03adb8ec3ad6cade5988632294c137cf84d18271b3d102ae08c",
+      "02-robcmp.zip": "0256288731ee2ef949e8c6be9a9129ea93a050a3625bb6c343882cbf24bb41dd",
+      "03-amostra_c2rob.zip": "a8eca47d97331f2c9c646d44dd6105b41a6cce354cdf71a47b9f9a1208b945da"
+    }
+  }
+}

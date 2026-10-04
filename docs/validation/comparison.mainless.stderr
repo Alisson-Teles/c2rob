@@ -1,0 +1,9 @@
+Error: signal 11:
+/workspace/scratch/e09376208dcf/validation-build-robcmp/robcmp(+0xa9d7e)[0x55eb0f11ad7e]
+/lib/x86_64-linux-gnu/libc.so.6(+0x45330)[0x7f5cfc2c7330]
+/workspace/scratch/e09376208dcf/validation-build-robcmp/robcmp(+0x92d4f)[0x55eb0f103d4f]
+/workspace/scratch/e09376208dcf/validation-build-robcmp/robcmp(+0x93acf)[0x55eb0f104acf]
+/workspace/scratch/e09376208dcf/validation-build-robcmp/robcmp(+0x299b3)[0x55eb0f09a9b3]
+/lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca)[0x7f5cfc2ac1ca]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b)[0x7f5cfc2ac28b]
+/workspace/scratch/e09376208dcf/validation-build-robcmp/robcmp(+0x29b85)[0x55eb0f09ab85]

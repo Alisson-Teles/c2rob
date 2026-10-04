@@ -1,0 +1,93 @@
+make: Entering directory '/workspace/scratch/e09376208dcf/c2rob/test/unit'
+python3 run_tests.py --c2rob "../../c2rob" --out "out-integration" --robcmp "/workspace/scratch/e09376208dcf/validation-build-robcmp/robcmp" --opt "/workspace/scratch/e09376208dcf/toolchain/usr/lib/llvm-19/bin/opt" --cc "cc" --arch "stm32f1"
+[PASS] for_regression: C -> ROB
+[PASS] for_regression: ARM object / IR pass / execution pass
+[PASS] comparison: C -> ROB
+[PASS] comparison: ARM object / IR pass / execution pass
+[PASS] single: C -> ROB
+[PASS] single: ARM object / IR pass / execution pass
+[PASS] empty_semicolon: C -> ROB
+[PASS] empty_semicolon: ARM object / IR pass / execution pass
+[PASS] empty_braces: C -> ROB
+[PASS] empty_braces: ARM object / IR pass / execution pass
+[PASS] integer: C -> ROB
+[PASS] integer: ARM object / IR pass / execution pass
+[PASS] integer_parenthesized: C -> ROB
+[PASS] integer_parenthesized: ARM object / IR pass / execution pass
+[PASS] arithmetic: C -> ROB
+[PASS] arithmetic: ARM object / IR pass / execution pass
+[PASS] false_condition: C -> ROB
+[PASS] false_condition: ARM object / IR pass / execution pass
+[PASS] one_iteration: C -> ROB
+[PASS] one_iteration: ARM object / IR pass / execution pass
+[PASS] nested: C -> ROB
+[PASS] nested: ARM object / IR pass / execution pass
+[PASS] mixed: C -> ROB
+[PASS] mixed: ARM object / IR pass / execution pass
+[PASS] for_outer: C -> ROB
+[PASS] for_outer: ARM object / IR pass / execution pass
+[PASS] dangling_else: C -> ROB
+[PASS] dangling_else: ARM object / IR pass / execution pass
+[PASS] logical_integer: C -> ROB
+[PASS] logical_integer: ARM object / IR pass / execution pass
+[PASS] logical_not: C -> ROB
+[PASS] logical_not: ARM object / IR pass / execution pass
+[PASS] bitwise_precedence: C -> ROB
+[PASS] bitwise_precedence: ARM object / IR pass / execution pass
+[PASS] parenthesis_precedence: C -> ROB
+[PASS] parenthesis_precedence: ARM object / IR pass / execution pass
+[PASS] short_circuit: C -> ROB
+[PASS] short_circuit: ARM object / IR pass / execution pass
+[PASS] short_circuit_or: C -> ROB
+[PASS] short_circuit_or: ARM object / IR pass / execution pass
+[PASS] call_once: C -> ROB
+[PASS] call_once: ARM object / IR pass / execution pass
+[PASS] array_integer: C -> ROB
+[PASS] array_integer: ARM object / IR pass / execution pass
+[PASS] local_shadow: C -> ROB
+[PASS] local_shadow: ARM object / IR pass / execution pass
+[PASS] postfix: expected diagnostic
+[PASS] postfix_comparison: expected diagnostic
+[PASS] postfix_argument: expected diagnostic
+[PASS] pointer: expected diagnostic
+[PASS] qualified_pointer: expected diagnostic
+[PASS] floating: expected diagnostic
+[PASS] floating_comparison: expected diagnostic
+[PASS] unknown_condition: expected diagnostic
+[PASS] break: expected diagnostic
+[PASS] continue: expected diagnostic
+[PASS] do_while: expected diagnostic
+[PASS] switch: expected diagnostic
+[PASS] goto: expected diagnostic
+[PASS] unknown_symbol: expected diagnostic
+[PASS] for_single_regression: C -> ROB
+[PASS] for_single_regression: ARM object / IR pass / execution pass
+[PASS] for_logical_regression: C -> ROB
+[PASS] for_logical_regression: ARM object / IR pass / execution pass
+[PASS] negated_integer: C -> ROB
+[PASS] negated_integer: ARM object / IR pass / execution pass
+[PASS] unsigned_integer: C -> ROB
+[PASS] unsigned_integer: ARM object / IR pass / execution pass
+[PASS] bitwise_grouped: C -> ROB
+[PASS] bitwise_grouped: ARM object / IR pass / execution pass
+[PASS] boolean_arithmetic: C -> ROB
+[PASS] boolean_arithmetic: ARM object / IR pass / execution pass
+[PASS] body_local: C -> ROB
+[PASS] body_local: ARM object / IR pass / execution pass
+[PASS] for_integer_nested: C -> ROB
+[PASS] for_integer_nested: ARM object / IR pass / execution pass
+[PASS] body_postfix_value: expected diagnostic
+[PASS] body_unknown_call: expected diagnostic
+[PASS] pointer_comparison: expected diagnostic
+[PASS] pointer_return: expected diagnostic
+[PASS] volatile_condition: expected diagnostic
+[PASS] volatile_body: expected diagnostic
+[PASS] pointer_parameter_call: expected diagnostic
+[PASS] struct_field: C -> ROB
+[PASS] struct_field: ARM object / IR pass / execution pass
+[PASS] body_struct_array: expected diagnostic
+[PASS] static_body: expected diagnostic
+[PASS] static_condition: expected diagnostic
+[PASS] partial_struct_body: expected diagnostic
+57 passed, 0 failed; detailed results: /workspace/scratch/e09376208dcf/c2rob/test/unit/out-integration/results.json
+make: Leaving directory '/workspace/scratch/e09376208dcf/c2rob/test/unit'

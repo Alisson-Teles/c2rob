@@ -2,14 +2,17 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 
 char *build_file_name;
 bool force_print_tree = false;
 class Node;
+class Strings;
 
 #include "c2rob.tab.h"
 
 int yyerror(const char *s);
+extern int errorcount;
 int yycolno = 0;
 
 #define YY_USER_ACTION  yycolno += yyleng;
@@ -30,6 +33,8 @@ int yycolno = 0;
 <COMMENT>"*/"			{ BEGIN(INITIAL); }
 
 "//".*\n { /* ignora */ }
+#define.*\n { /* ignora */ }
+__attribute__\(\(used\)\) { /* TODO: make generic or map supported robcmp attributes */ }
 
 #include[\t ]*[<"].*[>"] {
     yylval.str = strndup(yytext, yyleng); 
@@ -39,12 +44,24 @@ int yycolno = 0;
 "if"     { return TOK_IF; }
 "else"   { return TOK_ELSE; }
 "for"    { return TOK_FOR; }
+"while"  { return TOK_WHILE; }
+"do"|"switch"|"goto"|"break"|"continue"|"case"|"default" {
+    std::string message = std::string("comando C não suportado: ") + yytext;
+    yyerror(message.c_str());
+    return TOK_UNSUPPORTED;
+}
 "return" { return TOK_RETURN; }
 "struct" { return TOK_STRUCT; }
+"typedef" { return TOK_TYPEDEF; }
 
 "static"    { return TOK_STATIC; }
 "volatile"  { return TOK_VOLATILE; }
-"const"     { return TOK_CONST; }
+"inline"    { /* ignora */ }
+"const"     { /* ignora */ }
+"NULL"      { 
+    yylval.str = "0";
+    return TOK_INTEGER_LITERAL;
+}
 
 ">"  { yylval.str = ">";  return TOK_CMP_RELAT; }
 "<"  { yylval.str = "<";  return TOK_CMP_RELAT; }
@@ -78,6 +95,7 @@ int yycolno = 0;
 "^=" { yylval.str = "^="; return TOK_ATTRIBUTION; }
 "|=" { yylval.str = "|="; return TOK_ATTRIBUTION; }
 "&=" { yylval.str = "&="; return TOK_ATTRIBUTION; }
+"->" { return '.'; }
 
 "*" { return '*'; } // multiple meanings
 
@@ -106,14 +124,14 @@ int yycolno = 0;
     while (yytext[yyleng-1] == 'L')
         yyleng--;
     yylval.str = strndup(yytext, yyleng);
-    return TOK_STRING;
+    return TOK_INTEGER_LITERAL;
 }
 
 "0x"[0-9a-fA-F]+U*L* {
     while (yytext[yyleng-1] == 'L')
         yyleng--;
     yylval.str = strndup(yytext, yyleng);
-	return TOK_STRING;
+	return TOK_INTEGER_LITERAL;
 }
 
 \"([^\\\"]|\\.)*\"		{ yylval.str = strndup(yytext, yyleng);
@@ -124,6 +142,8 @@ int yycolno = 0;
 
 . { 
     fprintf(stderr, "%s:%d:%d: Símbolo não reconhecido %c\n", build_file_name, yylineno, yycolno, yytext[0]);
+    errorcount++;
+    return yytext[0];
   }
 
 
@@ -146,16 +166,24 @@ int yyerror(const char *s) {
 int main(int argc, char *argv[]) {
     
     if (argc <= 1) {
-        fprintf(stderr, "Sintaxe: %s nome_do_programa\n",
+        fprintf(stderr, "Sintaxe: %s [-f] [-d] nome_do_programa\n",
             argv[0]);
         return 1;
     }
 
     int build_file_id = 1;
+    int argid = 1;
 
-    if (strcmp(argv[1], "-f") == 0) {
+    if (strcmp(argv[argid], "-f") == 0) {
         force_print_tree = true;
         build_file_id++;
+        argid++;
+    }
+
+    if (strcmp(argv[argid], "-d") == 0) {
+        yydebug = 1;
+        build_file_id++;
+        argid++;
     }
 
     build_file_name = argv[build_file_id];
@@ -165,14 +193,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    //yydebug = 1;
-    yyparse();
+    int parse_status = yyparse();
 
     if (yyin)
         fclose(yyin);
     
-    return errorcount;
+    return (parse_status != 0 || errorcount != 0) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
-
-
-

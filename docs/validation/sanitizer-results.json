@@ -1,0 +1,458 @@
+[
+  {
+    "name": "for_regression",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "comparison",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "single",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "empty_semicolon",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "empty_braces",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "integer",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "integer_parenthesized",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "arithmetic",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "false_condition",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "one_iteration",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "nested",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "mixed",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "for_outer",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "dangling_else",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "logical_integer",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "logical_not",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "bitwise_precedence",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "parenthesis_precedence",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "short_circuit",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "short_circuit_or",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "call_once",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "array_integer",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "local_shadow",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "postfix",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "postfix_comparison",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "postfix_argument",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pointer",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "qualified_pointer",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "floating",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "floating_comparison",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "unknown_condition",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "break",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "continue",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "do_while",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "switch",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "goto",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "unknown_symbol",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "for_single_regression",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "for_logical_regression",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "negated_integer",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "unsigned_integer",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "bitwise_grouped",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "boolean_arithmetic",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "body_local",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "for_integer_nested",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "body_postfix_value",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "body_unknown_call",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pointer_comparison",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pointer_return",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "volatile_condition",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "volatile_body",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pointer_parameter_call",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "struct_field",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "body_struct_array",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "static_body",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "static_condition",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "partial_struct_body",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  }
+]
