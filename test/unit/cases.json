@@ -177,6 +177,203 @@
       5
     ]
   },
+  "no_params_main_empty": {
+    "has_main": true,
+    "contains": [
+      "int32 main()"
+    ]
+  },
+  "no_params_decl_empty": {
+    "contains": [
+      "int32 obterValor();",
+      "int32 obterValor()"
+    ],
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "expected": [
+      10,
+      11,
+      15
+    ]
+  },
+  "no_params_parameters": {
+    "contains": [
+      "int32 somar(int32 a, int32 b)"
+    ],
+    "entry": "somar",
+    "calls": [
+      [
+        2,
+        3
+      ],
+      [
+        -2,
+        4
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "expected": [
+      5,
+      2,
+      0
+    ]
+  },
+  "no_params_leading_comma": {
+    "diagnostic": "syntax error"
+  },
+  "no_params_main_void": {
+    "has_main": true,
+    "contains": [
+      "int32 main()"
+    ]
+  },
+  "no_params_void_marker": {
+    "contains": [
+      "void iniciar()"
+    ],
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "expected": [
+      0,
+      1,
+      5
+    ]
+  },
+  "no_params_decl_void": {
+    "contains": [
+      "int32 obterValor();",
+      "int32 obterValor()"
+    ],
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "expected": [
+      10,
+      11,
+      15
+    ]
+  },
+  "no_params_empty_body": {
+    "has_main": true,
+    "contains": [
+      "void iniciar() {\n}",
+      "void finalizar() {\n}"
+    ]
+  },
+  "no_params_void_function": {
+    "contains": [
+      "void iniciar()",
+      "iniciar();"
+    ],
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "expected": [
+      1,
+      2,
+      6
+    ]
+  },
+  "no_params_return": {
+    "contains": [
+      "int32 obterValor()",
+      "return 10;"
+    ],
+    "entry": "obterValor",
+    "calls": [
+      []
+    ],
+    "expected": [
+      10
+    ]
+  },
+  "no_params_call": {
+    "has_main": true,
+    "contains": [
+      "int32 obterValor()",
+      "return obterValor();"
+    ],
+    "exit_code": 10
+  },
+  "no_params_void_decl": {
+    "has_main": true,
+    "contains": [
+      "void iniciar();",
+      "void iniciar() {"
+    ]
+  },
+  "no_params_while": {
+    "contains": [
+      "int32 teste()",
+      "while n != 0 {"
+    ],
+    "calls": [
+      []
+    ],
+    "expected": [
+      0
+    ]
+  },
+  "no_params_while_call": {
+    "contains": [
+      "int32 proximo()",
+      "while proximo() != 0 {"
+    ],
+    "calls": [
+      []
+    ],
+    "expected": [
+      43
+    ]
+  },
+  "no_params_for": {
+    "contains": [
+      "int32 teste()",
+      "while i < 4 {"
+    ],
+    "calls": [
+      []
+    ],
+    "expected": [
+      6
+    ]
+  },
+  "no_params_trailing_comma": {
+    "diagnostic": "syntax error"
+  },
+  "no_params_return_semicolon": {
+    "diagnostic": "syntax error"
+  },
+  "no_params_unnamed_regression": {
+    "contains": [
+      "int32 somar(int32 _un0, int32 _un1);"
+    ]
+  },
+  "no_params_void_first": {
+    "diagnostic": "void must be the only item"
+  },
+  "no_params_void_last": {
+    "diagnostic": "void must be the only item"
+  },
+  "no_params_void_repeated": {
+    "diagnostic": "void must be the only item"
+  },
+  "no_params_void_named": {
+    "diagnostic": "void parameter cannot have a name"
+  },
   "postfix": {
     "diagnostic": "pós-incremento/decremento"
   },

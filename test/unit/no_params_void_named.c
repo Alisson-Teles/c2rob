@@ -1,0 +1,1 @@
+int teste(void valor) { return 0; }

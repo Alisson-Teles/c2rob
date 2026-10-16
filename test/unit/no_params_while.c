@@ -1,0 +1,9 @@
+int teste(void) {
+    int n = 3;
+
+    while (n) {
+        n--;
+    }
+
+    return n;
+}

@@ -403,6 +403,8 @@ public:
         arrayInitType = VariableDecl::convertTypeToRob(type);
     }
     virtual string toStr(int il) override {
+        if(children.empty())
+            return "";
         string sb;
         if (arrayInitType != "")
              sb += arrayInitType + "(" + children[0]->toStr(0) + ")";

@@ -1,0 +1,10 @@
+#include <stdio.h>
+int main(void){
+    int a, b;
+    scanf("%d%d", &a, &b);
+    if((a + b) % 3 == 0){
+        printf("Possible");
+    }else{
+        printf("Impossible");
+    }
+}

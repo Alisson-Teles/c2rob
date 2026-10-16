@@ -11,9 +11,20 @@ ROOT = Path(__file__).resolve().parent
 
 
 def run(command, timeout=10):
-    return subprocess.run(command, capture_output=True, text=True, timeout=timeout)
+    result = subprocess.run(
+        command,
+        capture_output=True,
+        timeout=timeout
+    )
 
+    result.stdout = result.stdout.decode("utf-8")
 
+    result.stderr = result.stderr.decode(
+        "utf-8",
+        errors="backslashreplace"
+    )
+
+    return result
 def require(result, command):
     if result.returncode:
         raise AssertionError(f"{command}: exit {result.returncode}\n{result.stderr}")
@@ -80,11 +91,18 @@ def main():
             if not args.robcmp:
                 row.update(object='skipped', ir='skipped', execution='skipped')
             else:
-                # Current Robcmp dereferences a missing main in Program::generate.
-                # Keep the exact translation in .rob; add an entry point only in this adapter.
+                # Supply an entry point only for fixtures without main.
                 validation_rob = out / f'{name}.validation.rob'
-                validation_rob.write_text(translated.stdout + '\nint32 main() { return 0; }\n')
-                row['validation_adapter'] = 'main entry point added to a separate .validation.rob'
+                has_main = spec.get('has_main', False)
+                adapter = '' if has_main else '\nint32 main() { return 0; }\n'
+
+                validation_rob.write_text(translated.stdout + adapter)
+
+                row['validation_adapter'] = (
+                    'none; fixture already defines main'
+                    if has_main else
+                    'main entry point added to a separate .validation.rob'
+                )
                 obj = out / f'{name}.arm.o'
                 obj.unlink(missing_ok=True)
                 row['object'] = 'fail'
@@ -101,33 +119,138 @@ def main():
                     row['ir'] = 'pass'
                 else:
                     row['ir'] = 'skipped_missing_opt'
-                if cc and objcopy and spec.get('inputs'):
+                calls = spec.get(
+                    'calls',
+                    [[n] for n in spec.get('inputs', [])]
+                )
+
+                if cc and (has_main or (objcopy and calls)):
                     row['execution'] = 'fail'
+
                     host = out / f'{name}.host.o'
                     host.unlink(missing_ok=True)
-                    require(run([compiler, '-O0', '-o', str(host), str(validation_rob)]), 'ROB -> host object')
-                    require(run([objcopy, '--redefine-sym', 'main=rob_validation_main', str(host)]), 'Rename adapter entry point in host object')
-                    entry = spec.get('entry', 'teste')
-                    calls = ''.join(f'printf("%d\\n", {entry}({n}));\n' for n in spec['inputs'])
-                    harness = out / f'{name}.driver.c'
-                    harness.write_text('#include <stdio.h>\n#ifdef ROB_VALIDATION\nextern int rob_validation_main(void);\n#endif\n'
-                                       + f'extern int {entry}(int);\nint main(void) {{\n'
-                                       + '#ifdef ROB_VALIDATION\nrob_validation_main();\n#endif\n'
-                                       + calls + 'return 0;\n}\n')
+
+                    require(
+                        run([
+                            compiler, '-O0', '-o',
+                            str(host), str(validation_rob)
+                        ]),
+                        'ROB -> host object'
+                    )
+
                     original_exe = out / f'{name}.c.exe'
                     rob_exe = out / f'{name}.rob.exe'
-                    require(run([cc, '-std=c11', '-O0', str(source), str(harness), '-o', str(original_exe)]), 'Build original C')
-                    require(run([cc, '-DROB_VALIDATION', '-no-pie', str(host), str(harness), '-o', str(rob_exe)]), 'Link ROB host object')
+
+                    if has_main:
+                        require(
+                            run([
+                                cc, '-std=c11', '-O0',
+                                str(source), '-o', str(original_exe)
+                            ]),
+                            'Build original C program'
+                        )
+
+                        require(
+                            run([
+                                cc, '-no-pie',
+                                str(host), '-o', str(rob_exe)
+                            ]),
+                            'Link ROB program'
+                        )
+
+                    else:
+                        require(
+                            run([
+                                objcopy, '--redefine-sym',
+                                'main=rob_validation_main', str(host)
+                            ]),
+                            'Rename adapter entry point in host object'
+                        )
+
+                        entry = spec.get('entry', 'teste')
+                        arity = len(calls[0])
+
+                        assert all(
+                            len(call) == arity for call in calls
+                        ), 'Inconsistent test call arity'
+
+                        parameters = ', '.join(['int'] * arity) or 'void'
+
+                        statements = ''.join(
+                            f'printf("%d\\n", {entry}({", ".join(map(str, call))}));\n'
+                            for call in calls
+                        )
+
+                        harness = out / f'{name}.driver.c'
+                        harness.write_text(
+                            '#include <stdio.h>\n'
+                            '#ifdef ROB_VALIDATION\n'
+                            'extern int rob_validation_main(void);\n'
+                            '#endif\n'
+                            + f'extern int {entry}({parameters});\n'
+                            + 'int main(void) {\n'
+                            + '#ifdef ROB_VALIDATION\n'
+                            + 'rob_validation_main();\n'
+                            + '#endif\n'
+                            + statements
+                            + 'return 0;\n}\n'
+                        )
+
+                        require(
+                            run([
+                                cc, '-std=c11', '-O0',
+                                str(source), str(harness),
+                                '-o', str(original_exe)
+                            ]),
+                            'Build original C'
+                        )
+
+                        require(
+                            run([
+                                cc, '-DROB_VALIDATION', '-no-pie',
+                                str(host), str(harness),
+                                '-o', str(rob_exe)
+                            ]),
+                            'Link ROB host object'
+                        )
+
                     original = run([str(original_exe)])
                     emitted = run([str(rob_exe)])
-                    require(original, 'Run C')
-                    require(emitted, 'Run ROB')
-                    assert original.stdout == emitted.stdout, f'C {original.stdout!r} != ROB {emitted.stdout!r}'
+
+                    expected_exit = spec.get('exit_code', 0)
+
+                    assert original.returncode == expected_exit, (
+                        f'C exit {original.returncode} != {expected_exit}'
+                    )
+
+                    assert emitted.returncode == expected_exit, (
+                        f'ROB exit {emitted.returncode} != {expected_exit}'
+                    )
+
+                    assert original.stdout == emitted.stdout, (
+                        f'C {original.stdout!r} != ROB {emitted.stdout!r}'
+                    )
+
+                    if 'expected' in spec:
+                        expected = ''.join(
+                            f'{value}\n' for value in spec['expected']
+                        )
+
+                        assert emitted.stdout == expected, (
+                            f'ROB {emitted.stdout!r} != expected {expected!r}'
+                        )
+
                     row['execution'] = 'pass'
                     row['values'] = emitted.stdout.splitlines()
                     row['c_values'] = original.stdout.splitlines()
+                    row['exit_code'] = emitted.returncode
+
                 else:
-                    row['execution'] = 'skipped_missing_cc_or_objcopy_or_inputs'
+                    row['execution'] = (
+                        'skipped_no_calls'
+                        if not has_main and not calls else
+                        'skipped_missing_cc_or_objcopy'
+                    )
                 print(f'[PASS] {name}: ARM object / IR {row["ir"]} / execution {row["execution"]}')
         except (AssertionError, subprocess.TimeoutExpired, OSError) as exc:
             if row['translation'] == 'pending':

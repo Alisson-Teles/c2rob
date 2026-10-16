@@ -39,7 +39,7 @@ extern bool force_print_tree;
 %type<node> array_values array_values_decls array_values_decl struct_values_decl
 %type<node> locals local scalar_decl scalar_init_decl attribution
 %type<node> scalar_or_array typedef_decl
-%type<node> func_arg func_args func_decl func_impl function_call func_call_args
+%type<node> func_arg func_args optional_func_args func_decl func_impl function_call func_call_args
 %type<node> ifstmt elseblock forstmt whilestmt whilebody optional_locals returnstmt include
 %type<node> struct_decl struct_field struct_fields
 %type<node> qualifiers qualifier
@@ -178,25 +178,45 @@ struct_field : TOK_IDENT[type] TOK_IDENT[name] ':' TOK_INTEGER_LITERAL[bitfield]
     $$ = new VariableDecl($type, $name, atoi($bitfield));
 }
 
-func_decl : TOK_IDENT[type] TOK_IDENT[name] '(' func_args ')' {
-    $$ = new Function($type, $name, $func_args);
+func_decl : TOK_IDENT[type] TOK_IDENT[name] '(' optional_func_args ')' {
+    $$ = new Function($type, $name, $optional_func_args);
 }
 
-func_decl : TOK_IDENT[type] '*' TOK_IDENT[name] '(' func_args ')' {
-    $$ = new Function($type, $name, $func_args);
+func_decl : TOK_IDENT[type] '*' TOK_IDENT[name] '(' optional_func_args ')' {
+    $$ = new Function($type, $name, $optional_func_args);
     ((Function*)$$)->markPointerResult();
 }
 
-func_impl : TOK_IDENT[type] TOK_IDENT[name] '(' func_args ')' '{' locals '}' {
-    $$ = new Function($type, $name, $func_args, $locals);
+func_impl : TOK_IDENT[type] TOK_IDENT[name] '(' optional_func_args ')' '{' optional_locals '}' {
+    $$ = new Function($type, $name, $optional_func_args, $optional_locals);
 }
 
-func_impl : TOK_IDENT[type] '*' TOK_IDENT[name] '(' func_args ')' '{' locals '}' {
-    $$ = new Function($type, $name, $func_args, $locals);
+func_impl : TOK_IDENT[type] '*' TOK_IDENT[name] '(' optional_func_args ')' '{' optional_locals '}' {
+    $$ = new Function($type, $name, $optional_func_args, $optional_locals);
     ((Function*)$$)->markPointerResult();
 }
 
+// Reject actual parameters of type void
+optional_func_args : func_args {
+    for (Node *node : $func_args->getChildren()) {
+        auto *arg = static_cast<FuncArg*>(node);
+
+        if (arg->getTypeName() == "void" && !arg->isSourcePointer())
+            yyerror("a void parameter cannot have a name or qualifiers");
+    }
+
+    $$ = $func_args;
+}
+
+optional_func_args : %empty {
+    $$ = new NodeArgs();
+}
+
+//Reject 'void' when mixed with other parameters in conditional
 func_args : func_args[gg] ',' func_arg {
+    if($gg->getChildren().empty() || !$func_arg)
+        yyerror("void must be the only item in the parameter list");
+
     $gg->append($func_arg);
     $$ = $gg;
 }
@@ -217,9 +237,13 @@ pointer_arg : '*' '*' {
 
 // unamed parameters
 func_arg : TOK_IDENT[type] {
-    char unamed[10];
-    snprintf(unamed, 10, "_un%d", current_unamed_arg++);
-    $$ = new FuncArg($type, unamed);
+    if(string($type) == "void"){
+        $$ = nullptr;
+    }else{
+        char unamed[10];
+        snprintf(unamed, 10, "_un%d", current_unamed_arg++);
+        $$ = new FuncArg($type, unamed);
+    }
 }
 
 func_arg : TOK_IDENT[type] pointer_arg {
