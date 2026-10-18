@@ -1,6 +1,6 @@
 SFILES = $(patsubst cfiles/%.c,out/%.s,$(wildcard cfiles/*.c))
-ARCH = atmega328p
-DUMP = avr-objdump
+ARCH = stm32f1
+DUMP = llvm-objdump-21
 
 .SUFFIXES:
 
