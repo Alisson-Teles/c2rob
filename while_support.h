@@ -69,7 +69,9 @@ void requireIntegral(const Expression &expr, Node *node) {
 Expression asInteger(Expression expr) {
     // C comparison/logical operators yield int. ROB yields a boolean.
     if (expr.kind == Kind::Boolean) {
-        expr.text = "int32(" + expr.text + ")";
+        // Robcmp sign-extends bool -> int32: true would become -1.
+        // Zero-extend to uint32 first, then preserve C's signed int result.
+        expr.text = "int32(uint32(" + expr.text + "))";
         expr.kind = Kind::Integer;
         expr.atomic = true;
     }
@@ -160,6 +162,7 @@ Expression expression(Node *node, const Scope &scope, const Functions &functions
         }
         auto index = expression(array->getIndex(), scope, functions);
         requireIntegral(index, node);
+        array->getIndex()->setCheckedExpression(asInteger(index).text);
         result = {array->getArrayName() + "[" + asInteger(index).text + "]", symbol.element};
     } else if (auto *field = dynamic_cast<LoadField*>(node)) {
         string name = field->getBaseName() + "." + field->getFieldName();
@@ -221,10 +224,9 @@ void statements(Node *node, Scope &scope, const Functions &functions, bool stric
     if (!node) return;
     if (auto *loop = dynamic_cast<While*>(node)) {
         bool native = loop->isNativeCWhile();
-        if (native || strict || containsNativeWhile(loop->getBody())) {
-            auto condition = expression(loop->getCondition(), scope, functions);
-            loop->setCheckedExpression(asCondition(condition, loop->getCondition()));
-        }
+        auto condition = expression(loop->getCondition(), scope, functions);
+        loop->setCheckedExpression(asCondition(condition, loop->getCondition()));
+
         Scope body = scope;
         statements(loop->getBody(), body, functions, strict || native);
     } else if (auto *branch = dynamic_cast<IfStmt*>(node)) {
@@ -265,8 +267,9 @@ void statements(Node *node, Scope &scope, const Functions &functions, bool stric
             checkValue(store->getValue(), scope, functions);
         }
     } else if (auto *update = dynamic_cast<UnaryAttribution*>(node)) {
-        // Statement n-- is supported; postfix used as a value is deliberately rejected.
-        if (strict) requireIntegral(expression(update->getValue(), scope, functions), update->getValue());
+                // Statement n-- is supported; postfix used as a value is deliberately rejected.   
+        if (strict || dynamic_cast<LoadArray*>(update->getValue()))
+                requireIntegral(expression(update->getValue(), scope, functions), update->getValue());        
     } else if (auto *ret = dynamic_cast<Return*>(node)) {
         if (strict) checkValue(ret->getExpr(), scope, functions);
     } else if (auto *call = dynamic_cast<FunctionCall*>(node)) {
@@ -292,7 +295,6 @@ Node *preserveWhileQualifiers(Node *node, Node *qualifiers) {
 
 bool validateWhileProgram(Node *program) {
     using namespace cwhile;
-    if (!containsNativeWhile(program)) return true;
     Scope globals;
     Functions functions;
     for (Node *node : program->getChildren()) {

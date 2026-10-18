@@ -3,7 +3,7 @@ int32 teste(int32 n) {
 	i = int32(0);
 
 	i = 0;
-	while ((i < n) != 0) and ((i < 3) != 0) {
+	while ((i < n)) and ((i < 3)) {
 		n += 0;
 		i++;
 	}

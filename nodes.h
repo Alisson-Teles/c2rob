@@ -726,7 +726,22 @@ class UnaryAttribution : public Unary {
 public:
     UnaryAttribution(Node *v, string op) : Unary(v, op) {}
     UnaryAttribution(Unary *un) : Unary(un->value, un->operation) {}
+
     virtual string toStr(int il) override {
+        if (auto *array = dynamic_cast<LoadArray*>(value)) {
+            // ROB accepts array assignment, but not array[index]++/--.
+            // Evaluate the index once, including any function call it contains.
+            static unsigned nextIndex = 0;
+            string index = "__c2rob_array_index_" + to_string(nextIndex++);
+            string target = array->getArrayName() + "[" + index + "]";
+            string op = operation == "++" ? "+" : "-";
+
+            return identation(il) + index + " = "
+                 + array->getIndex()->toStr(0) + ";\n"
+                 + identation(il) + target + " = "
+                 + target + " " + op + " 1;\n";
+        }
+
         return identation(il) + value->toStr(0) + operation + ";\n";
     }
 };
