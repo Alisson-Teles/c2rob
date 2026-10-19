@@ -1,6 +1,7 @@
 
 %{
 #include "nodes.h"
+#include "scope_support.h"
 #include "while_support.h"
 
 int yyerror(const char *s);
@@ -38,6 +39,7 @@ extern bool force_print_tree;
 %type<node> globals global expr factor array_decl array_init_decl
 %type<node> array_values array_values_decls array_values_decl struct_values_decl
 %type<node> locals local scalar_decl scalar_init_decl attribution
+%type<node> multi_decl multi_declarators multi_declarator
 %type<node> scalar_or_array typedef_decl
 %type<node> func_arg func_args optional_func_args func_decl func_impl function_call func_call_args
 %type<node> ifstmt elseblock forstmt whilestmt whilebody optional_locals returnstmt include
@@ -70,7 +72,8 @@ extern bool force_print_tree;
 program : globals {
     Node *program = $globals;
 
-    bool while_valid = errorcount == 0 ? validateWhileProgram(program) : false;
+    bool scope_valid = errorcount == 0 && resolveScopeProgram(program);
+    bool while_valid = scope_valid && validateWhileProgram(program);
     if (while_valid && (errorcount == 0 || force_print_tree))
         cout << program->toStr(-1);
     
@@ -97,6 +100,11 @@ global : qualifiers scalar_decl ';'         { $$ = preserveWhileQualifiers($2, $
        | qualifiers func_decl ';'           { $$ = $2; }
        | qualifiers struct_decl ';'         { $$ = $2; }
        | qualifiers func_impl               { $$ = $2; }
+       | multi_decl ';'
+       | qualifiers multi_decl ';' {
+           for (Node *decl : $2->getChildren()) preserveWhileQualifiers(decl, $1);
+           $$ = $2;
+       }
        | scalar_decl ';'
        | scalar_init_decl ';'
        | array_init_decl ';'
@@ -312,6 +320,11 @@ local : qualifiers scalar_decl ';'      { $$ = preserveWhileQualifiers($2, $1); 
       | qualifiers scalar_init_decl ';' { $$ = preserveWhileQualifiers($2, $1); }
       | qualifiers array_init_decl ';'  { $$ = preserveWhileQualifiers($2, $1); }
       | qualifiers array_decl ';'       { $$ = preserveWhileQualifiers($2, $1); }
+      | multi_decl ';'
+      | qualifiers multi_decl ';' {
+          for (Node *decl : $2->getChildren()) preserveWhileQualifiers(decl, $1);
+          $$ = $2;
+      }
       | scalar_decl ';'
       | scalar_init_decl ';'
       | array_init_decl ';'
@@ -345,6 +358,10 @@ returnstmt : TOK_RETURN expr ';' {
     $$ = new Return($expr);
 }
 
+returnstmt : TOK_RETURN ';' {
+    $$ = new Return();
+}
+
 // a = expr;
 attribution : scalar_or_array '=' expr {
     $$ = new Store($scalar_or_array, "=", $expr);
@@ -366,16 +383,18 @@ forstmt : TOK_FOR '(' attribution[a1] ';' expr ';' attribution[a2] ')' local {
     nfor->append($a1);
     Node *body = new Node();
     body->append($local);
-    body->append($a2);
-    nfor->append(new While($expr, body));
+    auto *loop = new While($expr, body);
+    loop->setUpdate($a2);
+    nfor->append(loop);
     $$ = nfor;
 }
 
 forstmt : TOK_FOR '(' attribution[a1] ';' expr ';' attribution[a2] ')' '{' locals '}' {
     Node *nfor = new Container();
     nfor->append($a1);
-    $locals->append($a2);
-    nfor->append(new While($expr, $locals));
+    auto *loop = new While($expr, $locals);
+    loop->setUpdate($a2);
+    nfor->append(loop);
     $$ = nfor;
 }
 
@@ -393,6 +412,55 @@ ifstmt : TOK_IF '(' expr ')' '{' locals '}' {
 
 ifstmt : TOK_IF '(' expr ')' '{' locals '}' elseblock {
     $$ = new IfStmt($expr, $locals, $elseblock);
+}
+
+// Require at least two declarators; single declarations keep their existing rules.
+multi_decl : TOK_IDENT[type] multi_declarators {
+    string type = VariableDecl::convertTypeToRob($type);
+    if (declared_types.contains(type))
+        yyerror("multiple declaration: aggregate type not supported");
+    if (type == "void")
+        yyerror("multiple declaration: type 'void' cannot be used to declare variables");
+    for (Node *node : $multi_declarators->getChildren()) {
+        auto *decl = static_cast<VariableDecl*>(node);
+        decl->setDeclarationType($type);
+        if (decl->getIndex()) {
+            string size = decl->getIndex()->toStr(0);
+            if (!regex_match(size, regex("[1-9][0-9]*")))
+                yyerror("multiple declaration: vector dimension must be a positive integer literal");
+            else if (decl->getValue() && to_string(decl->getValue()->getChildren().size()) != size)
+                yyerror("multiple declaration: array initialization must populate all elements");
+        }
+    }
+    $$ = $multi_declarators;
+}
+
+multi_declarators : multi_declarator[a] ',' multi_declarator[b] {
+    $$ = new Container();
+    $$->append($a);
+    $$->append($b);
+}
+
+multi_declarators : multi_declarators[list] ',' multi_declarator {
+    $list->append($multi_declarator);
+    $$ = $list;
+}
+
+// The shared source type is applied by multi_decl before emitting ROB.
+multi_declarator : TOK_IDENT[name] {
+    $$ = new VariableDecl("", $name);
+}
+
+multi_declarator : TOK_IDENT[name] '=' expr {
+    $$ = new VariableDecl("", $name, $expr);
+}
+
+multi_declarator : TOK_IDENT[name] '[' expr ']' {
+    $$ = new VariableDecl("", $name, $expr, nullptr);
+}
+
+multi_declarator : TOK_IDENT[name] '[' expr[idx] ']' '=' array_values_decl[value] {
+    $$ = new VariableDecl("", $name, $idx, $value);
 }
 
 elseblock : TOK_ELSE '{' locals '}' { $$ = $locals; }

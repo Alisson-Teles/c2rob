@@ -57,11 +57,11 @@ void requireIntegral(const Expression &expr, Node *node) {
     if (expr.kind == Kind::Integer || expr.kind == Kind::Boolean) return;
     string reason;
     switch (expr.kind) {
-        case Kind::Pointer: reason = "condição/expressão com ponteiro não suportada com semântica confiável"; break;
-        case Kind::Floating: reason = "condição/expressão com ponto flutuante não suportada neste incremento"; break;
-        case Kind::Aggregate: reason = "condição/expressão com agregado não suportada"; break;
-        case Kind::Void: reason = "expressão void não pode ser usada como condição/valor"; break;
-        default: reason = "tipo desconhecido na expressão"; break;
+        case Kind::Pointer: reason = "pointer condition/expression is not supported with reliable semantics"; break;
+        case Kind::Floating: reason = "floating-point condition/expression is not supported in this increment"; break;
+        case Kind::Aggregate: reason = "aggregate condition/expression is not supported"; break;
+        case Kind::Void: reason = "a void expression cannot be used as a condition/value"; break;
+        default: reason = "unknown type in expression"; break;
     }
     throw ValidationError{node, "while: " + reason + ": " + expr.text};
 }
@@ -109,13 +109,13 @@ Symbol resolveSymbol(const string &name, const Scope &scope) {
 
 void checkVolatile(const Symbol &symbol, Node *node) {
     if (symbol.unsafeLocalStatic)
-        throw ValidationError{node, "while: variável local static não suportada; o emissor atual não preserva sua duração entre execuções"};
+        throw ValidationError{node, "while: local static variable is not supported; the current emitter does not preserve its lifetime across calls"};
     if (symbol.sourceVolatile)
-        throw ValidationError{node, "while: acesso volatile não suportado; o C2rob atual não preserva esse qualificador na emissão ROB"};
+        throw ValidationError{node, "while: volatile access is not supported; the current C2ROB emitter does not preserve this qualifier in ROB"};
 }
 
 Expression expression(Node *node, const Scope &scope, const Functions &functions) {
-    if (!node) throw ValidationError{node, "while: expressão ausente"};
+    if (!node) throw ValidationError{node, "while: missing expression"};
     Expression result{"", Kind::Unknown};
     if (auto *literal = dynamic_cast<IntegerToken*>(node)) {
         result = {literal->getText(), Kind::Integer};
@@ -133,7 +133,7 @@ Expression expression(Node *node, const Scope &scope, const Functions &functions
     } else if (auto *unary = dynamic_cast<Unary*>(node)) {
         const string &op = unary->getOperation();
         if (op == "++" || op == "--")
-            throw ValidationError{node, "while: pós-incremento/decremento em expressão não suportado; o valor anterior não é garantido pelo ROB atual"};
+            throw ValidationError{node, "while: postfix increment/decrement in an expression is not supported; the current ROB does not guarantee the previous value"};
         auto value = expression(unary->getValue(), scope, functions);
         requireIntegral(value, node);
         if (op == "!")
@@ -158,7 +158,7 @@ Expression expression(Node *node, const Scope &scope, const Functions &functions
         checkVolatile(symbol, node);
         if (!symbol.array) {
             requireIntegral({array->getArrayName(), symbol.kind}, node);
-            throw ValidationError{node, "while: acesso a vetor de tipo desconhecido: " + array->getArrayName()};
+            throw ValidationError{node, "while: array access has an unknown type: " + array->getArrayName()};
         }
         auto index = expression(array->getIndex(), scope, functions);
         requireIntegral(index, node);
@@ -170,12 +170,12 @@ Expression expression(Node *node, const Scope &scope, const Functions &functions
         checkVolatile(symbol, node);
         result = {name, symbol.kind};
     } else if (dynamic_cast<LoadArrayField*>(node)) {
-        throw ValidationError{node, "while: acesso a campo de vetor não suportado; a emissão atual antecipa uma leitura para aux"};
+        throw ValidationError{node, "while: array field access is not supported; the current emitter performs an early read into aux"};
     } else if (auto *call = dynamic_cast<FunctionCall*>(node)) {
         auto function = functions.find(call->getName());
         if (function != functions.end()) {
             for (Kind parameter : function->second.parameters)
-                requireIntegral({call->getName() + " (tipo do parâmetro)", parameter}, node);
+                requireIntegral({call->getName() + " (parameter type)", parameter}, node);
         }
         string args;
         if (call->getArgs()) {
@@ -189,7 +189,7 @@ Expression expression(Node *node, const Scope &scope, const Functions &functions
         result = {call->getName() + "(" + args + ")",
                   function == functions.end() ? Kind::Unknown : function->second.result};
     } else {
-        throw ValidationError{node, "while: construção de expressão não suportada"};
+        throw ValidationError{node, "while: unsupported expression construct"};
     }
     node->setCheckedExpression(result.text);
     return result;
@@ -220,7 +220,7 @@ void checkValue(Node *value, const Scope &scope, const Functions &functions) {
     value->setCheckedExpression(asInteger(expr).text);
 }
 
-void statements(Node *node, Scope &scope, const Functions &functions, bool strict = false) {
+void statements(Node *node, Scope &scope, const Functions &functions, Kind returnKind, bool strict = false) {
     if (!node) return;
     if (auto *loop = dynamic_cast<While*>(node)) {
         bool native = loop->isNativeCWhile();
@@ -228,15 +228,20 @@ void statements(Node *node, Scope &scope, const Functions &functions, bool stric
         loop->setCheckedExpression(asCondition(condition, loop->getCondition()));
 
         Scope body = scope;
-        statements(loop->getBody(), body, functions, strict || native);
+        statements(loop->getBody(), body, functions,returnKind ,strict || native);
+        statements(loop->getUpdate(), scope, functions,returnKind ,strict || native);
     } else if (auto *branch = dynamic_cast<IfStmt*>(node)) {
         if (strict || containsNativeWhile(node)) {
             auto condition = expression(branch->getCondition(), scope, functions);
             branch->setCheckedExpression(asCondition(condition, branch->getCondition()));
         }
         Scope ifScope = scope, elseScope = scope;
-        statements(branch->getIfBody(), ifScope, functions, strict);
-        statements(branch->getElseBody(), elseScope, functions, strict);
+        statements(branch->getIfBody(), ifScope, functions,returnKind ,strict);
+        statements(branch->getElseBody(), elseScope, functions,returnKind ,strict);
+    } else if (auto *container = dynamic_cast<Container*>(node)) {
+        for (Node *child : container->getChildren()) {
+            statements(child, scope, functions,returnKind ,strict);
+        }
     } else if (auto *decl = dynamic_cast<VariableDecl*>(node)) {
         if (strict) checkVolatile({Kind::Unknown, Kind::Unknown, "", false, decl->isSourceVolatile(), decl->isSourceStatic()}, node);
         if (strict && decl->getValue()) {
@@ -251,16 +256,16 @@ void statements(Node *node, Scope &scope, const Functions &functions, bool stric
         if (strict) {
             checkVolatile({Kind::Unknown, Kind::Unknown, "", false, decl->isSourceVolatile(), decl->isSourceStatic()}, node);
             if (!declared_types.contains(decl->getTypeName()))
-                throw ValidationError{node, "while: tipo desconhecido na inicialização de agregado: " + decl->getTypeName()};
+                throw ValidationError{node, "while: unknown type in aggregate initialization: " + decl->getTypeName()};
             if (decl->getValues()->getChildren().size() != declared_types[decl->getTypeName()]->getFields()->getChildren().size())
-                throw ValidationError{node, "while: inicialização parcial de estrutura não suportada pelo emissor atual"};
+                throw ValidationError{node, "while: partial struct initialization is not supported by the current emitter"};
             for (Node *value : decl->getValues()->getChildren()) checkValue(value, scope, functions);
         }
         scope[decl->getName()] = {Kind::Aggregate, Kind::Unknown, decl->getTypeName(), false,
                                 decl->isSourceVolatile(), decl->isSourceStatic()};
     } else if (dynamic_cast<StructVariableDecl*>(node)) {
         if (strict)
-            throw ValidationError{node, "while: inicialização de vetor de estruturas não suportada com semântica confiável"};
+            throw ValidationError{node, "while: struct array initialization is not supported with reliable semantics"};
     } else if (auto *store = dynamic_cast<Store*>(node)) {
         if (strict) {
             requireIntegral(expression(store->getLeft(), scope, functions), store->getLeft());
@@ -271,14 +276,21 @@ void statements(Node *node, Scope &scope, const Functions &functions, bool stric
         if (strict || dynamic_cast<LoadArray*>(update->getValue()))
                 requireIntegral(expression(update->getValue(), scope, functions), update->getValue());        
     } else if (auto *ret = dynamic_cast<Return*>(node)) {
-        if (strict) checkValue(ret->getExpr(), scope, functions);
+    if (!ret->getExpr() && returnKind != Kind::Void)
+        throw ValidationError{node, "return: return; is only allowed in a void function"};
+
+    if (ret->getExpr() && returnKind == Kind::Void)
+        throw ValidationError{node, "return: a void function cannot return an expression"};
+
+    if (strict && ret->getExpr())
+        checkValue(ret->getExpr(), scope, functions);
     } else if (auto *call = dynamic_cast<FunctionCall*>(node)) {
         if (strict) {
             auto value = expression(call, scope, functions);
             if (value.kind != Kind::Void) requireIntegral(value, call);
         }
     } else {
-        for (Node *child : node->getChildren()) statements(child, scope, functions, strict);
+        for (Node *child : node->getChildren()) statements(child, scope, functions,returnKind ,strict);
     }
 }
 
@@ -297,7 +309,16 @@ bool validateWhileProgram(Node *program) {
     using namespace cwhile;
     Scope globals;
     Functions functions;
+     // A comma-separated global declaration is a container of individual variables.
+    vector<Node*> globalNodes;
     for (Node *node : program->getChildren()) {
+        if (auto *declarations = dynamic_cast<Container*>(node)) {
+            for (Node *decl : declarations->getChildren()) globalNodes.push_back(decl);
+        } else {
+            globalNodes.push_back(node);
+        }
+    }
+    for (Node *node : globalNodes) {
         if (auto *function = dynamic_cast<Function*>(node)) {
             FunctionInfo info{function->hasPointerResult() ? Kind::Pointer : kindOfType(function->getTypeName()), {}};
             if (function->getArgs()) {
@@ -324,7 +345,11 @@ bool validateWhileProgram(Node *program) {
                                                 Kind::Unknown, VariableDecl::convertTypeToRob(arg->getTypeName()), false};
                 }
             }
-            statements(function->getBody(), scope, functions);
+            Kind returnKind = function->hasPointerResult()
+                ? Kind::Pointer
+                : kindOfType(function->getTypeName());
+
+            statements(function->getBody(), scope, functions, returnKind);
         }
     } catch (const ValidationError &error) {
         fprintf(stderr, "%s:%d: %s\n", build_file_name, error.node ? error.node->getLineNo() : yylineno,

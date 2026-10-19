@@ -87,7 +87,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "c2rob.y"
+#line 18 "c2rob.y"
 
     const char *str;
     int64_t itg;

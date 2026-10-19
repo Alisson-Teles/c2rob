@@ -1014,7 +1014,7 @@ case 15:
 YY_RULE_SETUP
 #line 48 "c2rob.l"
 {
-    std::string message = std::string("comando C não suportado: ") + yytext;
+    std::string message = std::string("unsupported C statement: ") + yytext;
     yyerror(message.c_str());
     return TOK_UNSUPPORTED;
 }
@@ -1311,7 +1311,7 @@ case 69:
 YY_RULE_SETUP
 #line 143 "c2rob.l"
 { 
-    fprintf(stderr, "%s:%d:%d: Símbolo não reconhecido %c\n", build_file_name, yylineno, yycolno, yytext[0]);
+    fprintf(stderr, "%s:%d:%d: Unrecognized symbol %c\n", build_file_name, yylineno, yycolno, yytext[0]);
     errorcount++;
     return yytext[0];
   }
@@ -2359,7 +2359,7 @@ int yyerror(const char *s) {
 int main(int argc, char *argv[]) {
     
     if (argc <= 1) {
-        fprintf(stderr, "Sintaxe: %s [-f] [-d] nome_do_programa\n",
+        fprintf(stderr, "Usage: %s [-f] [-d] program_name\n",
             argv[0]);
         return 1;
     }
@@ -2382,7 +2382,7 @@ int main(int argc, char *argv[]) {
     build_file_name = argv[build_file_id];
     yyin = fopen(build_file_name, "r");
     if (yyin == NULL) {
-        fprintf(stderr, "Não foi possível abrir o arquivo %s.\n", build_file_name);
+        fprintf(stderr, "Could not open file %s.\n", build_file_name);
         return 1;
     }
 

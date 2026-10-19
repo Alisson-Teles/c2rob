@@ -1,0 +1,1 @@
+int teste(int n) { int a[2] = {1}, b[2] = {2, 3}; return n; }

@@ -163,6 +163,7 @@ public:
         return name;
     }
     const string &getText() const { return name; }
+    void setText(const string &text) { name = text; }
 };
 
 // Numeric tokens used to share Ident with names and string literals.
@@ -175,12 +176,16 @@ class Return : public Node {
 protected:
     Node *expr;
 public:
-    Return(Node *e) {
+    Return(Node *e = nullptr) {
         expr = e;
     }
+
     Node *getExpr() const { return expr; }
 
     virtual string toStr(int il) override {
+        if (!expr)
+            return identation(il) + "return;\n";
+
         return identation(il) + "return " + expr->toStr(0) + ";\n";
     }
 };
@@ -255,6 +260,7 @@ public:
         return name + "[" + expr->toStr(il)+ "]";
     }
     const string &getArrayName() const { return name; }
+    void setArrayName(const string &text) { name = text; }
     Node *getIndex() const { return expr; }
 };
 
@@ -268,6 +274,9 @@ public:
         expr = _expr;
         field = _field;
     }
+    const string &getBaseName() const { return name; }
+    void setBaseName(const string &text) { name = text; }
+    Node *getIndex() const { return expr; }
 
     virtual string toStr(int il) override {
         string result = "aux = " + name + "[" + expr->toStr(0)+ "];\n";
@@ -292,6 +301,7 @@ public:
     }
     const string &getBaseName() const { return name; }
     const string &getFieldName() const { return field; }
+    void setBaseName(const string &text) { name = text; }
 };
 
 class VariableDecl : public Node {
@@ -335,6 +345,8 @@ public:
         return name;
     }
     const string &getTypeName() const { return type; }
+    void setDeclarationType(const string &source);
+    void setName(const string &text) { name = text; }
     Node *getValue() const { return value; }
     Node *getIndex() const { return idx; }
 
@@ -417,7 +429,12 @@ public:
         return sb;
     }
 };
-
+//The declaration was placed within VariableDecl; the method body was placed after NodeArgs, because it makes use of that class.
+void VariableDecl::setDeclarationType(const string &source) {
+    type = convertTypeToRob(source);
+    if (idx && value)
+        static_cast<NodeArgs*>(value)->setArrayInitType(source);
+}
 
 class StructVariableDecl : public Node {
 protected:
@@ -436,6 +453,10 @@ public:
     const string getName() override {
         return name;
     }
+    void setName(const string &text) { name = text; }
+    const string &getTypeName() const { return type; }
+    Node *getIndex() const { return idx; }
+    Node *getValue() const { return value; }
 
     virtual string toStr(int il) override {
         string result = identation(il);
@@ -460,6 +481,7 @@ public:
         sourcePointer = pointer;
     }
     const string getName() override { return name; }
+    void setName(const string &text) { name = text; }
     const string &getTypeName() const { return type; }
     bool isSourcePointer() const { return sourcePointer; }
 
@@ -532,6 +554,7 @@ public:
         initvalues = _initvalues;
     }
     const string getName() override { return name; }
+    void setName(const string &text) { name = text; }
     const string &getTypeName() const { return type; }
     Node *getValues() const { return initvalues; }
 
@@ -634,6 +657,7 @@ protected:
     bool inExpr = true;
 public:
     const string getName() override { return name; }
+    void setName(const string &text) { name = text; }
     Node *getArgs() const { return args; }
     FunctionCall(const string n) {
         name = n;
@@ -674,6 +698,7 @@ class While : public Node {
 protected:
     Node *logicexpr = nullptr;
     Node *commands = nullptr;
+    Node *update = nullptr;
     bool nativeCWhile;
 public:
     While(Node *expr, Node *comm, bool native = false) {
@@ -683,6 +708,8 @@ public:
     }
     Node *getCondition() const { return logicexpr; }
     Node *getBody() const { return commands; }
+    Node *getUpdate() const { return update; }
+    void setUpdate(Node *node) { update = node; }
     bool isNativeCWhile() const { return nativeCWhile; }
 
     virtual string toStr(int il) override {
@@ -691,6 +718,7 @@ public:
         result += hasCheckedExpression ? checkedExpression : logicexpr->toStr(0);
         result += " {\n";
         if (commands) result += commands->toStr(il);
+        if (update) result += update->toStr(il+1);
         result += identation(il);
         result += "}\n\n";
         return result;

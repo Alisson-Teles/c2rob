@@ -351,43 +351,300 @@
       6
     ]
   },
+  "multi_global_init": {
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "expected": [
+      0,
+      1,
+      3
+    ]
+  },
+  "multi_shadow": {
+    "inputs": [
+      -2,
+      0,
+      5
+    ],
+    "expected": [
+      2,
+      4,
+      9
+    ]
+  },
   "array_increment": {
-    "inputs": [0, 1, 4],
-    "expected": [0, 1, 4]
+    "inputs": [
+      0,
+      1,
+      4
+    ],
+    "expected": [
+      0,
+      1,
+      4
+    ]
   },
   "array_index_once": {
-    "inputs": [0, 1, 3],
-    "expected": [0, 10, 30]
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      0,
+      10,
+      30
+    ]
   },
   "array_index_boolean": {
-    "inputs": [-1, 0, 1, 2],
-    "expected": [-18, -18, 0, 0]
+    "inputs": [
+      -1,
+      0,
+      1,
+      2
+    ],
+    "expected": [
+      -18,
+      -18,
+      0,
+      0
+    ]
   },
   "array_update_no_while": {
-    "inputs": [0, 1, 5],
-    "expected": [20, 21, 25]
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "expected": [
+      20,
+      21,
+      25
+    ]
   },
   "for_logical_calls": {
-    "inputs": [0, 1, 3],
-    "expected": [0, 11, 33]
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      0,
+      11,
+      33
+    ]
   },
   "for_integer_condition": {
+    "inputs": [
+      0,
+      1,
+      4
+    ],
+    "expected": [
+      0,
+      0,
+      6
+    ]
+  },
+  "multi_local_plain": {
+    "inputs": [
+      -2,
+      0,
+      5
+    ],
+    "expected": [
+      3,
+      5,
+      10
+    ]
+  },
+  "return_void_tail": {
+    "inputs": [
+      -2,
+      0,
+      5
+    ],
+    "expected": [
+      5,
+      7,
+      12
+    ],
+    "contains": [
+      "return;"
+    ]
+  },
+    "return_void_value": {
+    "diagnostic": "a void function cannot return an expression"
+  },
+  "multi_local_init": {
+    "inputs": [-2, 0, 5],
+    "expected": [1, 7, 17]
+  },
+  "multi_local_mixed": {
+    "inputs": [-2, 0, 5],
+    "expected": [0, 2, 7]
+  },
+  "multi_calls_once": {
+    "inputs": [0, 1, 5],
+    "expected": [126, 126, 126]
+  },
+  "multi_global_plain": {
+    "inputs": [-2, 0, 5],
+    "expected": [2, 4, 9]
+  },
+  "multi_arrays_init": {
+    "inputs": [-2, 0, 5],
+    "expected": [8, 10, 15],
+    "contains": [
+      "a = {int32(1), 2};",
+      "b = {int32(3), 4};"
+    ]
+  },
+  "multi_array_mixed": {
+    "inputs": [-2, 0, 5],
+    "expected": [3, 5, 10]
+  },
+  "multi_arrays_plain": {
+    "inputs": [-2, 0, 5],
+    "expected": [1, 3, 8]
+  },
+  "multi_arrays_while": {
+    "inputs": [0, 1, 3],
+    "expected": [0, 3, 15]
+  },
+  "multi_typedef": {
+    "inputs": [-2, 0, 5],
+    "expected": [0, 2, 7]
+  },
+  "multi_for_body": {
     "inputs": [0, 1, 4],
-    "expected": [0, 0, 6]
+    "expected": [0, 1, 16]
+  },
+  "multi_global_static": {
+    "inputs": [0, 1, 5],
+    "expected": [1, 1, 1]
+  },
+  "multi_global_array": {
+    "inputs": [0, 1, 5],
+    "expected": [4, 5, 9]
+  },
+  "multi_array_type": {
+    "inputs": [0, 1, 5],
+    "expected": [206, 207, 211],
+    "contains": [
+      "a = {uint32(200), 1};",
+      "b = {uint32(2), 3};"
+    ]
+  },
+  "multi_array_variable_size": {
+    "diagnostic": "multiple declaration: vector dimension must be a positive integer literal"
+  },
+  "multi_array_partial_init": {
+    "diagnostic": "multiple declaration: array initialization must populate all elements"
+  },
+  "multi_void_variables": {
+    "diagnostic": "multiple declaration: type 'void' cannot be used to declare variables"
+  },
+  "multi_volatile_second": {
+    "diagnostic": "while: volatile access"
+  },
+  "multi_static_second": {
+    "diagnostic": "while: local static variable"
+  },
+  "multi_bad_leading_comma": {
+    "diagnostic": "syntax error"
+  },
+  "multi_bad_trailing_comma": {
+    "diagnostic": "syntax error"
+  },
+  "multi_bad_repeated_type": {
+    "diagnostic": "syntax error"
+  },
+  "multi_pointer_unsupported": {
+    "diagnostic": "syntax error"
+  },
+  "multi_struct_unsupported": {
+    "diagnostic": "multiple declaration: aggregate type not supported"
+  },
+  "return_void_if": {
+    "inputs": [-2, 0, 5],
+    "expected": [1, 2, 2]
+  },
+  "return_void_else": {
+    "inputs": [-2, 0, 5],
+    "expected": [1, 2, 2]
+  },
+  "return_void_for": {
+    "inputs": [0, 1, 5],
+    "expected": [0, 1, 2]
+  },
+  "return_void_single_while": {
+    "inputs": [0, 1, 5],
+    "expected": [9, 0, 0]
+  },
+  "return_void_typedef": {
+    "inputs": [-2, 0, 5],
+    "expected": [2, 4, 9]
+  },
+  "return_void_multi": {
+    "inputs": [-2, 0, 5],
+    "expected": [0, 1, 6]
+  },
+  "return_nonvoid_while": {
+    "diagnostic": "return; is only allowed in a void function"
+  },
+  "return_pointer_nonvoid": {
+    "diagnostic": "return; is only allowed in a void function"
+  },
+  "return_nonvoid_typedef": {
+    "diagnostic": "return; is only allowed in a void function"
+  },
+  "return_void_call_value": {
+    "diagnostic": "a void function cannot return an expression"
   },
   "no_params_trailing_comma": {
     "diagnostic": "syntax error"
   },
-    "no_params_return_semicolon": {
-    "diagnostic": "syntax error"
+  "no_params_return_semicolon": {
+    "has_main": true,
+    "contains": [
+      "return;"
+    ]
   },
   "bool_to_int_value": {
-    "inputs": [0, 1, 2, 3, -1],
-    "expected": [0, 0, 1, 1, 0]
+    "inputs": [
+      0,
+      1,
+      2,
+      3,
+      -1
+    ],
+    "expected": [
+      0,
+      0,
+      1,
+      1,
+      0
+    ]
   },
   "bool_to_int_arithmetic": {
-    "inputs": [0, 1, 2, 3, -1],
-    "expected": [0, 10, 9, 9, 10]
+    "inputs": [
+      0,
+      1,
+      2,
+      3,
+      -1
+    ],
+    "expected": [
+      0,
+      10,
+      9,
+      9,
+      10
+    ]
   },
   "no_params_unnamed_regression": {
     "contains": [
@@ -407,46 +664,46 @@
     "diagnostic": "void parameter cannot have a name"
   },
   "postfix": {
-    "diagnostic": "pós-incremento/decremento"
+    "diagnostic": "postfix increment/decrement"
   },
   "postfix_comparison": {
-    "diagnostic": "pós-incremento/decremento"
+    "diagnostic": "postfix increment/decrement"
   },
   "postfix_argument": {
-    "diagnostic": "pós-incremento/decremento"
+    "diagnostic": "postfix increment/decrement"
   },
   "pointer": {
-    "diagnostic": "ponteiro"
+    "diagnostic": "pointer"
   },
   "qualified_pointer": {
-    "diagnostic": "ponteiro"
+    "diagnostic": "pointer"
   },
   "floating": {
-    "diagnostic": "ponto flutuante"
+    "diagnostic": "floating-point"
   },
   "floating_comparison": {
-    "diagnostic": "ponto flutuante"
+    "diagnostic": "floating-point"
   },
   "unknown_condition": {
-    "diagnostic": "tipo desconhecido"
+    "diagnostic": "unknown type"
   },
   "break": {
-    "diagnostic": "não suportado: break"
+    "diagnostic": "unsupported C statement: break"
   },
   "continue": {
-    "diagnostic": "não suportado: continue"
+    "diagnostic": "unsupported C statement: continue"
   },
   "do_while": {
-    "diagnostic": "não suportado: do"
+    "diagnostic": "unsupported C statement: do"
   },
   "switch": {
-    "diagnostic": "não suportado: switch"
+    "diagnostic": "unsupported C statement: switch"
   },
   "goto": {
-    "diagnostic": "não suportado: goto"
+    "diagnostic": "unsupported C statement: goto"
   },
   "unknown_symbol": {
-    "diagnostic": "Símbolo não reconhecido"
+    "diagnostic": "Unrecognized symbol"
   },
   "for_single_regression": {
     "inputs": [
@@ -507,25 +764,25 @@
     ]
   },
   "body_postfix_value": {
-    "diagnostic": "pós-incremento/decremento"
+    "diagnostic": "postfix increment/decrement"
   },
   "body_unknown_call": {
-    "diagnostic": "tipo desconhecido"
+    "diagnostic": "unknown type"
   },
   "pointer_comparison": {
-    "diagnostic": "ponteiro"
+    "diagnostic": "pointer"
   },
   "pointer_return": {
-    "diagnostic": "ponteiro"
+    "diagnostic": "pointer"
   },
   "volatile_condition": {
-    "diagnostic": "acesso volatile"
+    "diagnostic": "volatile access"
   },
   "volatile_body": {
-    "diagnostic": "acesso volatile"
+    "diagnostic": "volatile access"
   },
   "pointer_parameter_call": {
-    "diagnostic": "ponteiro"
+    "diagnostic": "pointer"
   },
   "struct_field": {
     "inputs": [
@@ -535,7 +792,7 @@
     ]
   },
   "body_struct_array": {
-    "diagnostic": "vetor de estruturas"
+    "diagnostic": "struct array"
   },
   "static_body": {
     "diagnostic": "local static"
@@ -544,6 +801,282 @@
     "diagnostic": "local static"
   },
   "partial_struct_body": {
-    "diagnostic": "inicialização parcial"
+    "diagnostic": "partial struct initialization"
+  },
+  "scope_shadow_single": {
+    "inputs": [
+      -2,
+      0,
+      3
+    ],
+    "expected": [
+      -2,
+      0,
+      3
+    ]
+  },
+  "scope_shadow_global": {
+    "inputs": [
+      -2,
+      0,
+      5
+    ],
+    "expected": [
+      -2,
+      2,
+      12
+    ]
+  },
+  "scope_shadow_parameter": {
+    "inputs": [
+      -2,
+      0,
+      5
+    ],
+    "expected": [
+      0,
+      0,
+      4
+    ]
+  },
+  "scope_parameter_global": {
+    "inputs": [
+      -2,
+      0,
+      5
+    ],
+    "expected": [
+      -1,
+      1,
+      6
+    ]
+  },
+  "scope_before_declaration": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      0,
+      14,
+      18
+    ]
+  },
+  "scope_shadow_nested": {
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "expected": [
+      0,
+      7,
+      7
+    ]
+  },
+  "scope_shadow_branches": {
+    "inputs": [
+      -2,
+      0,
+      5
+    ],
+    "expected": [
+      7,
+      9,
+      10
+    ]
+  },
+  "scope_sibling_blocks": {
+    "inputs": [
+      0,
+      1,
+      2
+    ],
+    "expected": [
+      0,
+      3,
+      10
+    ]
+  },
+  "scope_shadow_arrays": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      6,
+      6,
+      6
+    ]
+  },
+  "scope_index_call_once": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      1,
+      2,
+      4
+    ]
+  },
+  "scope_index_identifier": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      0,
+      7,
+      21
+    ]
+  },
+  "scope_for_update": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      0,
+      12,
+      36
+    ]
+  },
+  "scope_for_single_body": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      0,
+      6,
+      8
+    ]
+  },
+  "scope_struct_fields": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      1,
+      4,
+      10
+    ]
+  },
+  "scope_member_name": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      4,
+      7,
+      13
+    ]
+  },
+  "scope_literal_text": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      0,
+      97,
+      97
+    ],
+    "contains": [
+      "\"a.a\""
+    ]
+  },
+  "scope_function_name": {
+    "inputs": [
+      -2,
+      0,
+      5
+    ],
+    "expected": [
+      -3,
+      1,
+      11
+    ]
+  },
+  "scope_call_argument": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      0,
+      7,
+      21
+    ]
+  },
+  "scope_global_array": {
+    "inputs": [
+      0,
+      1,
+      3
+    ],
+    "expected": [
+      0,
+      4,
+      12
+    ]
+  },
+  "scope_redecl_list": {
+    "diagnostic": "[C2ROB_SCOPE_REDECLARATION]"
+  },
+  "scope_redecl_separate": {
+    "diagnostic": "[C2ROB_SCOPE_REDECLARATION]"
+  },
+  "scope_redecl_parameter": {
+    "diagnostic": "[C2ROB_SCOPE_REDECLARATION]"
+  },
+  "scope_redecl_params": {
+    "diagnostic": "[C2ROB_SCOPE_REDECLARATION]"
+  },
+  "scope_redecl_block": {
+    "diagnostic": "[C2ROB_SCOPE_REDECLARATION]"
+  },
+  "scope_type_name": {
+    "inputs": [
+      -2,
+      0,
+      5
+    ],
+    "expected": [
+      -2,
+      0,
+      5
+    ]
+  },
+  "return_void_while": {
+    "inputs": [
+      0,
+      1,
+      5
+    ],
+    "expected": [
+      0,
+      1,
+      2
+    ]
+  },
+  "return_nonvoid": {
+    "diagnostic": "return; is only allowed in a void function"
+  },
+  "return_void_value": {
+    "diagnostic": "a void function cannot return an expression"
   }
 }
