@@ -78,7 +78,8 @@ extern int yydebug;
     TOK_STATIC = 279,              /* TOK_STATIC  */
     TOK_VOLATILE = 280,            /* TOK_VOLATILE  */
     TOK_CONST = 281,               /* TOK_CONST  */
-    UMINUS = 282                   /* UMINUS  */
+    TOK_TYPE_SPEC = 282,           /* TOK_TYPE_SPEC  */
+    UMINUS = 283                   /* UMINUS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -87,15 +88,16 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 18 "c2rob.y"
+#line 72 "c2rob.y"
 
     const char *str;
     int64_t itg;
     double flt;
     Node *node;
     Strings *strings;
+    DeclarationSpecifiers *spec;
 
-#line 99 "c2rob.tab.h"
+#line 101 "c2rob.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -1,3 +1,4 @@
+#include "source_type.h"
 
 #include <iostream>
 #include <vector>
@@ -5,6 +6,7 @@
 #include <set>
 #include <regex>
 #include <format>
+
 
 extern int errorcount;
 extern int yylineno;
@@ -53,6 +55,7 @@ protected:
     bool hasCheckedExpression = false;
     string checkedExpression;
     bool sourceVolatile = false;
+    bool sourceConst = false;
     bool sourceStatic = false;
 
     string identation(int level) {
@@ -92,8 +95,13 @@ public:
         checkedExpression = s;
         hasCheckedExpression = true;
     }
+
+    void markSourceConst() { sourceConst = true; }
+    bool isSourceConst() const { return sourceConst; }
+    
     void markSourceVolatile() { sourceVolatile = true; }
     bool isSourceVolatile() const { return sourceVolatile; }
+    
     void markSourceStatic() { sourceStatic = true; }
     bool isSourceStatic() const { return sourceStatic; }
 };
@@ -170,6 +178,15 @@ public:
 class IntegerToken : public Ident {
 public:
     IntegerToken(const string &text) : Ident(text) {}
+
+    string toStr(int il) override {
+        if (hasCheckedExpression)
+            return checkedExpression;
+
+        auto literal = sourceIntegerLiteral(name);
+
+        return literal.digits;
+    }
 };
 
 class Return : public Node {
@@ -352,39 +369,60 @@ public:
 
     static string convertTypeToRob(string type) {
         std::regex pointertypes("[a-z0-9]+ ?\\*");
+
         if (regex_match(type, pointertypes)) {
-            string tt = convertTypeToRob(type.substr(0, type.length()-1));
+            string tt = convertTypeToRob(
+                type.substr(0, type.length() - 1)
+            );
+
             return tt + "[]";
         }
 
         type = get_final_type_for(type);
 
         std::regex inttypes("u?int[0-9]+_t");
-        if (regex_match(type, inttypes))
-            return type.substr(0, type.length()-2);
-        
-        if (type == "int" || type == "signed")
-            return "int32";
 
-        if (type == "unsigned long") return "uint32";
+        if (regex_match(type, inttypes)) {
+            return type.substr(0, type.length() - 2);
+        }
 
-        if (type == "long")
-            return "int64";
+        type = normalizeBuiltinType(type);
 
         // angha bench scalar types
         if (type == "intptr_t") return "int32";
         if (type == "uintptr_t") return "uint32";
         if (type == "scalar_t__") return "int32";
-        if (type == "size_t") return "uint32";
 
-        if (type == "unsigned")
-            return "uint32";
+        if (type == "size_t") {
+            return sourceAbi == SourceAbi::LP64 ?
+                "uint64" : "uint32";
+        }
 
         return type;
     }
+    bool hasLiteralInitializer() const {
+    auto literal = [](Node *node) {
+        return dynamic_cast<IntegerToken*>(node)
+            || dynamic_cast<Integer*>(node)
+            || dynamic_cast<Float*>(node);
+    };
+
+    if (!value)
+        return true;
+
+    if (!idx)
+        return literal(value);
+
+    for (Node *item : value->getChildren())
+        if (!literal(item))
+            return false;
+
+    return true;
+    }
 
     virtual string toStr(int il) override {
-        string result = identation(il);
+        string result = identation(il)
+        + (sourceConst && hasLiteralInitializer() ? "const " : "");
         if (idx && value) {
             result += format("{} = {{{}}}", name, value->toStr(0));
         } else if (idx) {
@@ -504,8 +542,13 @@ public:
     }
     Node *getLeft() const { return left; }
     Node *getValue() const { return value; }
-
+    const string &getOperation() const {
+    return op;
+    }
     virtual string toStr(int il) override {
+        if (hasCheckedExpression)
+            return identation(il) + checkedExpression + ";\n";
+        
         string result = identation(il);
         result += left->toStr(il);
         result += " ";

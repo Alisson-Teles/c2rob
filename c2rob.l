@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string>
 
+#include "source_type.h"
+
 char *build_file_name;
 bool force_print_tree = false;
 class Node;
@@ -57,7 +59,7 @@ __attribute__\(\(used\)\) { /* TODO: make generic or map supported robcmp attrib
 "static"    { return TOK_STATIC; }
 "volatile"  { return TOK_VOLATILE; }
 "inline"    { /* ignora */ }
-"const"     { /* ignora */ }
+"const"     { return TOK_CONST; }
 "NULL"      { 
     yylval.str = "0";
     return TOK_INTEGER_LITERAL;
@@ -110,6 +112,11 @@ __attribute__\(\(used\)\) { /* TODO: make generic or map supported robcmp attrib
 ":" { return ':'; }
 "\." { return '.'; }
 
+"void"|"char"|"short"|"int"|"long"|"signed"|"unsigned"|"float"|"double"|"_Bool" {
+    yylval.str = strndup(yytext, yyleng);
+    return TOK_TYPE_SPEC;
+}
+
 [a-zA-Z_][a-zA-Z0-9_\.]* {
     yylval.str = strndup(yytext, yyleng);
     return TOK_IDENT;
@@ -120,18 +127,9 @@ __attribute__\(\(used\)\) { /* TODO: make generic or map supported robcmp attrib
     return TOK_FLOAT;
 }
 
-[0-9]+U*L* {
-    while (yytext[yyleng-1] == 'L')
-        yyleng--;
+(0[xX][0-9a-fA-F]+|[0-9]+)([uU](ll|LL|[lL])?|(ll|LL|[lL])[uU]?)? {
     yylval.str = strndup(yytext, yyleng);
     return TOK_INTEGER_LITERAL;
-}
-
-"0x"[0-9a-fA-F]+U*L* {
-    while (yytext[yyleng-1] == 'L')
-        yyleng--;
-    yylval.str = strndup(yytext, yyleng);
-	return TOK_INTEGER_LITERAL;
 }
 
 \"([^\\\"]|\\.)*\"		{ yylval.str = strndup(yytext, yyleng);
@@ -164,39 +162,75 @@ int yyerror(const char *s) {
 }
 
 int main(int argc, char *argv[]) {
-    
     if (argc <= 1) {
-        fprintf(stderr, "Usage: %s [-f] [-d] program_name\n",
-            argv[0]);
+        fprintf(
+            stderr,
+            "Usage: %s [-f] [-d] [--abi=ilp32|lp64] program_name\n",
+            argv[0]
+        );
         return 1;
     }
 
-    int build_file_id = 1;
-    int argid = 1;
+    int build_file_id = 0;
 
-    if (strcmp(argv[argid], "-f") == 0) {
-        force_print_tree = true;
-        build_file_id++;
-        argid++;
+    for (int argid = 1; argid < argc; ++argid) {
+        std::string option(argv[argid]);
+
+        if (option == "-f") {
+            force_print_tree = true;
+        } else if (option == "-d") {
+            yydebug = 1;
+        } else if (option == "--abi=ilp32") {
+            sourceAbi = SourceAbi::ILP32;
+        } else if (option == "--abi=lp64") {
+            sourceAbi = SourceAbi::LP64;
+        } else if (option.starts_with("-")) {
+            fprintf(
+                stderr,
+                "Unknown option: %s. Supported ABIs: ilp32, lp64.\n",
+                argv[argid]
+            );
+            return 1;
+        } else if (build_file_id) {
+            fprintf(
+                stderr,
+                "Exactly one C input file is required.\n"
+            );
+            return 1;
+        } else {
+            build_file_id = argid;
+        }
     }
 
-    if (strcmp(argv[argid], "-d") == 0) {
-        yydebug = 1;
-        build_file_id++;
-        argid++;
+    if (!build_file_id) {
+        fprintf(stderr, "A C input file is required.\n");
+        return 1;
     }
 
     build_file_name = argv[build_file_id];
     yyin = fopen(build_file_name, "r");
+
     if (yyin == NULL) {
-        fprintf(stderr, "Could not open file %s.\n", build_file_name);
+        fprintf(
+            stderr,
+            "Could not open file %s.\n",
+            build_file_name
+        );
         return 1;
     }
 
-    int parse_status = yyparse();
+    int parse_status = 1;
 
-    if (yyin)
+    try {
+        parse_status = yyparse();
+    } catch (const std::exception &error) {
+        yyerror(error.what());
+    }
+
+    if (yyin) {
         fclose(yyin);
-    
-    return (parse_status != 0 || errorcount != 0) ? EXIT_FAILURE : EXIT_SUCCESS;
+    }
+
+    return (parse_status != 0 || errorcount != 0) ?
+        EXIT_FAILURE : EXIT_SUCCESS;
 }
