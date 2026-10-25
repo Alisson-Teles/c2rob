@@ -68,7 +68,8 @@ def main():
         source = ROOT / f'{name}.c'
         rob = out / f'{name}.rob'
         try:
-            translated = run([translator, str(source)])
+            translator_options = ["--abi=" + spec["abi"]] if "abi" in spec else []
+            translated = run([translator, *translator_options, str(source)])
             (out / f'{name}.stderr').write_text(translated.stderr)
             rob.write_text(translated.stdout)
             row['exit'] = translated.returncode

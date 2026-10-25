@@ -1,0 +1,1 @@
+int obter(unsigned int *p);

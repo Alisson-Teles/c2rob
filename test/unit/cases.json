@@ -476,7 +476,7 @@
       "return;"
     ]
   },
-    "return_void_value": {
+  "return_void_value": {
     "diagnostic": "a void function cannot return an expression"
   },
   "multi_local_init": {
@@ -569,6 +569,45 @@
   "multi_struct_unsupported": {
     "diagnostic": "multiple declaration: aggregate type not supported"
   },
+    "types_unsigned_multi": {
+    "inputs": [0, 1, 5],
+    "expected": [3, 4, 8],
+    "contains": [
+      "a = uint32(10);",
+      "b = uint32(3);"
+    ]
+  },
+  "types_specifier_order": {
+    "inputs": [0, 1, 5],
+    "expected": [7, 8, 12],
+    "contains": [
+      "a = uint32(8);",
+      "b = uint32(2);",
+      "c = int16("
+    ]
+  },
+  "types_function_signature": {
+    "inputs": [0, 1, 5],
+    "expected": [0, 2, 10],
+    "contains": [
+      "uint32 dobro(uint16 valor)"
+    ]
+  },
+  "types_const_positions": {
+    "inputs": [0, 1, 5],
+    "expected": [9, 10, 14],
+    "contains": [
+      "const a = int32(2);",
+      "const b = int32(3);",
+      "const c = uint32(4);"
+    ]
+  },
+  "types_invalid_combination": {
+    "diagnostic": "declaration: invalid type specifier combination"
+  },
+  "types_volatile_suffix": {
+    "diagnostic": "volatile access is not supported"
+  },
   "return_void_if": {
     "inputs": [-2, 0, 5],
     "expected": [1, 2, 2]
@@ -614,6 +653,23 @@
       "return;"
     ]
   },
+    "types_reserved_name": {
+    "diagnostic": "syntax error"
+  },
+  "types_identifier_prefix": {
+    "inputs": [0, 1, 5],
+    "expected": [2, 3, 7]
+  },
+  "types_abi_long": {
+    "inputs": [-2, 0, 5],
+    "expected": [-2, 0, 5],
+    "contains": [
+      "valor = int32(n);"
+    ]
+  },
+  "types_bool_unsupported": {
+    "diagnostic": "declaration: _Bool is not supported in this increment"
+  },
   "bool_to_int_value": {
     "inputs": [
       0,
@@ -645,6 +701,320 @@
       9,
       10
     ]
+  },
+    "types_decl_globals": {
+    "inputs": [0, 1, 5],
+    "expected": [5, 6, 10],
+    "contains": [
+      "a = uint32(10);",
+      "b = uint32(2);"
+    ]
+  },
+  "types_decl_arrays": {
+    "inputs": [0, 1, 5],
+    "expected": [9, 10, 14],
+    "contains": [
+      "valores = {uint16(",
+      "base = uint16("
+    ]
+  },
+  "types_decl_typedef": {
+    "inputs": [0, 1, 5],
+    "expected": [5, 6, 10],
+    "contains": [
+      "a = uint16(",
+      "b = uint16("
+    ]
+  },
+  "types_decl_struct_field": {
+    "inputs": [0, 1, 5],
+    "expected": [3, 4, 8],
+    "contains": [
+      "valor = uint16(0);",
+      "dados = Dados();"
+    ]
+  },
+  "types_decl_invalid_lengths": {
+    "diagnostic": "declaration: invalid type specifier combination"
+  },
+  "types_decl_volatile_list": {
+    "diagnostic": "volatile access"
+  },
+  "types_decl_tag_namespace": {
+    "inputs": [0, 1, 5],
+    "expected": [3, 4, 8],
+    "contains": [
+      "dados = Palavra();",
+      "total = int32(n);"
+    ]
+  },
+    "types_param_positions": {
+    "inputs": [0, 1, 5],
+    "expected": [2, 3, 7],
+    "contains": [
+      "uint16 somar(uint16 a, uint16 b)"
+    ]
+  },
+  "types_param_unnamed": {
+    "inputs": [0, 1, 5],
+    "expected": [0, 2, 10],
+    "contains": [
+      "uint32 dobro(uint16 _un0, uint16 _un1);"
+    ]
+  },
+  "types_param_typedef": {
+    "inputs": [0, 1, 5],
+    "expected": [1, 2, 6],
+    "contains": [
+      "int32 aceitar(uint16 valor)"
+    ]
+  },
+  "types_param_void_typedef": {
+    "inputs": [0, 1, 5],
+    "expected": [4, 5, 9],
+    "contains": [
+      "int32 obter()"
+    ]
+  },
+  "types_param_static": {
+    "diagnostic": "declaration: static is not allowed on a function parameter"
+  },
+  "types_param_void_qualified": {
+    "diagnostic": "a void parameter cannot have a name or qualifiers"
+  },
+  "types_param_invalid_combination": {
+    "diagnostic": "declaration: invalid type specifier combination"
+  },
+    "types_qual_const_read": {
+    "inputs": [0, 1, 5],
+    "expected": [14, 14, 22],
+    "contains": [
+      "const base = int32(2);",
+      "const a = int32(3);",
+      "valores = {",
+      "resultado = int32(valor + base);"
+    ]
+  },
+  "types_qual_const_write": {
+    "diagnostic": "cannot modify a const-qualified object"
+  },
+  "types_qual_parameter_write": {
+    "diagnostic": "cannot modify a const-qualified object"
+  },
+  "types_qual_array_update": {
+    "diagnostic": "cannot modify a const-qualified object"
+  },
+  "types_qual_postfix_expression": {
+    "diagnostic": "cannot modify a const-qualified object"
+  },
+  "types_qual_const_field": {
+    "diagnostic": "initialization of a struct with const fields is not supported"
+  },
+  "types_qual_volatile_global": {
+    "diagnostic": "volatile access is not supported"
+  },
+  "types_qual_volatile_parameter": {
+    "diagnostic": "volatile access is not supported"
+  },
+  "types_qual_local_static": {
+    "diagnostic": "local static variable is not supported"
+  },
+  "types_qual_pointer_const": {
+    "diagnostic": "qualified pointer parameters are not supported"
+  },
+  "types_qual_static_field": {
+    "diagnostic": "static is not allowed on a struct field"
+  },
+    "types_integer_char_promotion": {
+    "inputs": [0, 1, 5],
+    "expected": [260, 261, 265]
+  },
+  "types_integer_short_promotion": {
+    "inputs": [0, 1, 5],
+    "expected": [-1, 0, 4]
+  },
+    "types_signed_unsigned_division": {
+    "inputs": [0, 1],
+    "expected": [255, 255]
+  },
+  "types_unsigned_wrap": {
+    "inputs": [0, 1],
+    "expected": [0, 0]
+  },
+  "types_long_long_order": {
+    "inputs": [0, 1, 5],
+    "expected": [7, 8, 12]
+  },
+  "types_long_ilp32": {
+    "inputs": [0, 1, 5],
+    "expected": [3, 4, 8],
+    "contains": ["a = int32(n);", "b = uint32(3);"]
+  },
+  "types_long_lp64": {
+    "abi": "lp64",
+    "inputs": [0, 1],
+    "expected": [1, 1],
+    "contains": ["a = uint64("]
+  },
+  "types_typedef_multiword": {
+    "inputs": [0, 1, 5],
+    "expected": [32767, 32768, 32772]
+  },
+  "types_typedef_const": {
+    "inputs": [0, 1, 5],
+    "expected": [3, 4, 8],
+    "contains": ["const a = int32(3);"]
+  },
+  "types_array_elements": {
+    "inputs": [0, 1, 5],
+    "expected": [65534, 65535, 65539]
+  },
+  "types_global_multi": {
+    "inputs": [0, 1, 5],
+    "expected": [3, 4, 8]
+  },
+  "types_struct_field": {
+    "inputs": [0, 1, 5],
+    "expected": [250, 251, 255]
+  },
+  "types_unnamed_parameters": {
+    "inputs": [0, 1, 5],
+    "expected": [0, 2, 10]
+  },
+  "types_const_parameter": {
+    "inputs": [0, 1, 5],
+    "expected": [1, 2, 6]
+  },
+  "types_const_write": {
+    "diagnostic": "cannot modify a const-qualified object"
+  },
+  "types_const_update": {
+    "diagnostic": "cannot modify a const-qualified object"
+  },
+  "types_const_parameter_write": {
+    "diagnostic": "cannot modify a const-qualified object"
+  },
+  "types_typedef_const_write": {
+    "diagnostic": "cannot modify a const-qualified object"
+  },
+  "types_volatile_prefix": {
+    "diagnostic": "volatile access is not supported"
+  },
+  "types_volatile_global": {
+    "diagnostic": "volatile access is not supported"
+  },
+  "types_volatile_parameter": {
+    "diagnostic": "volatile access is not supported"
+  },
+  "types_invalid_signs": {
+    "diagnostic": "declaration: invalid type specifier combination"
+  },
+  "types_invalid_lengths": {
+    "diagnostic": "declaration: invalid type specifier combination"
+  },
+  "types_invalid_duplicate": {
+    "diagnostic": "declaration: invalid type specifier combination"
+  },
+  "types_invalid_two_bases": {
+    "diagnostic": "declaration: invalid type specifier combination"
+  },
+  "types_long_double_unsupported": {
+    "diagnostic": "declaration: long double is not supported"
+  },
+  "types_loop_promotion": {
+    "inputs": [0, 1, 5],
+    "expected": [0, 0, 10]
+  },
+  "types_const_shadow": {
+    "inputs": [0, 1, 5],
+    "expected": [2, 4, 8]
+  },
+  "types_array_unary_wrap": {
+    "inputs": [0, 1, 5],
+    "expected": [0, 0, 0]
+  },
+  "types_uint64_minus": {
+    "inputs": [0, 1, 5],
+    "expected": [1, 1, 1]
+  },
+  "types_signed_to_unsigned_param": {
+    "inputs": [0, 1, 5],
+    "expected": [255, 255, 255]
+  },
+  "types_char_promotion_complement": {
+    "inputs": [0, 1, 5],
+    "expected": [-256, -256, -256]
+  },
+  "types_const_array": {
+    "inputs": [0, 1, 5],
+    "expected": [7, 8, 12]
+  },
+  "types_const_struct_field": {
+    "diagnostic": "initialization of a struct with const fields is not supported"
+  },
+  "types_large_signed_literal": {
+    "inputs": [0, 1, 5],
+    "expected": [1, 2, 6]
+  },
+  "types_uint64_max_literal": {
+    "inputs": [0, 1, 5],
+    "expected": [0, 0, 0]
+  },
+  "types_unsigned_negation": {
+    "inputs": [0, 1, 5],
+    "expected": [1, 1, 1]
+  },
+  "types_pointer_parameter": {
+    "diagnostic": "pointer parameters are not supported"
+  },
+  "types_pointer_result": {
+    "diagnostic": "pointer return types are not supported"
+  },
+  "types_void_variable": {
+    "diagnostic": "void cannot be used as a variable type"
+  },
+  "types_integer_mixed_comparison": {
+    "inputs": [0, 1, 5],
+    "expected": [0, 0, 0]
+  },
+  "types_integer_signed_widen": {
+    "inputs": [0, 1],
+    "expected": [255, 255]
+  },
+  "types_integer_unsigned_widen": {
+    "inputs": [0, 1],
+    "expected": [1, 1]
+  },
+  "types_integer_long_long": {
+    "inputs": [0, 1, 5],
+    "expected": [2, 3, 7]
+  },
+  "types_integer_bool_init": {
+    "inputs": [-1, 0, 1, 5],
+    "expected": [1, 1, 2, 2]
+  },
+  "types_integer_bool_return": {
+    "inputs": [-1, 0, 1, 5],
+    "expected": [0, 0, 1, 1]
+  },
+  "types_integer_parameter": {
+    "inputs": [0, 65535, 65536],
+    "expected": [0, 65535, 0]
+  },
+  "types_integer_return": {
+    "inputs": [0, 65535, 65536],
+    "expected": [0, 65535, 0]
+  },
+  "types_integer_large_literal": {
+    "inputs": [0, 1, 5],
+    "expected": [1, 2, 6]
+  },
+  "types_integer_array_compound": {
+    "diagnostic": "compound assignment to an array element is not supported"
+  },
+  "types_integer_array_dimension": {
+    "inputs": [0, 1, 5],
+    "expected": [10, 11, 15]
   },
   "no_params_unnamed_regression": {
     "contains": [
@@ -1075,8 +1445,5 @@
   },
   "return_nonvoid": {
     "diagnostic": "return; is only allowed in a void function"
-  },
-  "return_void_value": {
-    "diagnostic": "a void function cannot return an expression"
   }
 }
