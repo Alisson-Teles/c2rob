@@ -1,0 +1,12 @@
+n = float(1.000000);
+
+int32 teste(int32 __c2rob_scope_0_n) {
+	i = int32(0);
+	while __c2rob_scope_0_n != 0 {
+		__c2rob_scope_0_n--;
+		i++;
+	}
+
+	return i;
+}
+

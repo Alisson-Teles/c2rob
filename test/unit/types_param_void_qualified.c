@@ -1,3 +1,1 @@
-int teste(const void) {
-    return 0;
-}
+int teste(const void) { return 0; }

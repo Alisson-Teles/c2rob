@@ -1,0 +1,8 @@
+
+int32 teste(int32 n) {
+	a = uint32(8);
+	b = uint32(2);
+	c = int16(int16(3));
+	return int32((uint32((uint32((uint32(a) / uint32(b))) + uint32(int32(c)))) + uint32(n)));
+}
+

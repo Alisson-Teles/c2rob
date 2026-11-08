@@ -1,0 +1,71 @@
+{
+  "base": "C2ROB_tipos_validado.zip (versão final, 238 casos)",
+  "compiler": "GCC/G++ 13.3.0, Bison 3.8.2, Flex 2.6.4, LLVM 19.1.7",
+  "unit": {
+    "passed": 248,
+    "failed": 0
+  },
+  "integration": {
+    "passed": 248,
+    "failed": 0,
+    "stm32f1_objects": 154,
+    "llvm_ir_verified": 154,
+    "c_vs_rob_host_comparisons": 153,
+    "expected_diagnostics": 94,
+    "prototype_skipped": 1
+  },
+  "previous_cases_unchanged": 238,
+  "previous_successful_rob_outputs_byte_identical": 150,
+  "robcmp_source_files_byte_identical": 127,
+  "robcmp_library_files_byte_identical": 33,
+  "corpus": {
+    "total": 142,
+    "translated_previous": 2,
+    "translated_with_pilot": 3,
+    "translated_new": [
+      "dummy.c"
+    ],
+    "assembly_files": [
+      "board.s",
+      "dummy.s",
+      "teste.s"
+    ],
+    "pipeline_without_reported_errors_previous": [
+      "teste.c"
+    ],
+    "pipeline_without_reported_errors_with_pilot": [
+      "dummy.c",
+      "teste.c"
+    ],
+    "board_diagnostic": "No such file or directory 'boardsupport.rob'",
+    "direct_exit_codes_unchanged": 142,
+    "direct_successful_rob_byte_identical": [
+      "board.c",
+      "teste.c"
+    ],
+    "preprocess_files": [
+      "dummy.c"
+    ],
+    "failed_no_rob": 139,
+    "of_which_existing_signal_11": [
+      "libpicojpeg.c"
+    ]
+  },
+  "dummy_host_comparison": {
+    "benchmark": 190,
+    "verify_benchmark_args": [
+      188,
+      189,
+      190,
+      191,
+      192
+    ],
+    "c_and_rob": [
+      0,
+      0,
+      1,
+      0,
+      0
+    ]
+  }
+}

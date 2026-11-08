@@ -1,0 +1,20 @@
+
+int32 teste(int32 n) {
+
+	x = int32(n);
+	soma = int32(0);
+	while n > 0 {
+		__c2rob_scope_0_x = int32(2);
+		while __c2rob_scope_0_x > 0 {
+
+			__c2rob_scope_1_x = int32(3);
+			y = int32(__c2rob_scope_1_x + 1);
+			soma += __c2rob_scope_1_x + y;
+			return soma;
+		}
+
+	}
+
+	return soma + x;
+}
+

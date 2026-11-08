@@ -1,0 +1,21 @@
+const base = int32(2);
+
+int32 somar(int32 valor) {
+	resultado = int32(valor + base);
+	return resultado;
+}
+
+
+int32 teste(int32 n) {
+	const a = int32(3);
+	valores = {int32(4), n + 5};
+
+	if n != 0 {
+		__c2rob_scope_0_a = int32(n);
+		__c2rob_scope_0_a += 1;
+		return somar(__c2rob_scope_0_a) + valores[0] + valores[1];
+	}
+
+	return somar(a) + valores[0] + valores[1];
+}
+

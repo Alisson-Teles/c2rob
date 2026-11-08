@@ -1,0 +1,15 @@
+
+a = {int32(1), 2};
+b = int32(3);
+
+int32 teste(int32 n) {
+	a[0] = 1;
+	while a[0] > 0 {
+		__c2rob_array_index_0 = 0;
+		a[__c2rob_array_index_0] = a[__c2rob_array_index_0] - 1;
+		n++;
+	}
+
+	return n + b;
+}
+

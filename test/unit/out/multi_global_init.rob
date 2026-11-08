@@ -1,0 +1,13 @@
+
+total = int32(0);
+limite = int32(3);
+
+int32 teste(int32 n) {
+	total = 0;
+	while (total < limite) and (total < n) {
+		total++;
+	}
+
+	return total;
+}
+

@@ -1,5 +1,1 @@
-int teste(const int n) {
-    n += 1;
-
-    return n;
-}
+int teste(const int n) { n += 1; return n; }

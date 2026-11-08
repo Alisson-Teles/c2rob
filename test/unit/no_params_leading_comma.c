@@ -1,3 +1,1 @@
-int teste(, int n) {
-    return n;
-}
+int teste(, int n) { return n; }

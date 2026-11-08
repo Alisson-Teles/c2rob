@@ -1,0 +1,8 @@
+
+int32 teste(int32 n) {
+
+	valores = {uint16(uint16(2)), uint16(3)};
+	base = uint16(uint16(4));
+	return int32((int32((int32((int32(uint32(valores[0])) + int32(uint32(valores[1])))) + int32(uint32(base)))) + int32(n)));
+}
+

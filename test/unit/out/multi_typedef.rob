@@ -1,0 +1,15 @@
+
+a = int32(1);
+b = int32(2);
+
+int32 teste(int32 n) {
+
+	x = int32(n);
+	y = int32(x + a);
+	while y > 0 {
+		y--;
+	}
+
+	return x + b;
+}
+

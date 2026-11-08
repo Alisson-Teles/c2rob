@@ -1,0 +1,8 @@
+
+int32 teste(int32 n) {
+	const a = int32(2);
+	const b = int32(3);
+	const c = uint32(4);
+	return int32((uint32((uint32(a + b) + uint32(c))) + uint32(n)));
+}
+

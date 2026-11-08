@@ -1,0 +1,3 @@
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/switch.c:1:37: unsupported C statement: switch
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/switch.c:1:37: syntax error, unexpected TOK_UNSUPPORTED
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/switch.c:1:48: unsupported C statement: case

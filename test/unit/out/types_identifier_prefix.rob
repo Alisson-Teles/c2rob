@@ -1,0 +1,7 @@
+
+int32 teste(int32 n) {
+	integer = int32(n);
+	unsigned_value = int32(2);
+	return integer + unsigned_value;
+}
+

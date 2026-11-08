@@ -1,0 +1,18 @@
+
+int32 teste(int32 n) {
+	i = int32(0);
+	total = int32(0);
+	j = int32(0);
+	while i < n {
+		j = 0;
+		while j < i {
+			total++;
+			j++;
+		}
+
+		i++;
+	}
+
+	return total;
+}
+

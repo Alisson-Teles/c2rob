@@ -1,4 +1,1 @@
-int teste(int n) {
-    _Bool valor = n;
-    return n;
-}
+int teste(int n) { _Bool valor = n; return n; }

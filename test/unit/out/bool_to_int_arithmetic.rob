@@ -1,0 +1,11 @@
+
+int32 teste(int32 n) {
+	resultado = int32(0);
+	while n != 0 {
+		resultado = int32((int32(10) - int32(int32(uint32((n > 1))))));
+		n = 0;
+	}
+
+	return resultado;
+}
+

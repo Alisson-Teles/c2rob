@@ -1,0 +1,6 @@
+
+int32 teste(int32 n) {
+	a = int64(int64(2147483648));
+	return int32((int64((int64(a) / int64(int64(1073741824)))) + int64(n)));
+}
+

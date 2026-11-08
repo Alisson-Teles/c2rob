@@ -1,0 +1,19 @@
+estado = int32(0);
+
+void ajustar(int32 n) {
+	estado = 1;
+
+	if n < 0 {
+		return;
+	}
+
+	estado = 2;
+}
+
+
+int32 teste(int32 n) {
+	estado = 0;
+	ajustar(n);
+	return estado;
+}
+

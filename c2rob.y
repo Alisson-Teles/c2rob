@@ -12,57 +12,52 @@ int errorcount = 0;
 int current_unamed_arg = 0;
 extern bool force_print_tree;
 
-DeclarationSpecifiers *resolveDeclarationSpecifiers(
-    DeclarationSpecifiers *spec
-) {
-    try {
-        spec->resolve();
-    } catch (const std::exception &error) {
-        yyerror(error.what());
-        spec->type = "int32";
-    }
-
+DeclarationSpecifiers *resolveDeclarationSpecifiers(DeclarationSpecifiers *spec) {
+    try { spec->resolve(); }
+    catch (const std::exception &error) { yyerror(error.what()); spec->type = "int32"; }
     return spec;
 }
 
-Node *applyDeclarationSpecifiers(
-    Node *node,
-    const DeclarationSpecifiers *spec
-) {
-    if (spec->isConst)
-        node->markSourceConst();
-
-    if (spec->isVolatile)
-        node->markSourceVolatile();
-
-    if (spec->isStatic)
-        node->markSourceStatic();
-
+Node *applyDeclarationSpecifiers(Node *node, const DeclarationSpecifiers *spec) {
+    if (spec->isConst) node->markSourceConst();
+    if (spec->isVolatile) node->markSourceVolatile();
+    if (spec->isStatic) node->markSourceStatic();
     return node;
 }
 
-FuncArg *makeFunctionArgument(
-    DeclarationSpecifiers *spec,
-    const string &name,
-    bool pointer = false
-) {
+FuncArg *makeFunctionArgument(DeclarationSpecifiers *spec, const string &name, bool pointer = false) {
     string type = spec->type;
-
-    if (pointer && (type == "char" || type == "int32"))
-        type += "*";
-
+    if (pointer && (type == "char" || type == "int32")) type += "*";
     auto *arg = new FuncArg(type, name, pointer);
-
     applyDeclarationSpecifiers(arg, spec);
-
-    if (spec->isStatic)
-        yyerror(
-            "declaration: static is not allowed on a function parameter"
-        );
-
+    if (spec->isStatic) yyerror("declaration: static is not allowed on a function parameter");
     return arg;
 }
 
+Function *makeFunctionHeader(const DeclarationSpecifiers *spec, const char *name, Node *args) {
+    auto *function = new Function(spec->type, name, args);
+    if (spec->isStatic) function->markSourceStatic();
+    return function;
+}
+
+// A declaration can attach noinline to the function before its definition.
+void propagateNoInline(Node *program) {
+    set<string> names;
+    for (Node *node : program->getChildren())
+        if (auto *function = dynamic_cast<Function*>(node); function && function->hasNoInline())
+            names.insert(function->getName());
+    for (Node *node : program->getChildren()) {
+        auto *function = dynamic_cast<Function*>(node);
+        if (!function || !names.contains(function->getName())) continue;
+        // The emitter cannot represent C's internal linkage for functions.
+        if (function->isSourceStatic()) {
+            fprintf(stderr, "%s:%d: function attribute: static linkage with noinline is outside this pilot: %s\n",
+                    build_file_name, function->getLineNo(), function->getName().c_str());
+            ++errorcount;
+        }
+        function->markNoInline();
+    }
+}
 %}
 
 %define parse.error detailed
@@ -85,13 +80,13 @@ FuncArg *makeFunctionArgument(
 %token TOK_IF TOK_ELSE TOK_FOR TOK_WHILE TOK_RETURN TOK_UNSUPPORTED
 %token <str> TOK_INTEGER_LITERAL
 %token TOK_INCLUDE TOK_STRUCT TOK_TYPEDEF
+%token TOK_GNU_ATTRIBUTE
 %token TOK_STATIC TOK_VOLATILE TOK_CONST
 %token <str> TOK_TYPE_SPEC
 
 %type<str> TOK_STRING TOK_IDENT TOK_CMP_EQNEQ TOK_CMP_RELAT TOK_UNARY_OPERATOR TOK_ATTRIBUTION
 %type<str> TOK_INCLUDE
-%type<str> specifier_qualifier
-%type<spec> declaration_specifiers builtin_specifiers specifier_qualifiers%type<itg> TOK_INT
+%type<itg> TOK_INT
 %type<flt> TOK_FLOAT
 %type<node> globals global expr factor array_decl array_init_decl
 %type<node> array_values array_values_decls array_values_decl struct_values_decl
@@ -99,9 +94,12 @@ FuncArg *makeFunctionArgument(
 %type<node> multi_decl multi_declarators multi_declarator
 %type<node> scalar_or_array typedef_decl
 %type<node> func_arg func_args optional_func_args func_decl func_impl function_call func_call_args
+%type<node> function_header
 %type<node> ifstmt elseblock forstmt whilestmt whilebody optional_locals returnstmt include
 %type<node> struct_decl struct_field struct_fields
-%type<itg> pointer_arg
+%type<spec> declaration_specifiers builtin_specifiers specifier_qualifiers
+%type<str> specifier_qualifier
+%type<itg> pointer_arg function_attribute
 
 %printer { fprintf(yyo, "%s", $$); } <str>
 %printer { fprintf(yyo, "%lld", static_cast<long long>($$)); } <itg>
@@ -124,44 +122,20 @@ FuncArg *makeFunctionArgument(
 
 %%
 
-
-
 program : globals {
     Node *program = $globals;
 
     try {
-        bool scope_valid =
-            errorcount == 0
-            && resolveScopeProgram(program);
+    if (errorcount == 0) propagateNoInline(program);
+    bool scope_valid = errorcount == 0 && resolveScopeProgram(program);
+    bool while_valid = scope_valid && validateWhileProgram(program);
+    bool qualifier_valid = while_valid && validateQualifierProgram(program);
+    bool integer_valid = qualifier_valid && validateIntegerProgram(program);
+    if (integer_valid && (errorcount == 0 || force_print_tree))
+        cout << program->toStr(-1);
+    } catch (const std::exception &error) { yyerror(error.what()); }
 
-        bool while_valid =
-            scope_valid
-            && validateWhileProgram(program);
-
-        bool qualifier_valid =
-            while_valid
-            && validateQualifierProgram(program);
-
-        bool integer_valid =
-            qualifier_valid
-            && validateIntegerProgram(program);
-
-        if (
-            integer_valid
-            && (errorcount == 0 || force_print_tree)
-        ) {
-            cout << program->toStr(-1);
-        }
-
-    } catch (const std::exception &error) {
-        yyerror(error.what());
-    }
-
-    exit(
-        errorcount != 0
-            ? EXIT_FAILURE
-            : EXIT_SUCCESS
-    );
+    exit(errorcount != 0 ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
 globals : globals[gg] global {
@@ -178,84 +152,40 @@ globals : global {
 }
 
 global : scalar_decl ';'
-    | scalar_init_decl ';'
-    | array_init_decl ';'
-    | array_decl ';'
-    | multi_decl ';'
-    | func_decl ';'
-    | typedef_decl ';'
-    | struct_decl ';'
-    | func_impl
-    | include
-    ;
+       | scalar_init_decl ';'
+       | array_init_decl ';'
+       | array_decl ';'
+       | multi_decl ';'
+       | func_decl ';'
+       | typedef_decl ';'
+       | struct_decl ';'
+       | func_impl
+       | include
+       ;
 
-builtin_specifiers
-    : TOK_TYPE_SPEC {
-        $$ = new DeclarationSpecifiers($1);
-    }
-    | builtin_specifiers TOK_TYPE_SPEC {
-        $$ = $1->append($2);
-    }
-    | builtin_specifiers specifier_qualifier {
-        $$ = $1->append($2);
-    }
-    ;
+// Built-in words are distinct tokens, so a declarator name ends this sequence.
+builtin_specifiers : TOK_TYPE_SPEC { $$ = new DeclarationSpecifiers($1); }
+                   | builtin_specifiers TOK_TYPE_SPEC { $$ = $1->append($2); }
+                   | builtin_specifiers specifier_qualifier { $$ = $1->append($2); }
+                   ;
 
-specifier_qualifier
-    : TOK_CONST {
-        $$ = "const";
-    }
-    | TOK_VOLATILE {
-        $$ = "volatile";
-    }
-    | TOK_STATIC {
-        $$ = "static";
-    }
-    ;
+specifier_qualifier : TOK_CONST { $$ = "const"; }
+          | TOK_VOLATILE { $$ = "volatile"; }
+          | TOK_STATIC { $$ = "static"; }
+          ;
 
-specifier_qualifiers
-    : specifier_qualifier {
-        $$ = new DeclarationSpecifiers($1);
-    }
-    | specifier_qualifiers specifier_qualifier {
-        $$ = $1->append($2);
-    }
-    ;
+specifier_qualifiers : specifier_qualifier { $$ = new DeclarationSpecifiers($1); }
+           | specifier_qualifiers specifier_qualifier { $$ = $1->append($2); }
+           ;
 
 declaration_specifiers
-    : builtin_specifiers {
-        $$ = resolveDeclarationSpecifiers($1);
-    }
-    | specifier_qualifiers builtin_specifiers {
-        $$ = resolveDeclarationSpecifiers(
-            $1->append($2)
-        );
-    }
-    | TOK_IDENT {
-        $$ = resolveDeclarationSpecifiers(
-            new DeclarationSpecifiers($1)
-        );
-    }
-    | TOK_IDENT specifier_qualifiers {
-        $$ = resolveDeclarationSpecifiers(
-            $2->append($1)
-        );
-    }
-    | specifier_qualifiers TOK_IDENT {
-        $$ = resolveDeclarationSpecifiers(
-            $1->append($2)
-        );
-    }
-    | specifier_qualifiers TOK_IDENT specifier_qualifiers {
-        $$ = resolveDeclarationSpecifiers(
-            $1->append($2)->append($3)
-        );
-    }
-    | TOK_STRUCT TOK_IDENT {
-        // Struct tags use their own C namespace.
-        $$ = new DeclarationSpecifiers($2);
-        $$->type = $2;
-    }
+    : builtin_specifiers { $$ = resolveDeclarationSpecifiers($1); }
+    | specifier_qualifiers builtin_specifiers { $$ = resolveDeclarationSpecifiers($1->append($2)); }
+    | TOK_IDENT { $$ = resolveDeclarationSpecifiers(new DeclarationSpecifiers($1)); }
+    | TOK_IDENT specifier_qualifiers { $$ = resolveDeclarationSpecifiers($2->append($1)); }
+    | specifier_qualifiers TOK_IDENT { $$ = resolveDeclarationSpecifiers($1->append($2)); }
+    | specifier_qualifiers TOK_IDENT specifier_qualifiers { $$ = resolveDeclarationSpecifiers($1->append($2)->append($3)); }
+    | TOK_STRUCT TOK_IDENT { $$ = new DeclarationSpecifiers($2); $$->type = $2; }
     ;
 
 include : TOK_INCLUDE[name] {
@@ -265,26 +195,17 @@ include : TOK_INCLUDE[name] {
     $$ = new Ident("use " + name + ";\n");
 }
 
+typedef_decl : TOK_TYPEDEF declaration_specifiers[src] TOK_IDENT[name] {
+    if ($src->isStatic) yyerror("declaration: static is not allowed in a typedef");
+    declared_typedefs[$name] = $src->type;
+    sourceTypedefs.insert_or_assign($name, *$src);
+    $$ = nullptr;
+}
 
-typedef_decl
-    : TOK_TYPEDEF declaration_specifiers[src] TOK_IDENT[name] {
-        if ($src->isStatic)
-            yyerror(
-                "declaration: static is not allowed in a typedef"
-            );
+struct_decl : TOK_STRUCT TOK_IDENT[name] '{' struct_fields '}' {
+    $$ = new Type($name, $struct_fields);
+}
 
-        declared_typedefs[$name] = $src->type;
-        sourceTypedefs.insert_or_assign($name, *$src);
-
-        $$ = nullptr;
-    }
-    ;
-
-struct_decl
-    : TOK_STRUCT TOK_IDENT[name] '{' struct_fields '}' {
-        $$ = new Type($name, $struct_fields);
-    }
-    ;
 struct_fields : struct_fields[gg] struct_field {
     $gg->append($struct_field);
     $$ = $gg;
@@ -300,91 +221,57 @@ struct_field : scalar_decl ';' {
     $$ = $scalar_decl;
 }
 
+struct_field : declaration_specifiers[type] TOK_IDENT[name] ':' TOK_INTEGER_LITERAL[bitfield] ';' {
+    $$ = applyDeclarationSpecifiers(new VariableDecl($type->type, $name, atoi($bitfield)), $type);
+}
 
-struct_field
-    : declaration_specifiers[type]
-      TOK_IDENT[name]
-      ':'
-      TOK_INTEGER_LITERAL[bitfield]
-      ';' {
-        $$ = applyDeclarationSpecifiers(
-            new VariableDecl(
-                $type->type,
-                $name,
-                atoi($bitfield)
-            ),
-            $type
-        );
-    }
-    ;
+// Only a single, argument-free noinline GNU attribute is supported here.
+function_attribute : TOK_GNU_ATTRIBUTE '(' '(' TOK_IDENT[name] ')' ')' {
+    string name($name);
+    $$ = name == "noinline" || name == "__noinline__";
+    if (!$$)
+        yyerror(("unsupported GNU function attribute: " + name).c_str());
+}
 
-func_decl
-    : declaration_specifiers[type]
-      TOK_IDENT[name]
-      '(' optional_func_args ')' {
-        $$ = new Function(
-            $type->type,
-            $name,
-            $optional_func_args
-        );
-    }
-    ;
+function_header : declaration_specifiers[type] TOK_IDENT[name] '(' optional_func_args ')' {
+    $$ = makeFunctionHeader($type, $name, $optional_func_args);
+}
 
-func_decl
-    : declaration_specifiers[type]
-      '*'
-      TOK_IDENT[name]
-      '(' optional_func_args ')' {
-        $$ = new Function(
-            $type->type,
-            $name,
-            $optional_func_args
-        );
+function_header : declaration_specifiers[type] '*' TOK_IDENT[name] '(' optional_func_args ')' {
+    $$ = makeFunctionHeader($type, $name, $optional_func_args);
+    ((Function*)$$)->markPointerResult();
+}
 
-        ((Function*)$$)->markPointerResult();
-    }
-    ;
+function_header : function_attribute[attr] declaration_specifiers[type] TOK_IDENT[name] '(' optional_func_args ')' {
+    auto *function = makeFunctionHeader($type, $name, $optional_func_args);
+    if ($attr) function->markNoInline();
+    $$ = function;
+}
 
-func_impl
-    : declaration_specifiers[type]
-      TOK_IDENT[name]
-      '(' optional_func_args ')'
-      '{' optional_locals '}' {
-        $$ = new Function(
-            $type->type,
-            $name,
-            $optional_func_args,
-            $optional_locals
-        );
-    }
-    ;
+function_header : declaration_specifiers[type] function_attribute[attr] TOK_IDENT[name] '(' optional_func_args ')' {
+    auto *function = makeFunctionHeader($type, $name, $optional_func_args);
+    if ($attr) function->markNoInline();
+    $$ = function;
+}
 
-func_impl
-    : declaration_specifiers[type]
-      '*'
-      TOK_IDENT[name]
-      '(' optional_func_args ')'
-      '{' optional_locals '}' {
-        $$ = new Function(
-            $type->type,
-            $name,
-            $optional_func_args,
-            $optional_locals
-        );
+func_decl : function_header
+          | function_header function_attribute[attr] {
+    $$ = $function_header;
+    if ($attr) static_cast<Function*>($$)->markNoInline();
+}
 
-        ((Function*)$$)->markPointerResult();
-    }
-    ;
+func_impl : function_header '{' optional_locals '}' {
+    $$ = $function_header;
+    static_cast<Function*>($$)->setBody($optional_locals);
+}
 
-// Reject actual parameters of type void
+// Keep the empty alternative outside the comma-separated list: reject f(, int n).
 optional_func_args : func_args {
     for (Node *node : $func_args->getChildren()) {
         auto *arg = static_cast<FuncArg*>(node);
-
         if (arg->getTypeName() == "void" && !arg->isSourcePointer())
             yyerror("a void parameter cannot have a name or qualifiers");
     }
-
     $$ = $func_args;
 }
 
@@ -392,11 +279,10 @@ optional_func_args : %empty {
     $$ = new NodeArgs();
 }
 
-//Reject 'void' when mixed with other parameters in conditional
 func_args : func_args[gg] ',' func_arg {
-    if($gg->getChildren().empty() || !$func_arg)
+    // A bare void is represented by an empty list and must stand alone.
+    if ($gg->getChildren().empty() || !$func_arg)
         yyerror("void must be the only item in the parameter list");
-
     $gg->append($func_arg);
     $$ = $gg;
 }
@@ -415,68 +301,30 @@ pointer_arg : '*' '*' {
     $$ = 1;
 }
 
-// An unqualified, unnamed void is the zero-parameter marker.
-func_arg
-    : declaration_specifiers[type] {
-        if (
-            $type->type == "void"
-            && !$type->isConst
-            && !$type->isVolatile
-            && !$type->isStatic
-        ) {
-            $$ = nullptr;
-        } else {
-            $$ = makeFunctionArgument(
-                $type,
-                "_un" + to_string(current_unamed_arg++)
-            );
-        }
+// An unqualified, unnamed void is the sole zero-parameter marker.
+func_arg : declaration_specifiers[type] {
+    if ($type->type == "void" && !$type->isConst && !$type->isVolatile && !$type->isStatic) {
+        $$ = nullptr;
+    } else {
+        $$ = makeFunctionArgument($type, "_un" + to_string(current_unamed_arg++));
     }
-    ;
+}
 
-func_arg
-    : declaration_specifiers[type] pointer_arg {
-        $$ = makeFunctionArgument(
-            $type,
-            "_un" + to_string(current_unamed_arg++),
-            true
-        );
-    }
-    ;
+func_arg : declaration_specifiers[type] pointer_arg {
+    $$ = makeFunctionArgument($type, "_un" + to_string(current_unamed_arg++), true);
+}
 
-func_arg
-    : declaration_specifiers[type] TOK_IDENT[name] {
-        $$ = makeFunctionArgument(
-            $type,
-            $name
-        );
-    }
-    ;
+func_arg : declaration_specifiers[type] TOK_IDENT[name] {
+    $$ = makeFunctionArgument($type, $name);
+}
 
-func_arg
-    : declaration_specifiers[type]
-      pointer_arg
-      TOK_IDENT[name] {
-        $$ = makeFunctionArgument(
-            $type,
-            $name,
-            true
-        );
-    }
-    ;
+func_arg : declaration_specifiers[type] pointer_arg TOK_IDENT[name] {
+    $$ = makeFunctionArgument($type, $name, true);
+}
 
-func_arg
-    : declaration_specifiers[type]
-      pointer_arg
-      TOK_IDENT[name]
-      '[' ']' {
-        $$ = makeFunctionArgument(
-            $type,
-            $name,
-            true
-        );
-    }
-    ;
+func_arg : declaration_specifiers[type] pointer_arg TOK_IDENT[name] '[' ']' {
+    $$ = makeFunctionArgument($type, $name, true);
+}
 
 global : error ';' { $$ = new Node(); }
 
@@ -492,20 +340,17 @@ locals : local {
 }
 
 local : multi_decl ';'
-    | scalar_decl ';'
-    | scalar_init_decl ';'
-    | array_init_decl ';'
-    | array_decl ';'
-    | attribution ';'
-    | function_call ';' {
-        ((FunctionCall*)$1)->setInExpr(false);
-        $$ = $1;
-    }
-    | ifstmt
-    | forstmt
-    | whilestmt
-    | returnstmt
-    ; 
+      | scalar_decl ';'
+      | scalar_init_decl ';'
+      | array_init_decl ';'
+      | array_decl ';'
+      | attribution ';'
+      | function_call ';'   { ((FunctionCall*)$1)->setInExpr(false); $$ = $1; }
+      | ifstmt
+      | forstmt
+      | whilestmt
+      | returnstmt
+      ;
 
 // Always pass a statement list to While, including the two empty-body forms.
 whilestmt : TOK_WHILE '(' expr ')' whilebody {
@@ -584,24 +429,26 @@ ifstmt : TOK_IF '(' expr ')' '{' locals '}' elseblock {
     $$ = new IfStmt($expr, $locals, $elseblock);
 }
 
+elseblock : TOK_ELSE '{' locals '}' { $$ = $locals; }
+elseblock : TOK_ELSE local          { $$ = $local; }
+
 // Require at least two declarators; single declarations keep their existing rules.
 multi_decl : declaration_specifiers[type] multi_declarators {
-    string type = VariableDecl::convertTypeToRob(
-    $type->type
-    );
+    string type = VariableDecl::convertTypeToRob($type->type);
     if (declared_types.contains(type))
-        yyerror("multiple declaration: aggregate type not supported");
+        yyerror("multiple declaration: aggregate type is not supported");
     if (type == "void")
-        yyerror("multiple declaration: type 'void' cannot be used to declare variables");
+        yyerror("multiple declaration: void cannot be used as a variable type");
     for (Node *node : $multi_declarators->getChildren()) {
         auto *decl = static_cast<VariableDecl*>(node);
         decl->setDeclarationType($type->type);
-        applyDeclarationSpecifiers(decl, $type);        if (decl->getIndex()) {
+        applyDeclarationSpecifiers(decl, $type);
+        if (decl->getIndex()) {
             string size = decl->getIndex()->toStr(0);
             if (!regex_match(size, regex("[1-9][0-9]*")))
-                yyerror("multiple declaration: vector dimension must be a positive integer literal");
+                yyerror("multiple declaration: array size must be a positive integer literal");
             else if (decl->getValue() && to_string(decl->getValue()->getChildren().size()) != size)
-                yyerror("multiple declaration: array initialization must populate all elements");
+                yyerror("multiple declaration: array initialization must provide all elements");
         }
     }
     $$ = $multi_declarators;
@@ -635,108 +482,35 @@ multi_declarator : TOK_IDENT[name] '[' expr[idx] ']' '=' array_values_decl[value
     $$ = new VariableDecl("", $name, $idx, $value);
 }
 
-elseblock : TOK_ELSE '{' locals '}' { $$ = $locals; }
-elseblock : TOK_ELSE local          { $$ = $local; }
-
 /* scalars */
-scalar_init_decl
-    : declaration_specifiers[type]
-      TOK_IDENT[name]
-      '=' expr {
-        $$ = applyDeclarationSpecifiers(
-            new VariableDecl(
-                $type->type,
-                $name,
-                $expr
-            ),
-            $type
-        );
-    }
-    ;
+scalar_init_decl : declaration_specifiers[type] TOK_IDENT[name] '=' expr {
+    $$ = applyDeclarationSpecifiers(new VariableDecl($type->type, $name, $expr), $type);
+}
 
 /* initialized structs */
-scalar_init_decl
-    : declaration_specifiers[type]
-      TOK_IDENT[name]
-      '=' array_values_decl[value] {
-        $$ = applyDeclarationSpecifiers(
-            new InitializedType(
-                $type->type,
-                $name,
-                $value
-            ),
-            $type
-        );
-    }
-    ;
+scalar_init_decl : declaration_specifiers[type] TOK_IDENT[name] '=' array_values_decl[value] {
+    $$ = applyDeclarationSpecifiers(new InitializedType($type->type, $name, $value), $type);
+}
 
 /* not initialized scalars */
-scalar_decl
-    : declaration_specifiers[type] TOK_IDENT[name] {
-        $$ = applyDeclarationSpecifiers(
-            new VariableDecl(
-                $type->type,
-                $name
-            ),
-            $type
-        );
-    }
-    ;
+scalar_decl : declaration_specifiers[type] TOK_IDENT[name] {
+    $$ = applyDeclarationSpecifiers(new VariableDecl($type->type, $name), $type);
+}
 
 /* arrays */
-array_init_decl
-    : declaration_specifiers[type]
-      TOK_IDENT[name]
-      '[' expr[idx] ']'
-      '=' array_values_decl[value] {
-        ((NodeArgs*)$value)->setArrayInitType(
-            $type->type
-        );
+array_init_decl : declaration_specifiers[type] TOK_IDENT[name] '[' expr[idx] ']' '=' array_values_decl[value] {
+    ((NodeArgs*)$value)->setArrayInitType($type->type);
+    $$ = applyDeclarationSpecifiers(new VariableDecl($type->type, $name, $idx, $value), $type);
+}
 
-        $$ = applyDeclarationSpecifiers(
-            new VariableDecl(
-                $type->type,
-                $name,
-                $idx,
-                $value
-            ),
-            $type
-        );
-    }
-    ;
+array_decl : declaration_specifiers[type] TOK_IDENT[name] '[' expr[idx] ']' {
+    $$ = applyDeclarationSpecifiers(new VariableDecl($type->type, $name, $idx, nullptr), $type);
+}
 
-array_decl
-    : declaration_specifiers[type]
-      TOK_IDENT[name]
-      '[' expr[idx] ']' {
-        $$ = applyDeclarationSpecifiers(
-            new VariableDecl(
-                $type->type,
-                $name,
-                $idx,
-                nullptr
-            ),
-            $type
-        );
-    }
-    ;
+array_init_decl : declaration_specifiers[type] TOK_IDENT[name] '[' expr[idx] ']' '=' struct_values_decl[value] {
+    $$ = applyDeclarationSpecifiers(new StructVariableDecl($type->type, $name, $idx, $value), $type);
+}
 
-array_init_decl
-    : declaration_specifiers[type]
-      TOK_IDENT[name]
-      '[' expr[idx] ']'
-      '=' struct_values_decl[value] {
-        $$ = applyDeclarationSpecifiers(
-            new StructVariableDecl(
-                $type->type,
-                $name,
-                $idx,
-                $value
-            ),
-            $type
-        );
-    }
-    ;
 
 struct_values_decl : '{' array_values_decls[decl] '}' { $$ = $decl; }
 

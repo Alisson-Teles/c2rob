@@ -1,0 +1,23 @@
+chamadas = int32(0);
+
+int32 indice() {
+	chamadas++;
+	return 0;
+}
+
+
+int32 teste(int32 n) {
+	a = {int32(1)};
+	chamadas = 0;
+	while n > 0 {
+
+		__c2rob_scope_0_a = {int32(2)};
+		b = int32(0);
+		__c2rob_array_index_0 = indice();
+		__c2rob_scope_0_a[__c2rob_array_index_0] = __c2rob_scope_0_a[__c2rob_array_index_0] + 1;
+		n--;
+	}
+
+	return a[0] + chamadas;
+}
+

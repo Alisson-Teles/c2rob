@@ -1,0 +1,22 @@
+
+int32 teste(int32 n) {
+	total = int32(0);
+
+	if n > 0 {
+
+		x = int32(1);
+		y = int32(2);
+		total += x + y;
+	}
+
+
+	if n > 1 {
+
+		__c2rob_scope_0_x = int32(3);
+		__c2rob_scope_1_y = int32(4);
+		total += __c2rob_scope_0_x + __c2rob_scope_1_y;
+	}
+
+	return total;
+}
+

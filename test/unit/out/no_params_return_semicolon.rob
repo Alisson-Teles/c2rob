@@ -1,0 +1,11 @@
+
+void iniciar() {
+	return;
+}
+
+
+int32 main() {
+	iniciar();
+	return 0;
+}
+

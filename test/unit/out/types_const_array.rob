@@ -1,0 +1,6 @@
+
+int32 teste(int32 n) {
+	const a = {uint16(uint16(3)), uint16(4)};
+	return int32((int32((int32(uint32(a[0])) + int32(uint32(a[1])))) + int32(n)));
+}
+

@@ -1,0 +1,5 @@
+
+int32 pilot_macros(int32 n) noinline {
+	return ((n) * 5) + 1;
+}
+

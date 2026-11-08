@@ -1,0 +1,13 @@
+
+type Dados {
+	valor = uint16(0);
+}
+
+
+int32 teste(int32 n) {
+	d = Dados();
+	d.valor = 250;
+
+	return int32((int32(uint32(d.valor)) + int32(n)));
+}
+

@@ -1,0 +1,10 @@
+
+int32 teste(int32 n) {
+
+	valor = int32(n);
+	itens = {int32(2), 3};
+	resto = int32(0);
+	resto = itens[0] + itens[1];
+	return valor + resto;
+}
+

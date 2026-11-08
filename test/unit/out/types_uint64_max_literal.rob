@@ -1,0 +1,7 @@
+
+int32 teste(int32 n) {
+	a = uint64(uint64(0xffffffffffffffff));
+	a++;
+	return int32(a);
+}
+

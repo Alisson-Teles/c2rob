@@ -1,0 +1,14 @@
+
+int32 teste(int32 n) {
+	i = int32(0);
+	soma = int32(0);
+
+	i = 0;
+	while (n - i) != 0 {
+		soma += i;
+		i++;
+	}
+
+	return soma;
+}
+

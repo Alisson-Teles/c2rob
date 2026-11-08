@@ -1,0 +1,10 @@
+
+uint16 obter(int32 n) {
+	return uint16(n);
+}
+
+
+int32 teste(int32 n) {
+	return int32(uint32(obter(n)));
+}
+

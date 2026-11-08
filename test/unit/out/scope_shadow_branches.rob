@@ -1,0 +1,21 @@
+
+int32 teste(int32 n) {
+
+	a = int32(n);
+	resultado = int32(0);
+
+	if n > 0 {
+
+		__c2rob_scope_0_a = int32(2);
+		b = int32(__c2rob_scope_0_a + 1);
+		resultado = __c2rob_scope_0_a + b;
+	} else {
+
+		__c2rob_scope_1_a = int32(4);
+		__c2rob_scope_2_b = int32(__c2rob_scope_1_a + 1);
+		resultado = __c2rob_scope_1_a + __c2rob_scope_2_b;
+	}
+
+	return resultado + a;
+}
+

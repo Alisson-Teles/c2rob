@@ -1,0 +1,14 @@
+
+int32 teste(int32 n) {
+	soma = int32(0);
+	while n > 0 {
+
+		valores = {int32(n), n + 1};
+		t = int32(valores[0]);
+		soma += t + valores[1];
+		n--;
+	}
+
+	return soma;
+}
+

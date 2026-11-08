@@ -1,0 +1,10 @@
+
+int32 obter(int32 n) {
+	return n + 1;
+}
+
+
+int32 teste(int32 n) {
+	return obter(n);
+}
+

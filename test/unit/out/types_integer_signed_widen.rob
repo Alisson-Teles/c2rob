@@ -1,0 +1,7 @@
+
+int32 teste(int32 n) {
+	a = int8(int8(-1));
+	b = uint32(uint32(int32(a)));
+	return int32((uint32(b) / uint32(16777216)));
+}
+

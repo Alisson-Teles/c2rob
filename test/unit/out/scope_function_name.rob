@@ -1,0 +1,13 @@
+
+int32 valor() {
+	return 9;
+}
+
+
+int32 teste(int32 n) {
+
+	__c2rob_scope_0_valor = int32(n);
+	outro = int32(__c2rob_scope_0_valor + 1);
+	return __c2rob_scope_0_valor + outro;
+}
+

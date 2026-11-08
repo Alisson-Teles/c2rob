@@ -1,0 +1,15 @@
+
+void iniciar() {
+}
+
+
+void finalizar() {
+}
+
+
+int32 main() {
+	iniciar();
+	finalizar();
+	return 0;
+}
+

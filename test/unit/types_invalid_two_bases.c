@@ -1,5 +1,1 @@
-int teste(int n) {
-    int char a;
-
-    return n;
-}
+int teste(int n) { int char a; return n; }

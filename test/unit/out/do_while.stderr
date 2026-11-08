@@ -1,0 +1,2 @@
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/do_while.c:1:21: unsupported C statement: do
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/do_while.c:1:21: syntax error, unexpected TOK_UNSUPPORTED

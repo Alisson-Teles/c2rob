@@ -1,0 +1,18 @@
+
+void initialise_benchmark() noinline {
+}
+
+
+void warm_caches(int32 heat) noinline {
+}
+
+
+int32 benchmark() noinline {
+	return 190;
+}
+
+
+int32 verify_benchmark(int32 r) noinline {
+	return int32(int32(uint32(r == 190)));
+}
+

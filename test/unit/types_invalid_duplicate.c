@@ -1,5 +1,1 @@
-int teste(int n) {
-    long long long a;
-
-    return n;
-}
+int teste(int n) { long long long a; return n; }

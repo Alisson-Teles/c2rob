@@ -1,0 +1,19 @@
+
+int32 texto(char[] s) {
+	return s[0];
+}
+
+
+int32 teste(int32 n) {
+	a = int32(n);
+
+	if n > 0 {
+
+		__c2rob_scope_0_a = int32(1);
+		b = int32(2);
+		return texto("a.a");
+	}
+
+	return a;
+}
+

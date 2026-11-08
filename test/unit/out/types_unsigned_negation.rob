@@ -1,0 +1,6 @@
+
+int32 teste(int32 n) {
+	a = uint32(1);
+	return int32(int32(uint32((uint32((uint32(0) - uint32(a))) == uint32(uint32(4294967295))))));
+}
+

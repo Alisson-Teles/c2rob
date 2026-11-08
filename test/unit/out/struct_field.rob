@@ -1,0 +1,19 @@
+
+type S {
+	valor = int32(0);
+}
+
+
+int32 teste(int32 n) {
+	s = S();
+	s.valor = 3;
+
+	i = int32(0);
+	while s.valor != 0 {
+		s.valor--;
+		i++;
+	}
+
+	return i;
+}
+

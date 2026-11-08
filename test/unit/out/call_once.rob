@@ -1,0 +1,19 @@
+chamadas = int32(0);
+limite = int32(0);
+
+int32 proximo(int32 n) {
+	chamadas++;
+	return int32(int32(uint32(chamadas <= n)));
+}
+
+
+int32 teste(int32 n) {
+	chamadas = 0;
+	i = int32(0);
+	while proximo(n) != 0 {
+		i++;
+	}
+
+	return chamadas * 10 + i;
+}
+

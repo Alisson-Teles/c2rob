@@ -1,0 +1,1 @@
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/types_volatile_parameter.c:1: while: volatile access is not supported; the current C2ROB emitter does not preserve this qualifier in ROB

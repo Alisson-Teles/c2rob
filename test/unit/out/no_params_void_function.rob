@@ -1,0 +1,11 @@
+
+void iniciar() {
+	x = int32(10);
+}
+
+
+int32 teste(int32 n) {
+	iniciar();
+	return n + 1;
+}
+

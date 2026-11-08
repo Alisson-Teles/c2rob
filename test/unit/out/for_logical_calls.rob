@@ -1,0 +1,21 @@
+chamadas = int32(0);
+
+int32 condicao(int32 n) {
+	chamadas++;
+	return n;
+}
+
+
+int32 teste(int32 n) {
+	i = int32(0);
+	chamadas = 0;
+
+	i = 0;
+	while ((i < n)) and ((condicao(i + 1)) != 0) {
+		chamadas += 0;
+		i++;
+	}
+
+	return chamadas * 10 + i;
+}
+

@@ -1,0 +1,14 @@
+dados = {int32(1), 2};
+
+int32 teste(int32 n) {
+
+	__c2rob_scope_0_dados = {int32(3), 4};
+	soma = int32(0);
+	while n > 0 {
+		soma += __c2rob_scope_0_dados[1];
+		n--;
+	}
+
+	return soma;
+}
+

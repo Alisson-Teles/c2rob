@@ -1,0 +1,12 @@
+
+int32 teste(int32 n) {
+	total = int32(0);
+	while n > 0 {
+		__c2rob_scope_0_n = int32(4);
+		total += __c2rob_scope_0_n;
+		return total;
+	}
+
+	return total;
+}
+

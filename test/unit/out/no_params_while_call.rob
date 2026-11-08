@@ -1,0 +1,18 @@
+chamadas = int32(0);
+
+int32 proximo() {
+	chamadas++;
+	return 4 - chamadas;
+}
+
+
+int32 teste() {
+	chamadas = 0;
+	n = int32(0);
+	while proximo() != 0 {
+		n++;
+	}
+
+	return chamadas * 10 + n;
+}
+

@@ -1,0 +1,11 @@
+
+int32 teste(int32 n) {
+	i = int32(0);
+	while i < n {
+		passo = int32(1);
+		i += passo;
+	}
+
+	return i;
+}
+

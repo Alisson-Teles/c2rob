@@ -1,0 +1,23 @@
+
+type S {
+	valor = int32(0);
+}
+
+
+int32 teste(int32 n) {
+	s = S();
+	s.valor = 1;
+
+	total = int32(0);
+	while n > 0 {
+		__c2rob_scope_0_s = S();
+		__c2rob_scope_0_s.valor = 3;
+
+		total += __c2rob_scope_0_s.valor;
+		__c2rob_scope_0_s.valor--;
+		n--;
+	}
+
+	return total + s.valor;
+}
+

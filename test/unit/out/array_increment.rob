@@ -1,0 +1,13 @@
+
+int32 teste(int32 n) {
+	a = {int32(0), 0};
+	i = int32(0);
+	while i < n {
+		__c2rob_array_index_0 = 0;
+		a[__c2rob_array_index_0] = a[__c2rob_array_index_0] + 1;
+		i++;
+	}
+
+	return a[0];
+}
+

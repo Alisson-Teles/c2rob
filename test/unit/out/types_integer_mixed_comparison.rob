@@ -1,0 +1,7 @@
+
+int32 teste(int32 n) {
+	a = uint32(1);
+	b = int32(-1);
+	return int32(int32(uint32((uint32(b) < uint32(a)))));
+}
+

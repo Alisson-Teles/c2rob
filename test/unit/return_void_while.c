@@ -1,5 +1,4 @@
 int estado = 0;
-
 void limitar(int n) {
     while (n > 0) {
         estado++;
@@ -7,9 +6,4 @@ void limitar(int n) {
         n--;
     }
 }
-
-int teste(int n) {
-    estado = 0;
-    limitar(n);
-    return estado;
-}
+int teste(int n) { estado = 0; limitar(n); return estado; }

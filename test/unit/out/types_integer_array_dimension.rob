@@ -1,0 +1,8 @@
+
+int32 teste(int32 n) {
+
+	a = {int32(1), 2};
+	b = {int32(3), 4};
+	return a[0] + a[1] + b[0] + b[1] + n;
+}
+

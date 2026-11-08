@@ -1,0 +1,4 @@
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/pilot_preprocess_error.c:1:2: error: #error pilot: intentional preprocessing failure
+    1 | #error pilot: intentional preprocessing failure
+      |  ^~~~~
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/pilot_preprocess_error.c: preprocess: C compiler exited with status 1

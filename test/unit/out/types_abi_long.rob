@@ -1,0 +1,6 @@
+
+int32 teste(int32 n) {
+	valor = int32(n);
+	return valor;
+}
+

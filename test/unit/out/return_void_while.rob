@@ -1,0 +1,22 @@
+estado = int32(0);
+
+void limitar(int32 n) {
+	while n > 0 {
+		estado++;
+
+		if estado == 2 {
+			return;
+		}
+
+		n--;
+	}
+
+}
+
+
+int32 teste(int32 n) {
+	estado = 0;
+	limitar(n);
+	return estado;
+}
+

@@ -1,0 +1,10 @@
+
+int32 inc(int32 n) noinline {
+	return n + 1;
+}
+
+
+int32 pilot_definition(int32 n) noinline {
+	return inc(n) + 2;
+}
+

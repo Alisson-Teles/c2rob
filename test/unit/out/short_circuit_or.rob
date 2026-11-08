@@ -1,0 +1,18 @@
+chamadas = int32(0);
+
+int32 tocar(int32 n) {
+	chamadas++;
+	return n;
+}
+
+
+int32 teste(int32 n) {
+	chamadas = 0;
+	i = int32(0);
+	while (i < n) or ((tocar(0)) != 0) {
+		i++;
+	}
+
+	return chamadas * 10 + i;
+}
+

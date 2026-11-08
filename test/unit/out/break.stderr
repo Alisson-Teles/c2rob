@@ -1,0 +1,2 @@
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/break.c:1:36: unsupported C statement: break
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/break.c:1:36: syntax error, unexpected TOK_UNSUPPORTED

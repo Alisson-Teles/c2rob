@@ -1,0 +1,7 @@
+
+int32 teste(int32 n) {
+	a = uint32(uint32(4294967295));
+	b = uint32(uint32(16777216));
+	return int32((uint32(a) / uint32(b)));
+}
+

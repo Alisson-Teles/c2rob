@@ -1,0 +1,13 @@
+
+void iniciar();
+
+void iniciar() {
+	x = int32(10);
+}
+
+
+int32 main() {
+	iniciar();
+	return 0;
+}
+

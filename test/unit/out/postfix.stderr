@@ -1,0 +1,1 @@
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/postfix.c:1: while: postfix increment/decrement in an expression is not supported; the current ROB does not guarantee the previous value

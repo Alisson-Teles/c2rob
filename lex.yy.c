@@ -371,8 +371,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 70
-#define YY_END_OF_BUFFER 71
+#define YY_NUM_RULES 71
+#define YY_END_OF_BUFFER 72
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -382,31 +382,31 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[238] =
     {   0,
-        0,    0,    0,    0,   71,   69,    1,    2,   41,   69,
-       69,   37,   39,   69,   54,   55,   52,   36,   60,   34,
-       62,   35,   66,   66,   61,   53,   25,   43,   24,   64,
-       64,   56,   57,   40,   64,   64,   64,   64,   64,   64,
-       64,   64,   64,   64,   64,   64,   64,   64,   64,   58,
-       38,   59,   42,    4,   70,   29,    0,   67,    0,    0,
-        0,   32,   50,    0,    0,   46,   30,   44,   31,   45,
-       51,    3,    0,   47,   65,   66,   66,   66,    0,   66,
-       27,   28,   26,   64,   64,   48,   64,   64,   64,   64,
-       64,   64,   64,   15,   64,   64,   64,   64,   11,   64,
+        0,    0,    0,    0,   72,   70,    1,    2,   43,   70,
+       70,   39,   41,   70,   56,   57,   54,   38,   62,   36,
+       64,   37,   67,   67,   63,   55,   27,   45,   26,   65,
+       65,   58,   59,   42,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,   65,   65,   65,   65,   65,   65,   60,
+       40,   61,   44,    4,   71,   31,    0,   68,    0,    0,
+        0,   34,   52,    0,    0,   48,   32,   46,   33,   47,
+       53,    3,    0,   49,   66,   67,   67,   67,    0,   67,
+       29,   30,   28,   65,   65,   50,   65,   65,   65,   65,
+       65,   65,   65,   16,   65,   65,   65,   65,   12,   65,
 
-       64,   64,   64,   64,   64,   64,   64,   64,   64,   64,
-       49,   33,    5,    6,    0,    0,   68,   68,    0,    7,
-       65,   66,   66,   66,   66,   66,   64,   64,   64,   64,
-       64,   64,   64,   64,   64,   64,   64,   13,   64,   64,
-       63,   64,   64,   64,   64,   64,   64,   64,   64,   64,
-       64,   64,   64,    0,    0,   66,   23,   64,   64,   64,
-       15,   64,   64,   64,   64,   12,   64,   64,   64,   64,
-       64,   64,   64,   64,   64,   64,   64,   64,    0,    0,
-       64,   22,   64,   64,   64,   64,   64,   64,   64,   64,
-       64,   64,   64,   64,   14,    0,    0,   64,   64,   64,
+       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
+       51,   35,    5,    6,    0,    0,   69,   69,    0,    7,
+       66,   67,   67,   67,   67,   67,   65,   65,   65,   65,
+       65,   65,   65,   65,   65,   65,   65,   14,   65,   65,
+       24,   65,   65,   65,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,    0,    0,   67,   25,   65,   65,   65,
+       16,   65,   65,   65,   65,   13,   65,   65,   65,   65,
+       65,   65,   65,   65,   65,   65,   65,   65,    0,    0,
+       65,   23,   65,   65,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,   65,   15,    0,    0,   65,   65,   65,
 
-       21,   16,   19,   17,   64,   64,   64,    0,    0,   64,
-       64,   18,   64,   64,    0,    8,    0,   64,   20,    0,
-        0,   64,    0,   10,   64,   64,   64,   64,    0,    0,
+       22,   17,   20,   18,   65,   65,   65,    0,    0,   65,
+       65,   19,   65,   65,    0,    8,    0,   65,   21,    0,
+        0,   65,    0,   11,   65,   65,   65,   10,    0,    0,
         0,    0,    0,    0,    0,    9,    0
     } ;
 
@@ -608,12 +608,12 @@ static const flex_int16_t yy_chk[390] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[71] =
+static const flex_int32_t yy_rule_can_match_eol[72] =
     {   0,
 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,     };
+    0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -637,12 +637,13 @@ char *yytext;
 #include <stdlib.h>
 #include <string>
 
-#include "source_type.h"
-
 char *build_file_name;
 bool force_print_tree = false;
 class Node;
 class Strings;
+struct DeclarationSpecifiers;
+#include "source_type.h"
+#include "preprocess.h"
 
 #include "c2rob.tab.h"
 
@@ -651,9 +652,9 @@ extern int errorcount;
 int yycolno = 0;
 
 #define YY_USER_ACTION  yycolno += yyleng;
-#line 655 "lex.yy.c"
+#line 656 "lex.yy.c"
 
-#line 657 "lex.yy.c"
+#line 658 "lex.yy.c"
 
 #define INITIAL 0
 #define COMMENT 1
@@ -871,10 +872,10 @@ YY_DECL
 		}
 
 	{
-#line 27 "c2rob.l"
+#line 28 "c2rob.l"
 
 
-#line 878 "lex.yy.c"
+#line 879 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -949,24 +950,24 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 29 "c2rob.l"
+#line 30 "c2rob.l"
 { /* ignora */ }
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 30 "c2rob.l"
+#line 31 "c2rob.l"
 { yycolno = 0; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 32 "c2rob.l"
+#line 33 "c2rob.l"
 { yymore(); BEGIN COMMENT; }
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 33 "c2rob.l"
+#line 34 "c2rob.l"
 { yymore(); }
 	YY_BREAK
 case 5:
@@ -976,367 +977,372 @@ YY_LINENO_REWIND_TO(yy_bp + 1);
 (yy_c_buf_p) = yy_cp = yy_bp + 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 34 "c2rob.l"
+#line 35 "c2rob.l"
 { yymore(); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 35 "c2rob.l"
+#line 36 "c2rob.l"
 { BEGIN(INITIAL); }
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 37 "c2rob.l"
+#line 38 "c2rob.l"
 { /* ignora */ }
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 38 "c2rob.l"
+#line 39 "c2rob.l"
 { /* ignora */ }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 39 "c2rob.l"
+#line 40 "c2rob.l"
 { /* TODO: make generic or map supported robcmp attributes */ }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 41 "c2rob.l"
+{ return TOK_GNU_ATTRIBUTE; }
+	YY_BREAK
+case 11:
+YY_RULE_SETUP
+#line 43 "c2rob.l"
 {
     yylval.str = strndup(yytext, yyleng); 
     return TOK_INCLUDE;
 }
 	YY_BREAK
-case 11:
-YY_RULE_SETUP
-#line 46 "c2rob.l"
-{ return TOK_IF; }
-	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 47 "c2rob.l"
-{ return TOK_ELSE; }
+#line 48 "c2rob.l"
+{ return TOK_IF; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 48 "c2rob.l"
-{ return TOK_FOR; }
+#line 49 "c2rob.l"
+{ return TOK_ELSE; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 49 "c2rob.l"
-{ return TOK_WHILE; }
+#line 50 "c2rob.l"
+{ return TOK_FOR; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 50 "c2rob.l"
+#line 51 "c2rob.l"
+{ return TOK_WHILE; }
+	YY_BREAK
+case 16:
+YY_RULE_SETUP
+#line 52 "c2rob.l"
 {
     std::string message = std::string("unsupported C statement: ") + yytext;
     yyerror(message.c_str());
     return TOK_UNSUPPORTED;
 }
 	YY_BREAK
-case 16:
-YY_RULE_SETUP
-#line 55 "c2rob.l"
-{ return TOK_RETURN; }
-	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 56 "c2rob.l"
-{ return TOK_STRUCT; }
+#line 57 "c2rob.l"
+{ return TOK_RETURN; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 57 "c2rob.l"
-{ return TOK_TYPEDEF; }
+#line 58 "c2rob.l"
+{ return TOK_STRUCT; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 59 "c2rob.l"
-{ return TOK_STATIC; }
+{ return TOK_TYPEDEF; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 60 "c2rob.l"
-{ return TOK_VOLATILE; }
+#line 61 "c2rob.l"
+{ return TOK_STATIC; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 61 "c2rob.l"
-{ /* ignora */ }
+#line 62 "c2rob.l"
+{ return TOK_VOLATILE; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 62 "c2rob.l"
-{ return TOK_CONST; }
+#line 63 "c2rob.l"
+{ /* ignora */ }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 63 "c2rob.l"
-{ 
-    yylval.str = "0";
-    return TOK_INTEGER_LITERAL;
-}
+#line 64 "c2rob.l"
+{ return TOK_CONST; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 68 "c2rob.l"
-{ yylval.str = ">";  return TOK_CMP_RELAT; }
-	YY_BREAK
-case 25:
-YY_RULE_SETUP
-#line 69 "c2rob.l"
-{ yylval.str = "<";  return TOK_CMP_RELAT; }
-	YY_BREAK
-case 26:
-YY_RULE_SETUP
-#line 70 "c2rob.l"
-{ yylval.str = ">="; return TOK_CMP_RELAT; }
-	YY_BREAK
-case 27:
-YY_RULE_SETUP
-#line 71 "c2rob.l"
-{ yylval.str = "<="; return TOK_CMP_RELAT; }
-	YY_BREAK
-case 28:
-YY_RULE_SETUP
-#line 72 "c2rob.l"
-{ yylval.str = "=="; return TOK_CMP_EQNEQ; }
-	YY_BREAK
-case 29:
-YY_RULE_SETUP
-#line 73 "c2rob.l"
-{ yylval.str = "!="; return TOK_CMP_EQNEQ; }
-	YY_BREAK
-case 30:
-YY_RULE_SETUP
-#line 75 "c2rob.l"
-{ yylval.str = "++"; return TOK_UNARY_OPERATOR; }
-	YY_BREAK
-case 31:
-YY_RULE_SETUP
-#line 76 "c2rob.l"
-{ yylval.str = "--"; return TOK_UNARY_OPERATOR; }
-	YY_BREAK
-case 32:
-YY_RULE_SETUP
-#line 78 "c2rob.l"
-{ return TOK_AND; }
-	YY_BREAK
-case 33:
-YY_RULE_SETUP
-#line 79 "c2rob.l"
-{ return TOK_OR; }
-	YY_BREAK
-case 34:
-YY_RULE_SETUP
-#line 81 "c2rob.l"
-{ return '-'; } // has two meanings: binary and unary operator
-	YY_BREAK
-case 35:
-YY_RULE_SETUP
-#line 82 "c2rob.l"
-{ return '/'; }
-	YY_BREAK
-case 36:
-YY_RULE_SETUP
-#line 83 "c2rob.l"
-{ return '+'; }
-	YY_BREAK
-case 37:
-YY_RULE_SETUP
-#line 84 "c2rob.l"
-{ return '%'; }
-	YY_BREAK
-case 38:
-YY_RULE_SETUP
-#line 85 "c2rob.l"
-{ return '|'; }
-	YY_BREAK
-case 39:
-YY_RULE_SETUP
-#line 86 "c2rob.l"
-{ return '&'; }
-	YY_BREAK
-case 40:
-YY_RULE_SETUP
-#line 87 "c2rob.l"
-{ return '^'; }
-	YY_BREAK
-case 41:
-YY_RULE_SETUP
-#line 88 "c2rob.l"
-{ return '!'; }
-	YY_BREAK
-case 42:
-YY_RULE_SETUP
-#line 89 "c2rob.l"
-{ return '~'; }
-	YY_BREAK
-/* attributions */
-case 43:
-YY_RULE_SETUP
-#line 92 "c2rob.l"
-{ return '='; } // has two meanings: initialized decl and set variable values
-	YY_BREAK
-case 44:
-YY_RULE_SETUP
-#line 93 "c2rob.l"
-{ yylval.str = "+="; return TOK_ATTRIBUTION; }
-	YY_BREAK
-case 45:
-YY_RULE_SETUP
-#line 94 "c2rob.l"
-{ yylval.str = "-="; return TOK_ATTRIBUTION; }
-	YY_BREAK
-case 46:
-YY_RULE_SETUP
-#line 95 "c2rob.l"
-{ yylval.str = "*="; return TOK_ATTRIBUTION; }
-	YY_BREAK
-case 47:
-YY_RULE_SETUP
-#line 96 "c2rob.l"
-{ yylval.str = "/="; return TOK_ATTRIBUTION; }
-	YY_BREAK
-case 48:
-YY_RULE_SETUP
-#line 97 "c2rob.l"
-{ yylval.str = "^="; return TOK_ATTRIBUTION; }
-	YY_BREAK
-case 49:
-YY_RULE_SETUP
-#line 98 "c2rob.l"
-{ yylval.str = "|="; return TOK_ATTRIBUTION; }
-	YY_BREAK
-case 50:
-YY_RULE_SETUP
-#line 99 "c2rob.l"
-{ yylval.str = "&="; return TOK_ATTRIBUTION; }
-	YY_BREAK
-case 51:
-YY_RULE_SETUP
-#line 100 "c2rob.l"
-{ return '.'; }
-	YY_BREAK
-case 52:
-YY_RULE_SETUP
-#line 102 "c2rob.l"
-{ return '*'; } // multiple meanings
-	YY_BREAK
-case 53:
-YY_RULE_SETUP
-#line 104 "c2rob.l"
-{ return ';'; }
-	YY_BREAK
-case 54:
-YY_RULE_SETUP
-#line 105 "c2rob.l"
-{ return '('; }
-	YY_BREAK
-case 55:
-YY_RULE_SETUP
-#line 106 "c2rob.l"
-{ return ')'; }
-	YY_BREAK
-case 56:
-YY_RULE_SETUP
-#line 107 "c2rob.l"
-{ return '['; }
-	YY_BREAK
-case 57:
-YY_RULE_SETUP
-#line 108 "c2rob.l"
-{ return ']'; }
-	YY_BREAK
-case 58:
-YY_RULE_SETUP
-#line 109 "c2rob.l"
-{ return '{'; }
-	YY_BREAK
-case 59:
-YY_RULE_SETUP
-#line 110 "c2rob.l"
-{ return '}'; }
-	YY_BREAK
-case 60:
-YY_RULE_SETUP
-#line 111 "c2rob.l"
-{ return ','; }
-	YY_BREAK
-case 61:
-YY_RULE_SETUP
-#line 112 "c2rob.l"
-{ return ':'; }
-	YY_BREAK
-case 62:
-YY_RULE_SETUP
-#line 113 "c2rob.l"
-{ return '.'; }
-	YY_BREAK
-case 63:
-YY_RULE_SETUP
-#line 115 "c2rob.l"
+#line 66 "c2rob.l"
 {
     yylval.str = strndup(yytext, yyleng);
     return TOK_TYPE_SPEC;
 }
 	YY_BREAK
+case 25:
+YY_RULE_SETUP
+#line 70 "c2rob.l"
+{ 
+    yylval.str = "0";
+    return TOK_INTEGER_LITERAL;
+}
+	YY_BREAK
+case 26:
+YY_RULE_SETUP
+#line 75 "c2rob.l"
+{ yylval.str = ">";  return TOK_CMP_RELAT; }
+	YY_BREAK
+case 27:
+YY_RULE_SETUP
+#line 76 "c2rob.l"
+{ yylval.str = "<";  return TOK_CMP_RELAT; }
+	YY_BREAK
+case 28:
+YY_RULE_SETUP
+#line 77 "c2rob.l"
+{ yylval.str = ">="; return TOK_CMP_RELAT; }
+	YY_BREAK
+case 29:
+YY_RULE_SETUP
+#line 78 "c2rob.l"
+{ yylval.str = "<="; return TOK_CMP_RELAT; }
+	YY_BREAK
+case 30:
+YY_RULE_SETUP
+#line 79 "c2rob.l"
+{ yylval.str = "=="; return TOK_CMP_EQNEQ; }
+	YY_BREAK
+case 31:
+YY_RULE_SETUP
+#line 80 "c2rob.l"
+{ yylval.str = "!="; return TOK_CMP_EQNEQ; }
+	YY_BREAK
+case 32:
+YY_RULE_SETUP
+#line 82 "c2rob.l"
+{ yylval.str = "++"; return TOK_UNARY_OPERATOR; }
+	YY_BREAK
+case 33:
+YY_RULE_SETUP
+#line 83 "c2rob.l"
+{ yylval.str = "--"; return TOK_UNARY_OPERATOR; }
+	YY_BREAK
+case 34:
+YY_RULE_SETUP
+#line 85 "c2rob.l"
+{ return TOK_AND; }
+	YY_BREAK
+case 35:
+YY_RULE_SETUP
+#line 86 "c2rob.l"
+{ return TOK_OR; }
+	YY_BREAK
+case 36:
+YY_RULE_SETUP
+#line 88 "c2rob.l"
+{ return '-'; } // has two meanings: binary and unary operator
+	YY_BREAK
+case 37:
+YY_RULE_SETUP
+#line 89 "c2rob.l"
+{ return '/'; }
+	YY_BREAK
+case 38:
+YY_RULE_SETUP
+#line 90 "c2rob.l"
+{ return '+'; }
+	YY_BREAK
+case 39:
+YY_RULE_SETUP
+#line 91 "c2rob.l"
+{ return '%'; }
+	YY_BREAK
+case 40:
+YY_RULE_SETUP
+#line 92 "c2rob.l"
+{ return '|'; }
+	YY_BREAK
+case 41:
+YY_RULE_SETUP
+#line 93 "c2rob.l"
+{ return '&'; }
+	YY_BREAK
+case 42:
+YY_RULE_SETUP
+#line 94 "c2rob.l"
+{ return '^'; }
+	YY_BREAK
+case 43:
+YY_RULE_SETUP
+#line 95 "c2rob.l"
+{ return '!'; }
+	YY_BREAK
+case 44:
+YY_RULE_SETUP
+#line 96 "c2rob.l"
+{ return '~'; }
+	YY_BREAK
+/* attributions */
+case 45:
+YY_RULE_SETUP
+#line 99 "c2rob.l"
+{ return '='; } // has two meanings: initialized decl and set variable values
+	YY_BREAK
+case 46:
+YY_RULE_SETUP
+#line 100 "c2rob.l"
+{ yylval.str = "+="; return TOK_ATTRIBUTION; }
+	YY_BREAK
+case 47:
+YY_RULE_SETUP
+#line 101 "c2rob.l"
+{ yylval.str = "-="; return TOK_ATTRIBUTION; }
+	YY_BREAK
+case 48:
+YY_RULE_SETUP
+#line 102 "c2rob.l"
+{ yylval.str = "*="; return TOK_ATTRIBUTION; }
+	YY_BREAK
+case 49:
+YY_RULE_SETUP
+#line 103 "c2rob.l"
+{ yylval.str = "/="; return TOK_ATTRIBUTION; }
+	YY_BREAK
+case 50:
+YY_RULE_SETUP
+#line 104 "c2rob.l"
+{ yylval.str = "^="; return TOK_ATTRIBUTION; }
+	YY_BREAK
+case 51:
+YY_RULE_SETUP
+#line 105 "c2rob.l"
+{ yylval.str = "|="; return TOK_ATTRIBUTION; }
+	YY_BREAK
+case 52:
+YY_RULE_SETUP
+#line 106 "c2rob.l"
+{ yylval.str = "&="; return TOK_ATTRIBUTION; }
+	YY_BREAK
+case 53:
+YY_RULE_SETUP
+#line 107 "c2rob.l"
+{ return '.'; }
+	YY_BREAK
+case 54:
+YY_RULE_SETUP
+#line 109 "c2rob.l"
+{ return '*'; } // multiple meanings
+	YY_BREAK
+case 55:
+YY_RULE_SETUP
+#line 111 "c2rob.l"
+{ return ';'; }
+	YY_BREAK
+case 56:
+YY_RULE_SETUP
+#line 112 "c2rob.l"
+{ return '('; }
+	YY_BREAK
+case 57:
+YY_RULE_SETUP
+#line 113 "c2rob.l"
+{ return ')'; }
+	YY_BREAK
+case 58:
+YY_RULE_SETUP
+#line 114 "c2rob.l"
+{ return '['; }
+	YY_BREAK
+case 59:
+YY_RULE_SETUP
+#line 115 "c2rob.l"
+{ return ']'; }
+	YY_BREAK
+case 60:
+YY_RULE_SETUP
+#line 116 "c2rob.l"
+{ return '{'; }
+	YY_BREAK
+case 61:
+YY_RULE_SETUP
+#line 117 "c2rob.l"
+{ return '}'; }
+	YY_BREAK
+case 62:
+YY_RULE_SETUP
+#line 118 "c2rob.l"
+{ return ','; }
+	YY_BREAK
+case 63:
+YY_RULE_SETUP
+#line 119 "c2rob.l"
+{ return ':'; }
+	YY_BREAK
 case 64:
 YY_RULE_SETUP
 #line 120 "c2rob.l"
+{ return '.'; }
+	YY_BREAK
+case 65:
+YY_RULE_SETUP
+#line 122 "c2rob.l"
 {
     yylval.str = strndup(yytext, yyleng);
     return TOK_IDENT;
 }
 	YY_BREAK
-case 65:
+case 66:
 YY_RULE_SETUP
-#line 125 "c2rob.l"
+#line 127 "c2rob.l"
 {
     yylval.flt = atof(yytext);
     return TOK_FLOAT;
 }
 	YY_BREAK
-case 66:
+case 67:
 YY_RULE_SETUP
-#line 130 "c2rob.l"
+#line 132 "c2rob.l"
 {
     yylval.str = strndup(yytext, yyleng);
     return TOK_INTEGER_LITERAL;
 }
 	YY_BREAK
-case 67:
-/* rule 67 can match eol */
+case 68:
+/* rule 68 can match eol */
 YY_RULE_SETUP
-#line 135 "c2rob.l"
+#line 137 "c2rob.l"
 { yylval.str = strndup(yytext, yyleng);
 						  return TOK_STRING; }
 	YY_BREAK
-case 68:
+case 69:
 YY_RULE_SETUP
-#line 138 "c2rob.l"
+#line 140 "c2rob.l"
 { yylval.itg = yytext[0];
 						  return TOK_CHAR; }
 	YY_BREAK
-case 69:
+case 70:
 YY_RULE_SETUP
-#line 141 "c2rob.l"
+#line 143 "c2rob.l"
 { 
     fprintf(stderr, "%s:%d:%d: Unrecognized symbol %c\n", build_file_name, yylineno, yycolno, yytext[0]);
     errorcount++;
     return yytext[0];
   }
 	YY_BREAK
-case 70:
+case 71:
 YY_RULE_SETUP
-#line 148 "c2rob.l"
+#line 150 "c2rob.l"
 ECHO;
 	YY_BREAK
-#line 1340 "lex.yy.c"
+#line 1346 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 	yyterminate();
@@ -2354,7 +2360,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 148 "c2rob.l"
+#line 150 "c2rob.l"
 
 
 int yywrap() {
@@ -2372,75 +2378,59 @@ int yyerror(const char *s) {
 }
 
 int main(int argc, char *argv[]) {
+    
     if (argc <= 1) {
-        fprintf(
-            stderr,
-            "Usage: %s [-f] [-d] [--abi=ilp32|lp64] program_name\n",
-            argv[0]
-        );
+        fprintf(stderr, "Usage: %s [-f] [-d] [--abi=ilp32|lp64] [--preprocess] program_name\n",
+            argv[0]);
         return 1;
     }
 
     int build_file_id = 0;
-
+    bool preprocess = false;
     for (int argid = 1; argid < argc; ++argid) {
         std::string option(argv[argid]);
-
-        if (option == "-f") {
-            force_print_tree = true;
-        } else if (option == "-d") {
-            yydebug = 1;
-        } else if (option == "--abi=ilp32") {
-            sourceAbi = SourceAbi::ILP32;
-        } else if (option == "--abi=lp64") {
-            sourceAbi = SourceAbi::LP64;
-        } else if (option.starts_with("-")) {
-            fprintf(
-                stderr,
-                "Unknown option: %s. Supported ABIs: ilp32, lp64.\n",
-                argv[argid]
-            );
+        if (option == "-f") force_print_tree = true;
+        else if (option == "-d") yydebug = 1;
+        else if (option == "--abi=ilp32") sourceAbi = SourceAbi::ILP32;
+        else if (option == "--abi=lp64") sourceAbi = SourceAbi::LP64;
+        else if (option == "--preprocess") preprocess = true;
+        else if (option.starts_with("-")) {
+            fprintf(stderr, "Unknown option: %s. Supported ABIs: ilp32, lp64.\n", argv[argid]);
             return 1;
         } else if (build_file_id) {
-            fprintf(
-                stderr,
-                "Exactly one C input file is required.\n"
-            );
+            fprintf(stderr, "Exactly one C input file is required.\n");
             return 1;
-        } else {
-            build_file_id = argid;
-        }
+        } else build_file_id = argid;
     }
-
     if (!build_file_id) {
         fprintf(stderr, "A C input file is required.\n");
         return 1;
     }
-
-    build_file_name = argv[build_file_id];
-    yyin = fopen(build_file_name, "r");
-
-    if (yyin == NULL) {
-        fprintf(
-            stderr,
-            "Could not open file %s.\n",
-            build_file_name
-        );
-        return 1;
+    const char *input = argv[build_file_id];
+    std::string diagnostic_name(input);
+    if (preprocess) {
+        try { yyin = cpreprocess::open(input); }
+        catch (const std::exception &error) {
+            fprintf(stderr, "%s: preprocess: %s\n", input, error.what());
+            return 1;
+        }
+        diagnostic_name += " (preprocessed)";
+    } else {
+        yyin = fopen(input, "r");
+        if (yyin == NULL) {
+            fprintf(stderr, "Could not open file %s.\n", input);
+            return 1;
+        }
     }
+    build_file_name = diagnostic_name.data();
 
     int parse_status = 1;
+    try { parse_status = yyparse(); }
+    catch (const std::exception &error) { yyerror(error.what()); }
 
-    try {
-        parse_status = yyparse();
-    } catch (const std::exception &error) {
-        yyerror(error.what());
-    }
-
-    if (yyin) {
+    if (yyin)
         fclose(yyin);
-    }
-
-    return (parse_status != 0 || errorcount != 0) ?
-        EXIT_FAILURE : EXIT_SUCCESS;
+    
+    return (parse_status != 0 || errorcount != 0) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
+

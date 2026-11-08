@@ -1,0 +1,2 @@
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/continue.c:1:39: unsupported C statement: continue
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/continue.c:1:39: syntax error, unexpected TOK_UNSUPPORTED

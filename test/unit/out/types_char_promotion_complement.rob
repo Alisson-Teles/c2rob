@@ -1,0 +1,6 @@
+
+int32 teste(int32 n) {
+	a = uint8(uint8(255));
+	return int32((int32(uint32(a)) ^ int32(-1)));
+}
+

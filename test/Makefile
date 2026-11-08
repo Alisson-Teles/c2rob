@@ -1,27 +1,38 @@
-SFILES = $(patsubst cfiles/%.c,out/%.s,$(wildcard cfiles/*.c))
-ARCH = stm32f1
-DUMP = llvm-objdump-21
+OUT ?= out
+C2ROB ?= ../c2rob
+ROBCMP ?= robcmp
+ARCH ?= stm32f1
+DUMP ?= llvm-objdump-21
+
+# Select input basenames explicitly. Other sources still take the direct path.
+PREPROCESS_FILES ?= dummy.c
+CFILES := $(wildcard cfiles/*.c)
+ROBFILES := $(patsubst cfiles/%.c,$(OUT)/%.rob,$(CFILES))
+OBJECTS := $(ROBFILES:.rob=.o)
+SFILES := $(patsubst cfiles/%.c,$(OUT)/%.s,$(CFILES))
 
 .SUFFIXES:
+.PHONY: all count clean
 
-all : out ${SFILES}
+all : $(OUT) $(SFILES)
 
 count:
-	@echo "Success: " `ls out/*.s | wc -l`
+	@echo "Assembly files in $(OUT): $(words $(wildcard $(OUT)/*.s))"
 
-out :
-	mkdir -p out
+$(OUT) :
+	mkdir -p "$@"
 
-.PRECIOUS: out/%.rob
+# Keep translation and object files on success; delete failed outputs.
+.SECONDARY: $(ROBFILES) $(OBJECTS)
 .DELETE_ON_ERROR:
-out/%.rob : cfiles/%.c | ../c2rob
-	../c2rob $< > $@
+$(OUT)/%.rob : cfiles/%.c $(C2ROB) | $(OUT)
+	"$(C2ROB)" $(if $(filter $(notdir $<),$(PREPROCESS_FILES)),--preprocess) "$<" > "$@"
 
-out/%.o : out/%.rob
-	robcmp -I .. -bdep -a ${ARCH} $< -o $@
+$(OUT)/%.o : $(OUT)/%.rob
+	"$(ROBCMP)" -I .. -bdep -a "$(ARCH)" "$<" -o "$@"
 
-out/%.s : out/%.o
-	${DUMP} -D $< > $@
+$(OUT)/%.s : $(OUT)/%.o
+	"$(DUMP)" -D "$<" > "$@"
 
 clean:
-	rm -f out/*
+	rm -f "$(OUT)"/*.rob "$(OUT)"/*.o "$(OUT)"/*.s

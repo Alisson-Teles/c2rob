@@ -1,0 +1,11 @@
+
+int32 teste(int32 n) {
+
+	a = int32(0);
+	b = int32(n);
+	c = int32(0);
+	a = 2;
+	c = b + a;
+	return c;
+}
+

@@ -1,0 +1,11 @@
+
+int32 teste(int32 n) {
+	i = int32(0);
+	while !((n) != 0) {
+		n = 1;
+		i++;
+	}
+
+	return i;
+}
+

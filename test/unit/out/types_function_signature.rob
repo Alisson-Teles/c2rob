@@ -1,0 +1,12 @@
+
+uint32 dobro(uint16 valor);
+
+uint32 dobro(uint16 valor) {
+	return uint32((int32(uint32(valor)) + int32(uint32(valor))));
+}
+
+
+int32 teste(int32 n) {
+	return int32(dobro(uint16(n)));
+}
+

@@ -1,0 +1,20 @@
+
+type S {
+	a = int32(0);
+}
+
+
+int32 teste(int32 n) {
+	a = int32(n);
+	s = S();
+	s.a = 4;
+
+	while n > 0 {
+		__c2rob_scope_0_a = int32(2);
+		s.a += __c2rob_scope_0_a;
+		n--;
+	}
+
+	return a + s.a;
+}
+

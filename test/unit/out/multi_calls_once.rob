@@ -1,0 +1,17 @@
+chamadas = int32(0);
+
+int32 proximo() {
+	chamadas++;
+	return chamadas;
+}
+
+
+int32 teste(int32 n) {
+	chamadas = 0;
+
+	a = int32(proximo());
+	b = int32(proximo());
+	c = int32(proximo());
+	return a * 100 + b * 10 + c + chamadas;
+}
+

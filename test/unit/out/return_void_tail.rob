@@ -1,0 +1,14 @@
+estado = int32(0);
+
+void iniciar() {
+	estado = 7;
+	return;
+}
+
+
+int32 teste(int32 n) {
+	estado = 0;
+	iniciar();
+	return estado + n;
+}
+

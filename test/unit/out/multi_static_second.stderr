@@ -1,0 +1,1 @@
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/multi_static_second.c:3: while: local static variable is not supported; the current emitter does not preserve its lifetime across calls

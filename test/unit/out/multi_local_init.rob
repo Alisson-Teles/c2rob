@@ -1,0 +1,13 @@
+
+int32 teste(int32 n) {
+
+	a = int32(n);
+	b = int32(a + 2);
+	c = int32(b + 3);
+	while a > 0 {
+		a--;
+	}
+
+	return a + b + c;
+}
+

@@ -1,0 +1,10 @@
+
+uint32 obter(int8 n) {
+	return uint32(int32(n));
+}
+
+
+int32 teste(int32 n) {
+	return int32((uint32(obter(int8(-1))) / uint32(16777216)));
+}
+

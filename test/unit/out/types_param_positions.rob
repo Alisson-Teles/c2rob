@@ -1,0 +1,12 @@
+
+uint16 somar(uint16 a, uint16 b);
+
+uint16 somar(uint16 a, uint16 b) {
+	return uint16((int32(uint32(a)) + int32(uint32(b))));
+}
+
+
+int32 teste(int32 n) {
+	return int32(uint32(somar(uint16(n), uint16(2))));
+}
+

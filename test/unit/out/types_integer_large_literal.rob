@@ -1,0 +1,8 @@
+
+int32 teste(int32 n) {
+
+	a = uint64(uint64(0x20000000000001));
+	b = uint64(uint64(0x20000000000000));
+	return int32((uint64((uint64(a) - uint64(b))) + uint64(int64(n))));
+}
+

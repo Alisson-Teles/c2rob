@@ -1,5 +1,2 @@
 unsigned volatile int a;
-
-int teste(int n) {
-    return a + n;
-}
+int teste(int n) { return a + n; }

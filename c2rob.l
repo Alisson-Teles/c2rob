@@ -4,12 +4,13 @@
 #include <stdlib.h>
 #include <string>
 
-#include "source_type.h"
-
 char *build_file_name;
 bool force_print_tree = false;
 class Node;
 class Strings;
+struct DeclarationSpecifiers;
+#include "source_type.h"
+#include "preprocess.h"
 
 #include "c2rob.tab.h"
 
@@ -37,6 +38,7 @@ int yycolno = 0;
 "//".*\n { /* ignora */ }
 #define.*\n { /* ignora */ }
 __attribute__\(\(used\)\) { /* TODO: make generic or map supported robcmp attributes */ }
+"__attribute__" { return TOK_GNU_ATTRIBUTE; }
 
 #include[\t ]*[<"].*[>"] {
     yylval.str = strndup(yytext, yyleng); 
@@ -60,6 +62,11 @@ __attribute__\(\(used\)\) { /* TODO: make generic or map supported robcmp attrib
 "volatile"  { return TOK_VOLATILE; }
 "inline"    { /* ignora */ }
 "const"     { return TOK_CONST; }
+
+"void"|"char"|"short"|"int"|"long"|"signed"|"unsigned"|"float"|"double"|"_Bool" {
+    yylval.str = strndup(yytext, yyleng);
+    return TOK_TYPE_SPEC;
+}
 "NULL"      { 
     yylval.str = "0";
     return TOK_INTEGER_LITERAL;
@@ -112,11 +119,6 @@ __attribute__\(\(used\)\) { /* TODO: make generic or map supported robcmp attrib
 ":" { return ':'; }
 "\." { return '.'; }
 
-"void"|"char"|"short"|"int"|"long"|"signed"|"unsigned"|"float"|"double"|"_Bool" {
-    yylval.str = strndup(yytext, yyleng);
-    return TOK_TYPE_SPEC;
-}
-
 [a-zA-Z_][a-zA-Z0-9_\.]* {
     yylval.str = strndup(yytext, yyleng);
     return TOK_IDENT;
@@ -162,75 +164,58 @@ int yyerror(const char *s) {
 }
 
 int main(int argc, char *argv[]) {
+    
     if (argc <= 1) {
-        fprintf(
-            stderr,
-            "Usage: %s [-f] [-d] [--abi=ilp32|lp64] program_name\n",
-            argv[0]
-        );
+        fprintf(stderr, "Usage: %s [-f] [-d] [--abi=ilp32|lp64] [--preprocess] program_name\n",
+            argv[0]);
         return 1;
     }
 
     int build_file_id = 0;
-
+    bool preprocess = false;
     for (int argid = 1; argid < argc; ++argid) {
         std::string option(argv[argid]);
-
-        if (option == "-f") {
-            force_print_tree = true;
-        } else if (option == "-d") {
-            yydebug = 1;
-        } else if (option == "--abi=ilp32") {
-            sourceAbi = SourceAbi::ILP32;
-        } else if (option == "--abi=lp64") {
-            sourceAbi = SourceAbi::LP64;
-        } else if (option.starts_with("-")) {
-            fprintf(
-                stderr,
-                "Unknown option: %s. Supported ABIs: ilp32, lp64.\n",
-                argv[argid]
-            );
+        if (option == "-f") force_print_tree = true;
+        else if (option == "-d") yydebug = 1;
+        else if (option == "--abi=ilp32") sourceAbi = SourceAbi::ILP32;
+        else if (option == "--abi=lp64") sourceAbi = SourceAbi::LP64;
+        else if (option == "--preprocess") preprocess = true;
+        else if (option.starts_with("-")) {
+            fprintf(stderr, "Unknown option: %s. Supported ABIs: ilp32, lp64.\n", argv[argid]);
             return 1;
         } else if (build_file_id) {
-            fprintf(
-                stderr,
-                "Exactly one C input file is required.\n"
-            );
+            fprintf(stderr, "Exactly one C input file is required.\n");
             return 1;
-        } else {
-            build_file_id = argid;
-        }
+        } else build_file_id = argid;
     }
-
     if (!build_file_id) {
         fprintf(stderr, "A C input file is required.\n");
         return 1;
     }
-
-    build_file_name = argv[build_file_id];
-    yyin = fopen(build_file_name, "r");
-
-    if (yyin == NULL) {
-        fprintf(
-            stderr,
-            "Could not open file %s.\n",
-            build_file_name
-        );
-        return 1;
+    const char *input = argv[build_file_id];
+    std::string diagnostic_name(input);
+    if (preprocess) {
+        try { yyin = cpreprocess::open(input); }
+        catch (const std::exception &error) {
+            fprintf(stderr, "%s: preprocess: %s\n", input, error.what());
+            return 1;
+        }
+        diagnostic_name += " (preprocessed)";
+    } else {
+        yyin = fopen(input, "r");
+        if (yyin == NULL) {
+            fprintf(stderr, "Could not open file %s.\n", input);
+            return 1;
+        }
     }
+    build_file_name = diagnostic_name.data();
 
     int parse_status = 1;
+    try { parse_status = yyparse(); }
+    catch (const std::exception &error) { yyerror(error.what()); }
 
-    try {
-        parse_status = yyparse();
-    } catch (const std::exception &error) {
-        yyerror(error.what());
-    }
-
-    if (yyin) {
+    if (yyin)
         fclose(yyin);
-    }
-
-    return (parse_status != 0 || errorcount != 0) ?
-        EXIT_FAILURE : EXIT_SUCCESS;
+    
+    return (parse_status != 0 || errorcount != 0) ? EXIT_FAILURE : EXIT_SUCCESS;
 }

@@ -1,0 +1,6 @@
+n = int32(30);
+
+int32 teste(int32 __c2rob_scope_0_n) {
+	return __c2rob_scope_0_n + 1;
+}
+

@@ -1,0 +1,2 @@
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/goto.c:1:35: unsupported C statement: goto
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/goto.c:1:35: syntax error, unexpected TOK_UNSUPPORTED

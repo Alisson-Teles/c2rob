@@ -1,3 +1,1 @@
-void iniciar(void) {
-    return 1;
-}
+void iniciar(void) { return 1; }

@@ -1,0 +1,22 @@
+estado = int32(0);
+
+void definir(int32 n) {
+
+	a = int32(n);
+	b = int32(a + 1);
+
+	if a < 0 {
+		return;
+	}
+
+	estado = b;
+	return;
+}
+
+
+int32 teste(int32 n) {
+	estado = 0;
+	definir(n);
+	return estado;
+}
+

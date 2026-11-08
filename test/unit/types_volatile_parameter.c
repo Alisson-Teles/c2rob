@@ -1,3 +1,1 @@
-int teste(int volatile n) {
-    return n;
-}
+int teste(int volatile n) { return n; }

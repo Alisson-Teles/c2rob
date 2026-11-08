@@ -1,0 +1,13 @@
+
+int32 teste(int32 n) {
+	const a = int32(2);
+
+	if n != 0 {
+		__c2rob_scope_0_a = int32(3);
+		__c2rob_scope_0_a += n;
+		return __c2rob_scope_0_a;
+	}
+
+	return a;
+}
+

@@ -1,0 +1,7 @@
+
+int32 teste(int32 n) {
+	a = uint64(uint64(4294967295));
+	a++;
+	return int32(int32(uint32((uint64(a) == uint64(uint64(4294967296))))));
+}
+

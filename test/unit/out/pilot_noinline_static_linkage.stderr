@@ -1,0 +1,2 @@
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/pilot_noinline_static_linkage.c:1: function attribute: static linkage with noinline is outside this pilot: inc
+/home/alisson/Documents/C2ROB_piloto_preprocessamento_noinline/c2rob/test/unit/pilot_noinline_static_linkage.c:3: function attribute: static linkage with noinline is outside this pilot: inc

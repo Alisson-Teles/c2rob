@@ -1,0 +1,11 @@
+
+type S {
+	valor = int32(0);
+}
+
+
+int32 teste(int32 n) {
+	__c2rob_scope_0_S = int32(n);
+	return __c2rob_scope_0_S;
+}
+

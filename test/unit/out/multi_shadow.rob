@@ -1,0 +1,15 @@
+
+int32 teste(int32 n) {
+
+	a = int32(n);
+	b = int32(4);
+	while n > 0 {
+
+		__c2rob_scope_0_a = int32(2);
+		__c2rob_scope_1_b = int32(3);
+		n--;
+	}
+
+	return a + b;
+}
+

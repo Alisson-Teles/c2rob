@@ -1,0 +1,10 @@
+
+int32 obterValor() {
+	return 10;
+}
+
+
+int32 main() {
+	return obterValor();
+}
+

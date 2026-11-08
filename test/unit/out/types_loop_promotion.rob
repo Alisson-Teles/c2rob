@@ -1,0 +1,12 @@
+
+int32 teste(int32 n) {
+	i = uint16(uint16(0));
+	total = int32(0);
+	while (int32(uint32(i)) < int32(n)) {
+		total = int32((int32(total) + int32(uint32(i))));
+		i++;
+	}
+
+	return total;
+}
+

@@ -1,0 +1,3779 @@
+[
+  {
+    "name": "for_regression",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "comparison",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "single",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "empty_semicolon",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "empty_braces",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "integer",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "integer_parenthesized",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "arithmetic",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "4"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "false_condition",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "7",
+      "7",
+      "7"
+    ],
+    "c_values": [
+      "7",
+      "7",
+      "7"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "one_iteration",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "1",
+      "1"
+    ],
+    "c_values": [
+      "1",
+      "1",
+      "1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "nested",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "mixed",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "4",
+      "23"
+    ],
+    "c_values": [
+      "0",
+      "4",
+      "23"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "for_outer",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "dangling_else",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "3",
+      "8"
+    ],
+    "c_values": [
+      "0",
+      "3",
+      "8"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "logical_integer",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "4"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "logical_not",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "bitwise_precedence",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "0",
+      "1",
+      "1"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "0",
+      "1",
+      "1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "parenthesis_precedence",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "1",
+      "4"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "1",
+      "4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "short_circuit",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "short_circuit_or",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "10",
+      "11",
+      "15"
+    ],
+    "c_values": [
+      "10",
+      "11",
+      "15"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "call_once",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "10",
+      "21",
+      "65"
+    ],
+    "c_values": [
+      "10",
+      "21",
+      "65"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "array_integer",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "1",
+      "1"
+    ],
+    "c_values": [
+      "1",
+      "1",
+      "1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "local_shadow",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "postfix",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "postfix_comparison",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "postfix_argument",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pointer",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "qualified_pointer",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "floating",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "floating_comparison",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "unknown_condition",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "break",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "continue",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "do_while",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "switch",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "goto",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "unknown_symbol",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "for_single_regression",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "for_logical_regression",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "3"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "negated_integer",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "0",
+      "0"
+    ],
+    "c_values": [
+      "1",
+      "0",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "unsigned_integer",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "bitwise_grouped",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "1",
+      "1",
+      "0"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "1",
+      "1",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "boolean_arithmetic",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "body_local",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "for_integer_nested",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "2",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "2",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "body_postfix_value",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "body_unknown_call",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pointer_comparison",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pointer_return",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "volatile_condition",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "volatile_body",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pointer_parameter_call",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "struct_field",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "3",
+      "3",
+      "3"
+    ],
+    "c_values": [
+      "3",
+      "3",
+      "3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "body_struct_array",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "static_body",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "static_condition",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "partial_struct_body",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "no_params_main_empty",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "none; fixture already defines main",
+    "values": [],
+    "c_values": [],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_decl_empty",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "10",
+      "11",
+      "15"
+    ],
+    "c_values": [
+      "10",
+      "11",
+      "15"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_parameters",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "5",
+      "2",
+      "0"
+    ],
+    "c_values": [
+      "5",
+      "2",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_leading_comma",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "no_params_main_void",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "none; fixture already defines main",
+    "values": [],
+    "c_values": [],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_void_marker",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_decl_void",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "10",
+      "11",
+      "15"
+    ],
+    "c_values": [
+      "10",
+      "11",
+      "15"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_unnamed_regression",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "skipped_no_calls",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob"
+  },
+  {
+    "name": "no_params_void_first",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "no_params_void_last",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "no_params_void_repeated",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "no_params_void_named",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "no_params_empty_body",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "none; fixture already defines main",
+    "values": [],
+    "c_values": [],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_void_function",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "2",
+      "6"
+    ],
+    "c_values": [
+      "1",
+      "2",
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_return",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "10"
+    ],
+    "c_values": [
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_call",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "none; fixture already defines main",
+    "values": [],
+    "c_values": [],
+    "exit_code": 10
+  },
+  {
+    "name": "no_params_void_decl",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "none; fixture already defines main",
+    "values": [],
+    "c_values": [],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_while",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0"
+    ],
+    "c_values": [
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_while_call",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "43"
+    ],
+    "c_values": [
+      "43"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_for",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "6"
+    ],
+    "c_values": [
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "no_params_trailing_comma",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "no_params_return_semicolon",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "none; fixture already defines main",
+    "values": [],
+    "c_values": [],
+    "exit_code": 0
+  },
+  {
+    "name": "bool_to_int_value",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "1",
+      "1",
+      "0"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "1",
+      "1",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "bool_to_int_arithmetic",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "10",
+      "9",
+      "9",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "10",
+      "9",
+      "9",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "array_increment",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "4"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "array_index_once",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "10",
+      "30"
+    ],
+    "c_values": [
+      "0",
+      "10",
+      "30"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "array_index_boolean",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-18",
+      "-18",
+      "0",
+      "0"
+    ],
+    "c_values": [
+      "-18",
+      "-18",
+      "0",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "array_update_no_while",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "20",
+      "21",
+      "25"
+    ],
+    "c_values": [
+      "20",
+      "21",
+      "25"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "for_logical_calls",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "11",
+      "33"
+    ],
+    "c_values": [
+      "0",
+      "11",
+      "33"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "for_integer_condition",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "6"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_local_plain",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "3",
+      "5",
+      "10"
+    ],
+    "c_values": [
+      "3",
+      "5",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "return_void_tail",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "5",
+      "7",
+      "12"
+    ],
+    "c_values": [
+      "5",
+      "7",
+      "12"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_global_init",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "3"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_shadow",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "2",
+      "4",
+      "9"
+    ],
+    "c_values": [
+      "2",
+      "4",
+      "9"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_shadow_single",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-2",
+      "0",
+      "3"
+    ],
+    "c_values": [
+      "-2",
+      "0",
+      "3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_shadow_global",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-2",
+      "2",
+      "12"
+    ],
+    "c_values": [
+      "-2",
+      "2",
+      "12"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_shadow_parameter",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "4"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_parameter_global",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-1",
+      "1",
+      "6"
+    ],
+    "c_values": [
+      "-1",
+      "1",
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_before_declaration",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "14",
+      "18"
+    ],
+    "c_values": [
+      "0",
+      "14",
+      "18"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_shadow_nested",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "7",
+      "7"
+    ],
+    "c_values": [
+      "0",
+      "7",
+      "7"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_shadow_branches",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "7",
+      "9",
+      "10"
+    ],
+    "c_values": [
+      "7",
+      "9",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_sibling_blocks",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "3",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "3",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_shadow_arrays",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "6",
+      "6",
+      "6"
+    ],
+    "c_values": [
+      "6",
+      "6",
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_index_call_once",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "2",
+      "4"
+    ],
+    "c_values": [
+      "1",
+      "2",
+      "4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_index_identifier",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "7",
+      "21"
+    ],
+    "c_values": [
+      "0",
+      "7",
+      "21"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_for_update",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "12",
+      "36"
+    ],
+    "c_values": [
+      "0",
+      "12",
+      "36"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_for_single_body",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "6",
+      "8"
+    ],
+    "c_values": [
+      "0",
+      "6",
+      "8"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_struct_fields",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "4",
+      "10"
+    ],
+    "c_values": [
+      "1",
+      "4",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_member_name",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "4",
+      "7",
+      "13"
+    ],
+    "c_values": [
+      "4",
+      "7",
+      "13"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_literal_text",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "97",
+      "97"
+    ],
+    "c_values": [
+      "0",
+      "97",
+      "97"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_function_name",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-3",
+      "1",
+      "11"
+    ],
+    "c_values": [
+      "-3",
+      "1",
+      "11"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_call_argument",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "7",
+      "21"
+    ],
+    "c_values": [
+      "0",
+      "7",
+      "21"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_global_array",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "4",
+      "12"
+    ],
+    "c_values": [
+      "0",
+      "4",
+      "12"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "scope_redecl_list",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "scope_redecl_separate",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "scope_redecl_parameter",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "scope_redecl_params",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "scope_redecl_block",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "scope_type_name",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-2",
+      "0",
+      "5"
+    ],
+    "c_values": [
+      "-2",
+      "0",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "return_void_while",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "2"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "return_nonvoid",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "return_void_value",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "multi_local_init",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "7",
+      "17"
+    ],
+    "c_values": [
+      "1",
+      "7",
+      "17"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_local_mixed",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "2",
+      "7"
+    ],
+    "c_values": [
+      "0",
+      "2",
+      "7"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_calls_once",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "126",
+      "126",
+      "126"
+    ],
+    "c_values": [
+      "126",
+      "126",
+      "126"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_global_plain",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "2",
+      "4",
+      "9"
+    ],
+    "c_values": [
+      "2",
+      "4",
+      "9"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_arrays_init",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "8",
+      "10",
+      "15"
+    ],
+    "c_values": [
+      "8",
+      "10",
+      "15"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_array_mixed",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "3",
+      "5",
+      "10"
+    ],
+    "c_values": [
+      "3",
+      "5",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_arrays_plain",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "3",
+      "8"
+    ],
+    "c_values": [
+      "1",
+      "3",
+      "8"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_arrays_while",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "3",
+      "15"
+    ],
+    "c_values": [
+      "0",
+      "3",
+      "15"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_typedef",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "2",
+      "7"
+    ],
+    "c_values": [
+      "0",
+      "2",
+      "7"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_for_body",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "16"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "16"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_global_static",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "1",
+      "1"
+    ],
+    "c_values": [
+      "1",
+      "1",
+      "1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_global_array",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "4",
+      "5",
+      "9"
+    ],
+    "c_values": [
+      "4",
+      "5",
+      "9"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_array_type",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "206",
+      "207",
+      "211"
+    ],
+    "c_values": [
+      "206",
+      "207",
+      "211"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "multi_array_variable_size",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "multi_array_partial_init",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "multi_void_variables",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "multi_volatile_second",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "multi_static_second",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "multi_bad_leading_comma",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "multi_bad_trailing_comma",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "multi_bad_repeated_type",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "multi_pointer_unsupported",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "multi_struct_unsupported",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "return_void_if",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "2",
+      "2"
+    ],
+    "c_values": [
+      "1",
+      "2",
+      "2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "return_void_else",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "2",
+      "2"
+    ],
+    "c_values": [
+      "1",
+      "2",
+      "2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "return_void_for",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "2"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "return_void_single_while",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "9",
+      "0",
+      "0"
+    ],
+    "c_values": [
+      "9",
+      "0",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "return_void_typedef",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "2",
+      "4",
+      "9"
+    ],
+    "c_values": [
+      "2",
+      "4",
+      "9"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "return_void_multi",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "1",
+      "6"
+    ],
+    "c_values": [
+      "0",
+      "1",
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "return_nonvoid_while",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "return_pointer_nonvoid",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "return_nonvoid_typedef",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "return_void_call_value",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_unsigned_multi",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "c_values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_specifier_order",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "7",
+      "8",
+      "12"
+    ],
+    "c_values": [
+      "7",
+      "8",
+      "12"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_function_signature",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "2",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "2",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_const_positions",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "9",
+      "10",
+      "14"
+    ],
+    "c_values": [
+      "9",
+      "10",
+      "14"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_invalid_combination",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_volatile_suffix",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_signed_unsigned_division",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "255",
+      "255"
+    ],
+    "c_values": [
+      "255",
+      "255"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_unsigned_wrap",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0"
+    ],
+    "c_values": [
+      "0",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_long_long_order",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "7",
+      "8",
+      "12"
+    ],
+    "c_values": [
+      "7",
+      "8",
+      "12"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_long_ilp32",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "c_values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_long_lp64",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "1"
+    ],
+    "c_values": [
+      "1",
+      "1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_typedef_multiword",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "32767",
+      "32768",
+      "32772"
+    ],
+    "c_values": [
+      "32767",
+      "32768",
+      "32772"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_typedef_const",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "c_values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_array_elements",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "65534",
+      "65535",
+      "65539"
+    ],
+    "c_values": [
+      "65534",
+      "65535",
+      "65539"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_global_multi",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "c_values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_struct_field",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "250",
+      "251",
+      "255"
+    ],
+    "c_values": [
+      "250",
+      "251",
+      "255"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_unnamed_parameters",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "2",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "2",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_const_parameter",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "2",
+      "6"
+    ],
+    "c_values": [
+      "1",
+      "2",
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_const_write",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_const_update",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_const_parameter_write",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_typedef_const_write",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_volatile_prefix",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_volatile_global",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_volatile_parameter",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_invalid_signs",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_invalid_lengths",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_invalid_duplicate",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_invalid_two_bases",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_long_double_unsupported",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_loop_promotion",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_const_shadow",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "2",
+      "4",
+      "8"
+    ],
+    "c_values": [
+      "2",
+      "4",
+      "8"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_array_unary_wrap",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "0"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_uint64_minus",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "1",
+      "1"
+    ],
+    "c_values": [
+      "1",
+      "1",
+      "1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_signed_to_unsigned_param",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "255",
+      "255",
+      "255"
+    ],
+    "c_values": [
+      "255",
+      "255",
+      "255"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_char_promotion_complement",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-256",
+      "-256",
+      "-256"
+    ],
+    "c_values": [
+      "-256",
+      "-256",
+      "-256"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_const_array",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "7",
+      "8",
+      "12"
+    ],
+    "c_values": [
+      "7",
+      "8",
+      "12"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_const_struct_field",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_large_signed_literal",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "2",
+      "6"
+    ],
+    "c_values": [
+      "1",
+      "2",
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_uint64_max_literal",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "0"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_unsigned_negation",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "1",
+      "1"
+    ],
+    "c_values": [
+      "1",
+      "1",
+      "1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_pointer_parameter",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_pointer_result",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_void_variable",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_reserved_name",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_identifier_prefix",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "2",
+      "3",
+      "7"
+    ],
+    "c_values": [
+      "2",
+      "3",
+      "7"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_abi_long",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-2",
+      "0",
+      "5"
+    ],
+    "c_values": [
+      "-2",
+      "0",
+      "5"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_bool_unsupported",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_decl_globals",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "5",
+      "6",
+      "10"
+    ],
+    "c_values": [
+      "5",
+      "6",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_decl_arrays",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "9",
+      "10",
+      "14"
+    ],
+    "c_values": [
+      "9",
+      "10",
+      "14"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_decl_typedef",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "5",
+      "6",
+      "10"
+    ],
+    "c_values": [
+      "5",
+      "6",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_decl_struct_field",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "c_values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_decl_invalid_lengths",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_decl_volatile_list",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_decl_tag_namespace",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "c_values": [
+      "3",
+      "4",
+      "8"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_param_positions",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "2",
+      "3",
+      "7"
+    ],
+    "c_values": [
+      "2",
+      "3",
+      "7"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_param_unnamed",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "2",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "2",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_param_typedef",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "2",
+      "6"
+    ],
+    "c_values": [
+      "1",
+      "2",
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_param_void_typedef",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "4",
+      "5",
+      "9"
+    ],
+    "c_values": [
+      "4",
+      "5",
+      "9"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_param_static",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_param_void_qualified",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_param_invalid_combination",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_qual_const_read",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "14",
+      "14",
+      "22"
+    ],
+    "c_values": [
+      "14",
+      "14",
+      "22"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_qual_const_write",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_qual_parameter_write",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_qual_array_update",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_qual_postfix_expression",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_qual_const_field",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_qual_volatile_global",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_qual_volatile_parameter",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_qual_local_static",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_qual_pointer_const",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_qual_static_field",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_integer_char_promotion",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "260",
+      "261",
+      "265"
+    ],
+    "c_values": [
+      "260",
+      "261",
+      "265"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_short_promotion",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-1",
+      "0",
+      "4"
+    ],
+    "c_values": [
+      "-1",
+      "0",
+      "4"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_mixed_comparison",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "0"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_signed_widen",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "255",
+      "255"
+    ],
+    "c_values": [
+      "255",
+      "255"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_unsigned_widen",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "1"
+    ],
+    "c_values": [
+      "1",
+      "1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_long_long",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "2",
+      "3",
+      "7"
+    ],
+    "c_values": [
+      "2",
+      "3",
+      "7"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_bool_init",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "1",
+      "2",
+      "2"
+    ],
+    "c_values": [
+      "1",
+      "1",
+      "2",
+      "2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_bool_return",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "1",
+      "1"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "1",
+      "1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_parameter",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "65535",
+      "0"
+    ],
+    "c_values": [
+      "0",
+      "65535",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_return",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "65535",
+      "0"
+    ],
+    "c_values": [
+      "0",
+      "65535",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_large_literal",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "1",
+      "2",
+      "6"
+    ],
+    "c_values": [
+      "1",
+      "2",
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "types_integer_array_compound",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "types_integer_array_dimension",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "10",
+      "11",
+      "15"
+    ],
+    "c_values": [
+      "10",
+      "11",
+      "15"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "pilot_dummy",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "0",
+      "1",
+      "0",
+      "0"
+    ],
+    "c_values": [
+      "0",
+      "0",
+      "1",
+      "0",
+      "0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "pilot_preprocess_macros",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-14",
+      "1",
+      "36"
+    ],
+    "c_values": [
+      "-14",
+      "1",
+      "36"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "pilot_noinline_definition",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "0",
+      "3",
+      "10"
+    ],
+    "c_values": [
+      "0",
+      "3",
+      "10"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "pilot_noinline_prototype",
+    "translation": "pass",
+    "object": "pass",
+    "ir": "pass",
+    "execution": "pass",
+    "exit": 0,
+    "validation_adapter": "main entry point added to a separate .validation.rob",
+    "values": [
+      "-4",
+      "-1",
+      "6"
+    ],
+    "c_values": [
+      "-4",
+      "-1",
+      "6"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "pilot_noinline_wrong_target",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pilot_noinline_unknown_attribute",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pilot_noinline_static_linkage",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pilot_preprocess_error",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pilot_preprocess_include",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "pilot_preprocess_label",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  }
+]

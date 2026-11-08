@@ -1,0 +1,7 @@
+
+int32 pilot_prototype(int32 n) noinline;
+
+int32 pilot_prototype(int32 n) noinline {
+	return n - 1;
+}
+

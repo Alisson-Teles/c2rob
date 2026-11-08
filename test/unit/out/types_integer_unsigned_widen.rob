@@ -1,0 +1,7 @@
+
+int32 teste(int32 n) {
+	a = uint32(uint32(4294967295));
+	b = int64(int64(uint64(a)));
+	return int32((uint64(b) / uint64(uint64(4294967295))));
+}
+

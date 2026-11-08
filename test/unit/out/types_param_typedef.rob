@@ -1,0 +1,10 @@
+
+int32 aceitar(uint16 valor) {
+	return int32(uint32(valor));
+}
+
+
+int32 teste(int32 n) {
+	return int32((int32(aceitar(uint16(n))) + int32(1)));
+}
+

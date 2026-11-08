@@ -1,0 +1,6 @@
+
+int32 teste(int32 n) {
+	const a = int32(3);
+	return a + n;
+}
+
