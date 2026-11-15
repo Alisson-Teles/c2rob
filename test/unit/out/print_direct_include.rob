@@ -1,0 +1,7 @@
+use print;
+
+int32 main() {
+	print("direct: %d\n", 5);
+	return 0;
+}
+

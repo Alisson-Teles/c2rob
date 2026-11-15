@@ -1,0 +1,8 @@
+use print;
+use printf;
+
+int32 main() {
+	printf("%d\n", print("%d\n", 19));
+	return 0;
+}
+

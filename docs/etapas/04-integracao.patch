@@ -1,0 +1,217 @@
+--- a/test/Makefile
++++ b/test/Makefile
+@@ -3,6 +3,7 @@
+ ROBCMP ?= robcmp
+ ARCH ?= stm32f1
+ DUMP ?= llvm-objdump-21
++C2ROB_FLAGS ?=
+ 
+ # Select input basenames explicitly. Other sources still take the direct path.
+ PREPROCESS_FILES ?= dummy.c
+@@ -26,10 +27,10 @@
+ .SECONDARY: $(ROBFILES) $(OBJECTS)
+ .DELETE_ON_ERROR:
+ $(OUT)/%.rob : cfiles/%.c $(C2ROB) | $(OUT)
+-	"$(C2ROB)" $(if $(filter $(notdir $<),$(PREPROCESS_FILES)),--preprocess) "$<" > "$@"
++	"$(C2ROB)" $(C2ROB_FLAGS) $(if $(filter $(notdir $<),$(PREPROCESS_FILES)),--preprocess) "$<" > "$@"
+ 
+-$(OUT)/%.o : $(OUT)/%.rob
+-	"$(ROBCMP)" -I .. -bdep -a "$(ARCH)" "$<" -o "$@"
++$(OUT)/%.o : $(OUT)/%.rob ../compat/c2rob_printf.rob
++	"$(ROBCMP)" -I .. -I ../compat -bdep -a "$(ARCH)" "$<" -o "$@"
+ 
+ $(OUT)/%.s : $(OUT)/%.o
+ 	"$(DUMP)" -D "$<" > "$@"
+--- /dev/null
++++ b/test/unit/printf_packet_probe.c
+@@ -0,0 +1,75 @@
++/* Test-only oracle. The tested fixtures have known format/argument shapes.
++   The real ROB stub is linked independently in printf_stub_link. */
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++enum {
++    signed32 = 1, unsigned32, signed64, unsigned64, floating64, literal_string
++};
++
++static void check(int ok) {
++    if (!ok) {
++        fputs("invalid printf bridge packet\n", stderr);
++        abort();
++    }
++}
++
++static uint64_t next(const uint64_t *packet, uint32_t size, uint32_t *i) {
++    check(*i < size);
++    return packet[(*i)++];
++}
++
++/* ROB appends the sizes of array parameters after the explicit arguments. */
++int c2rob_test_printf(const char *format_bytes, const uint64_t *packet,
++                      uint32_t format_size, uint32_t packet_size) {
++    check(format_size < 256 && packet_size > 0);
++    char format[256], str[64] = {0};
++    memcpy(format, format_bytes, format_size);
++    format[format_size] = '\0';
++    uint64_t count = packet[0], tags[16], values[16];
++    double doubles[16];
++    uint32_t i = 1;
++    check(count <= 16);
++    for (uint64_t k = 0; k < count; ++k) {
++        tags[k] = next(packet, packet_size, &i);
++        values[k] = next(packet, packet_size, &i);
++        if (tags[k] == floating64) memcpy(&doubles[k], &values[k], sizeof(double));
++        else if (tags[k] == literal_string) {
++            check(values[k] < sizeof str);
++            for (uint64_t j = 0; j < values[k]; ++j) {
++                uint64_t byte = next(packet, packet_size, &i);
++                check(byte <= 255);
++                str[j] = (char)byte;
++            }
++            str[values[k]] = '\0';
++        } else check(tags[k] >= signed32 && tags[k] <= unsigned64);
++    }
++    check(i == packet_size);
++
++    if (!count) return fputs(format, stdout);
++    if (!strcmp(format, "%d %u %lld %llu %.2f %.2f %d %s %%\n")) {
++        const uint64_t expected[] = {signed32, unsigned32, signed64, unsigned64,
++                                     floating64, floating64, signed32, literal_string};
++        check(count == 8 && !memcmp(tags, expected, sizeof expected));
++        return printf(format, (int)(int32_t)values[0], (unsigned)values[1],
++                      (long long)(int64_t)values[2], (unsigned long long)values[3],
++                      doubles[4], doubles[5], (int)(int32_t)values[6], str);
++    }
++    if (!strcmp(format, "a%d %s\n")) {
++        check(count == 2 && tags[0] == signed32 && tags[1] == literal_string);
++        return printf(format, (int)(int32_t)values[0], str);
++    }
++    if (!strcmp(format, "ação: %.17g %.17g %.17g %c\n")) {
++        check(count == 4 && tags[0] == floating64 && tags[1] == floating64 &&
++              tags[2] == floating64 && tags[3] == signed32);
++        return printf(format, doubles[0], doubles[1], doubles[2], (int)(int32_t)values[3]);
++    }
++    for (uint64_t k = 0; k < count; ++k) check(tags[k] == signed32);
++    if (count == 1) return printf(format, (int)(int32_t)values[0]);
++    if (count == 2) return printf(format, (int)(int32_t)values[0], (int)(int32_t)values[1]);
++    check(count == 4);
++    return printf(format, (int)(int32_t)values[0], (int)(int32_t)values[1],
++                  (int)(int32_t)values[2], (int)(int32_t)values[3]);
++}
+--- a/test/unit/run_tests.py
++++ b/test/unit/run_tests.py
+@@ -9,6 +9,7 @@
+ import sys
+ 
+ ROOT = Path(__file__).resolve().parent
++COMPAT = ROOT.parent.parent / 'compat'
+ 
+ 
+ def run(command, timeout=10):
+@@ -65,6 +66,7 @@
+     if args.robcmp is not None and not compiler:
+         parser.error('Integration requires an existing --robcmp executable')
+     results = []
++    printf_stub = None
+     for name, spec in json.loads((ROOT / 'cases.json').read_text()).items():
+         if args.filter and args.filter not in name:
+             continue
+@@ -93,8 +95,6 @@
+             require(translated, 'C -> ROB')
+             for fragment in spec.get('contains', []):
+                 assert fragment in translated.stdout, f'Missing {fragment!r}\n{translated.stdout}'
+-            for fragment in spec.get('contains', []):
+-                assert fragment in translated.stdout, f'Missing {fragment!r}\n{translated.stdout}'
+             for fragment in spec.get('excludes', []):
+                 assert fragment not in translated.stdout, f'Unexpected {fragment!r}\n{translated.stdout}'
+             golden = ROOT / f'{name}.expected.rob'
+@@ -105,6 +105,7 @@
+             if not args.robcmp:
+                 row.update(object='skipped', ir='skipped', execution='skipped')
+             else:
++                rob_options = ['-I', str(COMPAT)]
+                 # The adapter supplies an entry point and initializes library-style fixtures.
+                 # Keep the exact translation in .rob; adapt only fixtures without main.
+                 validation_rob = out / f'{name}.validation.rob'
+@@ -116,16 +117,28 @@
+                 obj = out / f'{name}.arm.o'
+                 obj.unlink(missing_ok=True)
+                 row['object'] = 'fail'
+-                require(run([compiler, '-O0', '-a', args.arch, '-o', str(obj), str(validation_rob)]), 'ROB -> ARM object')
++                level = spec.get('robcmp_opt', '-O0')
++                require(run([compiler, *rob_options, level, '-a', args.arch, '-o', str(obj), str(validation_rob)]), 'ROB -> ARM object')
+                 assert obj.is_file() and obj.stat().st_size, 'Missing ARM object'
+                 row['object'] = 'pass'
+                 row['ir'] = 'fail'
+-                ir = run([compiler, '-O0', '-a', args.arch, str(validation_rob)])
++                ir = run([compiler, *rob_options, level, '-a', args.arch, str(validation_rob)])
+                 require(ir, 'ROB -> LLVM IR')
+                 ll = out / f'{name}.ll'
+                 ll.write_text(ir.stdout)
+                 if 'ir_noinline' in spec:
+                     require_noinline(ir.stdout, spec['ir_noinline'])
++                for fragment in spec.get('ir_contains', []):
++                    assert fragment in ir.stdout, f'Missing LLVM IR fragment {fragment!r}'
++                if spec.get('printf_external') or 'printf_calls' in spec:
++                    actual = len(re.findall(r'\bcall i32 @printf\(', ir.stdout))
++                    expected_calls = spec.get('printf_calls')
++                    assert actual > 0, 'No optimized printf call remained'
++                    if expected_calls is not None:
++                        assert actual == expected_calls, f'Expected {expected_calls} optimized printf calls, found {actual}'
++                    assert re.search(r'^declare .*@printf\(', ir.stdout, re.MULTILINE)
++                    assert not re.search(r'^define .*@printf\(', ir.stdout, re.MULTILINE)
++                    row['printf_calls_in_ir'] = actual
+                 if verifier:
+                     require(run([verifier, '-passes=verify', '-disable-output', str(ll)]), 'LLVM verify')
+                     row['ir'] = 'pass'
+@@ -136,12 +149,29 @@
+                     row['execution'] = 'fail'
+                     host = out / f'{name}.host.o'
+                     host.unlink(missing_ok=True)
+-                    require(run([compiler, '-O0', '-o', str(host), str(validation_rob)]), 'ROB -> host object')
++                    require(run([compiler, *rob_options, level, '-o', str(host), str(validation_rob)]), 'ROB -> host object')
+                     original_exe = out / f'{name}.c.exe'
+                     rob_exe = out / f'{name}.rob.exe'
+                     if has_main:
+                         require(run([cc, '-std=c11', '-O0', str(source), '-o', str(original_exe)]), 'Build original C program')
+-                        require(run([cc, '-no-pie', str(host), '-o', str(rob_exe)]), 'Link ROB program')
++                        extra = []
++                        if spec.get('printf_probe'):
++                            probe = out / 'printf_packet_probe.o'
++                            require(run([cc, '-std=c11', '-O0', '-fno-builtin', '-c',
++                                         str(ROOT / 'printf_packet_probe.c'), '-o', str(probe)]), 'Build printf packet check')
++                            extra.append(str(probe))
++                            # The probe can use libc in the host executable.
++                            assert objcopy, 'The printf packet check needs objcopy'
++                            require(run([objcopy, '--redefine-sym', 'printf=c2rob_test_printf', str(host)]),
++                                    'Isolate the test bridge symbol')
++                        elif spec.get('printf_stub'):
++                            if not printf_stub:
++                                stub = out / 'printf_stub.host.o'
++                                require(run([compiler, '-Oz', '-o', str(stub), str(COMPAT / 'printf_stub.rob')]),
++                                        'Compile the separate ROB printf stub')
++                                printf_stub = str(stub)
++                            extra.append(printf_stub)
++                        require(run([cc, '-no-pie', str(host), *extra, '-o', str(rob_exe)]), 'Link ROB program')
+                     else:
+                         require(run([objcopy, '--redefine-sym', 'main=rob_validation_main', str(host)]), 'Rename adapter entry point in host object')
+                         entry = spec.get('entry', 'teste')
+@@ -161,11 +191,14 @@
+                     expected_exit = spec.get('exit_code', 0)
+                     assert original.returncode == expected_exit, f'C exit {original.returncode} != {expected_exit}'
+                     assert emitted.returncode == expected_exit, f'ROB exit {emitted.returncode} != {expected_exit}'
+-                    assert original.stdout == emitted.stdout, f'C {original.stdout!r} != ROB {emitted.stdout!r}'
++                    if spec.get('printf_stub'):
++                        assert not emitted.stdout, 'The temporary ROB printf stub must be silent'
++                    else:
++                        assert original.stdout == emitted.stdout, f'C {original.stdout!r} != ROB {emitted.stdout!r}'
+                     if 'expected' in spec:
+                         expected = ''.join(f'{value}\n' for value in spec['expected'])
+                         assert emitted.stdout == expected, f'ROB {emitted.stdout!r} != expected {expected!r}'
+-                    row['execution'] = 'pass'
++                    row['execution'] = 'pass_stub' if spec.get('printf_stub') else 'pass'
+                     row['values'] = emitted.stdout.splitlines()
+                     row['c_values'] = original.stdout.splitlines()
+                     row['exit_code'] = emitted.returncode

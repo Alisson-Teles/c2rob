@@ -1,0 +1,663 @@
+--- a/c2rob.l
++++ b/c2rob.l
+@@ -6,6 +6,8 @@
+ 
+ char *build_file_name;
+ bool force_print_tree = false;
++bool translate_printf = false;
++bool printf_mode_used = false;
+ class Node;
+ class Strings;
+ struct DeclarationSpecifiers;
+@@ -24,23 +26,38 @@
+ %option yylineno
+ 
+ %x COMMENT
++%s PRINTF_MODE
++
++PWS      [ \t\r\n]
++PNAME    [a-zA-Z_][a-zA-Z0-9_]*
++PRINTF_PROTO (extern{PWS}+)?int{PWS}+printf{PWS}*\({PWS}*(const{PWS}+char|char{PWS}+const){PWS}*\*{PWS}*((restrict|__restrict|__restrict__){PWS}+)?({PNAME}{PWS}*)?,{PWS}*\.\.\.{PWS}*\){PWS}*;
++EXP      [eE][+-]?[0-9]+
++DEC_FLOAT (([0-9]+\.[0-9]*|\.[0-9]+){EXP}?|[0-9]+{EXP})
++HEX_FLOAT 0[xX]([0-9a-fA-F]+\.?[0-9a-fA-F]*|\.[0-9a-fA-F]+)[pP][+-]?[0-9]+
+ 
+ %%
+ 
++<PRINTF_MODE>{PRINTF_PROTO} {
++    int column = yycolno - yyleng;
++    for (int i = 0; i < yyleng; ++i) column = yytext[i] == '\n' ? 0 : column + 1;
++    yycolno = column;
++    return TOK_PRINTF_PROTOTYPE;
++}
++
+ [ \t\r] { /* ignora */ }
+ [\n] { yycolno = 0; }
+ 
+ "/*"					{ yymore(); BEGIN COMMENT; }
+ <COMMENT>[^*]			{ yymore(); }
+ <COMMENT>"*"/[^/]		{ yymore(); }
+-<COMMENT>"*/"			{ BEGIN(INITIAL); }
++<COMMENT>"*/"			{ BEGIN(translate_printf ? PRINTF_MODE : INITIAL); }
+ 
+ "//".*\n { /* ignora */ }
+ #define.*\n { /* ignora */ }
+ __attribute__\(\(used\)\) { /* TODO: make generic or map supported robcmp attributes */ }
+ "__attribute__" { return TOK_GNU_ATTRIBUTE; }
+ 
+-#include[\t ]*[<"].*[>"] {
++#[\t ]*include[\t ]*(<[^>\n]+>|\"[^"\n]+\") {
+     yylval.str = strndup(yytext, yyleng); 
+     return TOK_INCLUDE;
+ }
+@@ -124,8 +141,13 @@
+     return TOK_IDENT;
+ }
+ 
++<PRINTF_MODE>({DEC_FLOAT}|{HEX_FLOAT})[fFlL]? {
++    yylval.str = strndup(yytext, yyleng);
++    return TOK_FLOAT;
++}
++
+ [0-9]+\.[0-9]* {
+-    yylval.flt = atof(yytext);
++    yylval.str = strndup(yytext, yyleng);
+     return TOK_FLOAT;
+ }
+ 
+@@ -137,8 +159,12 @@
+ \"([^\\\"]|\\.)*\"		{ yylval.str = strndup(yytext, yyleng);
+ 						  return TOK_STRING; }
+ 
+-'\\?.'					{ yylval.itg = yytext[0];
+-						  return TOK_CHAR; }
++<PRINTF_MODE>\'([^\\'\n]|\\.)+\' {
++    yylval.str = strndup(yytext, yyleng);
++    return TOK_CHAR;
++}
++
++'\\?.'					{ return TOK_CHAR; }
+ 
+ . { 
+     fprintf(stderr, "%s:%d:%d: Unrecognized symbol %c\n", build_file_name, yylineno, yycolno, yytext[0]);
+@@ -166,7 +192,7 @@
+ int main(int argc, char *argv[]) {
+     
+     if (argc <= 1) {
+-        fprintf(stderr, "Usage: %s [-f] [-d] [--abi=ilp32|lp64] [--preprocess] program_name\n",
++        fprintf(stderr, "Usage: %s [-f] [-d] [--abi=ilp32|lp64] [--preprocess] [--printf] program_name\n",
+             argv[0]);
+         return 1;
+     }
+@@ -180,6 +206,7 @@
+         else if (option == "--abi=ilp32") sourceAbi = SourceAbi::ILP32;
+         else if (option == "--abi=lp64") sourceAbi = SourceAbi::LP64;
+         else if (option == "--preprocess") preprocess = true;
++        else if (option == "--printf") translate_printf = true;
+         else if (option.starts_with("-")) {
+             fprintf(stderr, "Unknown option: %s. Supported ABIs: ilp32, lp64.\n", argv[argid]);
+             return 1;
+@@ -211,7 +238,12 @@
+     build_file_name = diagnostic_name.data();
+ 
+     int parse_status = 1;
+-    try { parse_status = yyparse(); }
++    if (translate_printf) BEGIN(PRINTF_MODE);
++    try {
++        parse_status = yyparse();
++        if (parse_status == 0 && errorcount == 0 && printf_mode_used)
++            fprintf(stderr, "%s: printf bridge requires the ROB printf module at link time\n", build_file_name);
++    }
+     catch (const std::exception &error) { yyerror(error.what()); }
+ 
+     if (yyin)
+--- a/c2rob.y
++++ b/c2rob.y
+@@ -4,6 +4,7 @@
+ #include "scope_support.h"
+ #include "while_support.h"
+ #include "qualifier_support.h"
++#include "printf_support.h"
+ #include "integer_support.h"
+ 
+ int yyerror(const char *s);
+@@ -11,6 +12,8 @@
+ int errorcount = 0;
+ int current_unamed_arg = 0;
+ extern bool force_print_tree;
++extern bool translate_printf;
++extern bool printf_mode_used;
+ 
+ DeclarationSpecifiers *resolveDeclarationSpecifiers(DeclarationSpecifiers *spec) {
+     try { spec->resolve(); }
+@@ -67,7 +70,6 @@
+ %union {
+     const char *str;
+     int64_t itg;
+-    double flt;
+     Node *node;
+     Strings *strings;
+     DeclarationSpecifiers *spec;
+@@ -81,14 +83,15 @@
+ %token <str> TOK_INTEGER_LITERAL
+ %token TOK_INCLUDE TOK_STRUCT TOK_TYPEDEF
+ %token TOK_GNU_ATTRIBUTE
++%token TOK_PRINTF_PROTOTYPE
+ %token TOK_STATIC TOK_VOLATILE TOK_CONST
+ %token <str> TOK_TYPE_SPEC
+ 
+ %type<str> TOK_STRING TOK_IDENT TOK_CMP_EQNEQ TOK_CMP_RELAT TOK_UNARY_OPERATOR TOK_ATTRIBUTION
+ %type<str> TOK_INCLUDE
+ %type<itg> TOK_INT
+-%type<flt> TOK_FLOAT
+-%type<node> globals global expr factor array_decl array_init_decl
++%type<str> TOK_FLOAT TOK_CHAR
++%type<node> globals global expr factor string_literal array_decl array_init_decl
+ %type<node> array_values array_values_decls array_values_decl struct_values_decl
+ %type<node> locals local scalar_decl scalar_init_decl attribution
+ %type<node> multi_decl multi_declarators multi_declarator
+@@ -103,7 +106,6 @@
+ 
+ %printer { fprintf(yyo, "%s", $$); } <str>
+ %printer { fprintf(yyo, "%lld", static_cast<long long>($$)); } <itg>
+-%printer { fprintf(yyo, "%lf", $$); } <flt>
+ 
+ %left TOK_OR
+ %left TOK_AND
+@@ -128,14 +130,22 @@
+     try {
+     if (errorcount == 0) propagateNoInline(program);
+     bool scope_valid = errorcount == 0 && resolveScopeProgram(program);
+-    bool while_valid = scope_valid && validateWhileProgram(program);
++    bool printf_valid = scope_valid && cprintf::prepare(program, translate_printf);
++    if (printf_valid && cprintf::usedBridge) {
++        yyerror("printf: recognized; argument packets are not enabled yet");
++        printf_valid = false;
++    }
++    bool while_valid = printf_valid && validateWhileProgram(program);
+     bool qualifier_valid = while_valid && validateQualifierProgram(program);
+     bool integer_valid = qualifier_valid && validateIntegerProgram(program);
+-    if (integer_valid && (errorcount == 0 || force_print_tree))
++    if (integer_valid && (errorcount == 0 || force_print_tree)) {
++        printf_mode_used = cprintf::usedBridge;
+         cout << program->toStr(-1);
++    }
+     } catch (const std::exception &error) { yyerror(error.what()); }
+ 
+-    exit(errorcount != 0 ? EXIT_FAILURE : EXIT_SUCCESS);
++    if (errorcount != 0) YYABORT;
++    YYACCEPT;
+ }
+ 
+ globals : globals[gg] global {
+@@ -157,6 +167,7 @@
+        | array_decl ';'
+        | multi_decl ';'
+        | func_decl ';'
++       | TOK_PRINTF_PROTOTYPE { cprintf::sawExternalPrintf = true; $$ = nullptr; }
+        | typedef_decl ';'
+        | struct_decl ';'
+        | func_impl
+@@ -190,9 +201,14 @@
+ 
+ include : TOK_INCLUDE[name] {
+     string name($name);
+-    size_t start = name.find_first_of("<\"") + 1;
+-    name = name.substr(start, name.length()-3-start);
+-    $$ = new Ident("use " + name + ";\n");
++    if (translate_printf && cprintf::isStdio(name)) {
++        cprintf::sawStdio = true;
++        $$ = nullptr;
++    } else {
++        size_t start = name.find_first_of("<\"") + 1;
++        name = name.substr(start, name.length()-3-start);
++        $$ = new Ident("use " + name + ";\n");
++    }
+ }
+ 
+ typedef_decl : TOK_TYPEDEF declaration_specifiers[src] TOK_IDENT[name] {
+@@ -564,14 +580,39 @@
+     $$ = new Integer($itg);
+ }
+ 
+-factor : TOK_FLOAT[flt] {
+-    $$ = new Float($flt);
++factor : TOK_FLOAT[text] {
++    $$ = new Float($text);
++}
++
++factor : TOK_CHAR[text] {
++    auto *literal = new Ident(translate_printf ? $text : "");
++    if (!translate_printf) {
++        yyerror("character literals need --printf in this increment");
++        YYABORT;
++    }
++    string value = cprintf::bytes(literal, $text);
++    if (value.size() != 1 || static_cast<unsigned char>(value.front()) > 127) {
++        yyerror("only single ASCII character literals are supported");
++        YYABORT;
++    }
++    $$ = new IntegerToken(to_string(static_cast<unsigned char>(value.front())));
+ }
+ 
+-factor : TOK_STRING[str] {
++factor : string_literal
++
++string_literal : TOK_STRING[str] {
+     $$ = new Ident($str);
+ }
+ 
++string_literal : string_literal[previous] TOK_STRING[str] {
++    auto *literal = static_cast<Ident*>($previous);
++    if (translate_printf) {
++        string combined = cprintf::bytes(literal, literal->getText()) + cprintf::bytes(literal, $str);
++        literal->setText(cprintf::spellRobString(combined));
++    } else yyerror("adjacent string literals need --printf in this increment");
++    $$ = literal;
++}
++
+ factor : TOK_INTEGER_LITERAL[str] {
+     $$ = new IntegerToken($str);
+ }
+--- a/include/nodes.h
++++ b/include/nodes.h
+@@ -8,13 +8,20 @@
+ #include <set>
+ #include <regex>
+ #include <format>
++#include <cmath>
++#include <cstdlib>
+ 
+ extern int errorcount;
+ extern int yylineno;
+ extern char *build_file_name;
++extern bool translate_printf;
+ 
+ using namespace std;
+ 
++inline bool isPrintfInternalName(const string &name) {
++    return name.starts_with("__c2rob_printf_");
++}
++
+ class Type;
+ map<string, Type*> declared_types;
+ map<string, string> declared_typedefs;
+@@ -145,14 +152,23 @@
+ class Float : public Node {
+ protected:
+     float value;
++    string source;
+ public:
+-    Float(const float v) {
+-        value = v;
++    explicit Float(const string &text) : value(static_cast<float>(strtod(text.c_str(), nullptr))), source(text) {}
++    bool isSingle() const { return source.back() == 'f' || source.back() == 'F'; }
++    bool isLongDouble() const { return source.back() == 'l' || source.back() == 'L'; }
++
++    string preciseText() const {
++        if (isLongDouble()) throw std::runtime_error("long double literals are not supported");
++        double exact = isSingle() ? static_cast<double>(strtof(source.c_str(), nullptr)) : strtod(source.c_str(), nullptr);
++        if (!std::isfinite(exact)) throw std::runtime_error("floating literal is not finite");
++        // Enough significant digits to round-trip at C's literal width.
++        return isSingle() ? std::format("{:.8e}", exact) : std::format("{:.16e}D", exact);
+     }
+ 
+     virtual string toStr(int il) override {
+         if (hasCheckedExpression) return checkedExpression;
+-        return to_string(value);
++        return translate_printf ? preciseText() : to_string(value);
+     }
+ };
+ 
+@@ -673,10 +689,16 @@
+     string name;
+     Node *args = nullptr;
+     bool inExpr = true;
++    bool printfBridge = false;
++    vector<string> printfCapture;
+ public:
+     const string getName() override { return name; }
+     void setName(const string &text) { name = text; }
+     Node *getArgs() const { return args; }
++    bool isStatement() const { return !inExpr; }
++    void markPrintfBridge() { printfBridge = true; }
++    bool isPrintfBridge() const { return printfBridge; }
++    void setPrintfCapture(vector<string> statements) { printfCapture = std::move(statements); }
+     FunctionCall(const string n) {
+         name = n;
+     }
+@@ -691,8 +713,12 @@
+     }
+ 
+     virtual string toStr(int il) override {
+-        if (hasCheckedExpression)
+-            return (inExpr ? "" : identation(il)) + checkedExpression + (inExpr ? "" : ";\n");
++        if (hasCheckedExpression) {
++            if (inExpr) return checkedExpression;
++            string result;
++            for (const auto &line : printfCapture) result += identation(il) + line + "\n";
++            return result + identation(il) + checkedExpression + ";\n";
++        }
+         string result;
+         
+         if (!inExpr)
+--- /dev/null
++++ b/include/printf_support.h
+@@ -0,0 +1,217 @@
++#pragma once
++
++// The ROB packet contains the number of C values, then a tag and a payload
++// for each number, or a tag, byte count and bytes for each literal string.
++namespace cprintf {
++
++inline bool sawStdio = false;
++inline bool sawExternalPrintf = false;
++inline bool usedBridge = false;
++
++inline bool isStdio(const string &directive) {
++    size_t start = directive.find('<');
++    if (start == string::npos) return false;
++    size_t stop = directive.find_last_not_of(" \t\r");
++    return directive.substr(start, stop - start + 1) == "<stdio.h>";
++}
++
++inline bool looksLikeString(Node *node) {
++    auto *ident = dynamic_cast<Ident*>(node);
++    return ident && ident->getText().starts_with('"');
++}
++
++// Only these types already have a supported ABI and ROB representation.
++inline bool isFloatingType(const string &type) {
++    return type == "float" || type == "double";
++}
++
++inline Node *unwrap(Node *node) {
++    while (auto *paren = dynamic_cast<Parenthesis*>(node)) node = paren->getValue();
++    return node;
++}
++
++// Decode byte strings rather than feeding C escapes to the ROB lexer,
++// whose escape rules do not include all C escapes.
++inline string bytes(Node *node, const string &literal) {
++    string result;
++    auto hex = [](unsigned char c) -> int {
++        if (c >= '0' && c <= '9') return c - '0';
++        if (c >= 'a' && c <= 'f') return c - 'a' + 10;
++        if (c >= 'A' && c <= 'F') return c - 'A' + 10;
++        return -1;
++    };
++    for (size_t i = 1; i + 1 < literal.size(); ++i) {
++        unsigned char ch = literal[i];
++        if (ch == '\\') {
++            ch = literal[++i];
++            switch (ch) {
++                case 'a': ch = 7; break;
++                case 'b': ch = 8; break;
++                case 'f': ch = 12; break;
++                case 'n': ch = 10; break;
++                case 'r': ch = 13; break;
++                case 't': ch = 9; break;
++                case 'v': ch = 11; break;
++                case '?': case '\\': case '"': case '\'': break;
++                case 'x': {
++                    int value = 0, digits = 0;
++                    while (i + 2 < literal.size() && hex(literal[i + 1]) >= 0) {
++                        value = 16 * value + hex(literal[++i]);
++                        if (value > 255)
++                            throw cwhile::ValidationError{node, "printf: byte escape is out of range"};
++                        ++digits;
++                    }
++                    if (!digits)
++                        throw cwhile::ValidationError{node, "printf: hexadecimal escape needs a digit"};
++                    ch = static_cast<unsigned char>(value);
++                    break;
++                }
++                default: {
++                    if (ch < '0' || ch > '7')
++                        throw cwhile::ValidationError{node, "printf: unsupported string escape"};
++                    int value = ch - '0';
++                    for (int extra = 0; extra < 2 && i + 2 < literal.size()
++                         && literal[i + 1] >= '0' && literal[i + 1] <= '7'; ++extra)
++                        value = value * 8 + literal[++i] - '0';
++                    if (value > 255)
++                        throw cwhile::ValidationError{node, "printf: byte escape is out of range"};
++                    ch = static_cast<unsigned char>(value);
++                }
++            }
++        }
++        result.push_back(static_cast<char>(ch));
++    }
++    return result;
++}
++
++inline string spellRobString(const string &bytes) {
++    string result = "\"";
++    for (unsigned char c : bytes) {
++        if (c == '\n') result += "\\n";
++        else if (c == '\t') result += "\\t";
++        else if (c == '\r') result += "\\r";
++        else if (c == '\\' || c == '"') {
++            result += '\\';
++            result += c;
++        } else if (c < 32 || c >= 127) {
++            result += '\\';
++            result += static_cast<char>('0' + (c >> 6));
++            result += static_cast<char>('0' + ((c >> 3) & 7));
++            result += static_cast<char>('0' + (c & 7));
++        } else result += c;
++    }
++    return result + '"';
++}
++
++inline string format(Node *node) {
++    Node *literal = unwrap(node);
++    if (!looksLikeString(literal))
++        throw cwhile::ValidationError{node, "printf: the format must be an ordinary string literal"};
++    string decoded = bytes(literal, static_cast<Ident*>(literal)->getText());
++    // This Robcmp revision represents string lengths with C strings internally.
++    // Refuse to silently truncate an input format containing an embedded NUL.
++    if (decoded.find('\0') != string::npos)
++        throw cwhile::ValidationError{node, "printf: embedded NUL in the format is not supported"};
++    return spellRobString(decoded);
++}
++
++// Do not intercept program-defined functions. Mark statement calls before
++// the while pass examines their arguments.
++class Calls {
++    bool userPrintf = false;
++    bool usesBridge = false;
++    std::set<Node*> visited;
++
++    void visit(Node *node, bool mark) {
++        if (!node || !visited.insert(node).second) return;
++        if (auto *call = dynamic_cast<FunctionCall*>(node)) {
++            const string name = call->getName();
++            if (mark && name == "printf" && !userPrintf) {
++                if (!sawStdio && !sawExternalPrintf)
++                    throw cwhile::ValidationError{call, "printf: include <stdio.h> or declare the standard prototype"};
++                if (!call->isStatement())
++                    throw cwhile::ValidationError{call, "printf: only calls used as statements are supported"};
++                if (!call->getArgs() || call->getArgs()->getChildren().empty())
++                    throw cwhile::ValidationError{call, "printf: a format argument is required"};
++                format(call->getArgs()->getChildren().front());
++                call->markPrintfBridge();
++                usesBridge = true;
++            } else if (mark && !userPrintf &&
++                       (name == "scanf" || name == "fprintf" || name == "sprintf" ||
++                        name == "snprintf" || name == "puts" || name == "getchar" ||
++                        name == "putchar" || name == "fscanf" || name == "sscanf") &&
++                       sawStdio) {
++                // With <stdio.h> consumed, do not pretend that these APIs exist.
++                throw cwhile::ValidationError{call, "printf bridge: unsupported stdio call: " + name};
++            }
++            visit(call->getArgs(), mark);
++        } else if (auto *fn = dynamic_cast<Function*>(node)) {
++            visit(fn->getBody(), mark);
++        } else if (auto *decl = dynamic_cast<VariableDecl*>(node)) {
++            visit(decl->getIndex(), mark);
++            visit(decl->getValue(), mark);
++        } else if (auto *decl = dynamic_cast<InitializedType*>(node)) {
++            visit(decl->getValues(), mark);
++        } else if (auto *decl = dynamic_cast<StructVariableDecl*>(node)) {
++            visit(decl->getIndex(), mark);
++            visit(decl->getValue(), mark);
++        } else if (auto *loop = dynamic_cast<While*>(node)) {
++            visit(loop->getCondition(), mark);
++            visit(loop->getBody(), mark);
++            visit(loop->getUpdate(), mark);
++        } else if (auto *branch = dynamic_cast<IfStmt*>(node)) {
++            visit(branch->getCondition(), mark);
++            visit(branch->getIfBody(), mark);
++            visit(branch->getElseBody(), mark);
++        } else if (auto *ret = dynamic_cast<Return*>(node)) {
++            visit(ret->getExpr(), mark);
++        } else if (auto *store = dynamic_cast<Store*>(node)) {
++            visit(store->getLeft(), mark);
++            visit(store->getValue(), mark);
++        } else if (auto *array = dynamic_cast<LoadArray*>(node)) {
++            visit(array->getIndex(), mark);
++        } else if (auto *array = dynamic_cast<LoadArrayField*>(node)) {
++            visit(array->getIndex(), mark);
++        } else if (auto *paren = dynamic_cast<Parenthesis*>(node)) {
++            visit(paren->getValue(), mark);
++        } else {
++            for (Node *child : node->getChildren()) visit(child, mark);
++        }
++    }
++
++public:
++    void run(Node *program) {
++        for (Node *node : program->getChildren()) {
++            if (node->getName() == "printf") userPrintf = true;
++            if (auto *declarations = dynamic_cast<Container*>(node))
++                for (Node *decl : declarations->getChildren())
++                    if (decl->getName() == "printf") userPrintf = true;
++        }
++        if (userPrintf && (sawStdio || sawExternalPrintf))
++            throw cwhile::ValidationError{nullptr, "printf: the program's own declaration conflicts with the standard printf"};
++        visit(program, true);
++        if (usesBridge) {
++            usedBridge = true;
++            program->getChildren().insert(program->getChildren().begin(),
++                                          new Ident("// C2ROB: printf bridge; requires a separately linked implementation.\n"));
++            program->getChildren().insert(program->getChildren().begin() + 1,
++                                          new Ident("use c2rob_printf;\n"));
++        } else if (sawStdio) {
++            program->getChildren().insert(program->getChildren().begin(), new Ident("use stdio;\n"));
++        }
++    }
++};
++
++inline bool prepare(Node *program, bool active) {
++    if (!active) return true;
++    try { Calls{}.run(program); }
++    catch (const cwhile::ValidationError &error) {
++        fprintf(stderr, "%s:%d: %s\n", build_file_name,
++                error.node ? error.node->getLineNo() : yylineno, error.message.c_str());
++        ++errorcount;
++        return false;
++    }
++    return true;
++}
++
++} // namespace cprintf
+--- a/test/unit/cases.json
++++ b/test/unit/cases.json
+@@ -2111,5 +2111,29 @@
+   "pilot_preprocess_label": {
+     "preprocess": true,
+     "diagnostic": " (preprocessed):"
++  },
++  "printf_dynamic_format": {
++    "printf": true,
++    "diagnostic": "printf: the format must be an ordinary string literal"
++  },
++  "printf_no_format": {
++    "printf": true,
++    "diagnostic": "printf: a format argument is required"
++  },
++  "printf_result_unsupported": {
++    "printf": true,
++    "diagnostic": "printf: only calls used as statements are supported"
++  },
++  "printf_nul_format": {
++    "printf": true,
++    "diagnostic": "printf: embedded NUL in the format is not supported"
++  },
++  "printf_no_declaration": {
++    "printf": true,
++    "diagnostic": "printf: include <stdio.h> or declare the standard prototype"
++  },
++  "printf_stub_link": {
++    "printf": true,
++    "diagnostic": "printf: recognized; argument packets are not enabled yet"
+   }
+ }
+--- /dev/null
++++ b/test/unit/printf_dynamic_format.c
+@@ -0,0 +1,5 @@
++#include <stdio.h>
++
++void f(char *format, int n) {
++    printf(format, n);
++}
+--- /dev/null
++++ b/test/unit/printf_no_declaration.c
+@@ -0,0 +1 @@
++void f(int n) { printf("%d\n", n); }
+--- /dev/null
++++ b/test/unit/printf_no_format.c
+@@ -0,0 +1,3 @@
++#include <stdio.h>
++
++void f(void) { printf(); }
+--- /dev/null
++++ b/test/unit/printf_nul_format.c
+@@ -0,0 +1,3 @@
++#include <stdio.h>
++
++void f(void) { printf("visible\000hidden"); }
+--- /dev/null
++++ b/test/unit/printf_result_unsupported.c
+@@ -0,0 +1,3 @@
++#include <stdio.h>
++
++int f(int n) { return printf("%d", n); }
+--- /dev/null
++++ b/test/unit/printf_stub_link.c
+@@ -0,0 +1,13 @@
++#include <stdio.h>
++
++int calls = 0;
++
++int next(void) {
++    calls++;
++    return calls + 2;
++}
++
++int main(void) {
++    printf("value=%d\n", next());
++    return calls;
++}
+--- a/test/unit/run_tests.py
++++ b/test/unit/run_tests.py
+@@ -76,6 +76,8 @@
+             translator_options = ["--abi=" + spec["abi"]] if "abi" in spec else []
+             if spec.get('preprocess'):
+                 translator_options.append('--preprocess')
++            if spec.get('printf'):
++                translator_options.append('--printf')
+             translated = run([translator, *translator_options, str(source)])
+             (out / f'{name}.stderr').write_text(translated.stderr)
+             rob.write_text(translated.stdout)
+@@ -91,6 +93,10 @@
+             require(translated, 'C -> ROB')
+             for fragment in spec.get('contains', []):
+                 assert fragment in translated.stdout, f'Missing {fragment!r}\n{translated.stdout}'
++            for fragment in spec.get('contains', []):
++                assert fragment in translated.stdout, f'Missing {fragment!r}\n{translated.stdout}'
++            for fragment in spec.get('excludes', []):
++                assert fragment not in translated.stdout, f'Unexpected {fragment!r}\n{translated.stdout}'
+             golden = ROOT / f'{name}.expected.rob'
+             if golden.exists():
+                 assert translated.stdout == golden.read_text(), 'Golden ROB regression differs'

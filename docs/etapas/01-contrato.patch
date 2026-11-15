@@ -1,0 +1,25 @@
+--- /dev/null
++++ b/compat/c2rob_printf.rob
+@@ -0,0 +1,2 @@
++// Declarations only: keep the implementation out of the caller's LLVM module.
++int32 printf(char[] format, uint64[] arguments);
+--- /dev/null
++++ b/compat/printf_stub.rob
+@@ -0,0 +1,4 @@
++// Compile separately. This is the ROB bridge ABI, not C libc's variadic printf.
++int32 printf(char[] format, uint64[] arguments) {
++    return 0;
++}
+--- /dev/null
++++ b/test/unit/printf_bridge_contract.rob
+@@ -0,0 +1,10 @@
++use c2rob_printf;
++
++int32 main() {
++    n = int32(7);
++    sem_valores = {uint64(0)};
++    com_valor = {uint64(1), uint64(1), uint64(int64(n))};
++    printf("Pronto\n", sem_valores);
++    printf("n = %d\n", com_valor);
++    return 0;
++}

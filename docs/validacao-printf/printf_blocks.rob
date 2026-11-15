@@ -1,0 +1,68 @@
+// C2ROB: printf bridge; requires a separately linked implementation.
+use c2rob_printf;
+checks = int32(0);
+
+int32 check(int32 n) {
+	checks++;
+	return n;
+}
+
+
+int32 main() {
+
+	i = int32(0);
+	seen = int32(0);
+	while i < 3 {
+
+		if i == 1 {
+			__c2rob_printf_pack_0_value_1 = int32(i);
+			__c2rob_printf_pack_0 = {uint64(1), uint64(1), uint64(int64(__c2rob_printf_pack_0_value_1))};
+			printf("middle %d\n", __c2rob_printf_pack_0);
+		} else {
+			__c2rob_printf_pack_1_value_1 = int32((int32(i) + int32(1)));
+			__c2rob_printf_pack_1 = {uint64(1), uint64(1), uint64(int64(__c2rob_printf_pack_1_value_1))};
+			printf("edge %d\n", __c2rob_printf_pack_1);
+		}
+
+		i++;
+	}
+
+
+	i = 0;
+	while i < 2 {
+		__c2rob_printf_pack_2_value_1 = int32(i);
+		__c2rob_printf_pack_2 = {uint64(1), uint64(1), uint64(int64(__c2rob_printf_pack_2_value_1))};
+		printf("loop %d\n", __c2rob_printf_pack_2);
+		i++;
+	}
+
+
+	if i == 2 {
+		__c2rob_printf_pack_3_value_1_condition_0 = int32(1);
+		if (int32(uint32((int32(i) == int32(2))))) == 0 {
+			__c2rob_printf_pack_3_value_1_condition_0 = int32(uint32((check(0)) != 0));
+		}
+		__c2rob_printf_pack_3_value_1 = int32(__c2rob_printf_pack_3_value_1_condition_0);
+		__c2rob_printf_pack_3 = {uint64(1), uint64(1), uint64(int64(__c2rob_printf_pack_3_value_1))};
+		printf("done %d\n", __c2rob_printf_pack_3);
+	}
+
+	__c2rob_printf_pack_4_value_1_condition_0 = int32(0);
+	if (seen) != 0 {
+		__c2rob_printf_pack_4_value_1_condition_0 = int32(uint32((check(1)) != 0));
+	}
+	__c2rob_printf_pack_4_value_1 = int32(__c2rob_printf_pack_4_value_1_condition_0);
+	__c2rob_printf_pack_4_value_2_condition_0 = int32(0);
+	if (int32(uint32(((int32(i) == int32(2)))))) != 0 {
+		__c2rob_printf_pack_4_value_2_condition_1 = int32(1);
+		if (check(0)) == 0 {
+			__c2rob_printf_pack_4_value_2_condition_1 = int32(uint32((check(7)) != 0));
+		}
+		__c2rob_printf_pack_4_value_2_condition_0 = int32(uint32(((__c2rob_printf_pack_4_value_2_condition_1)) != 0));
+	}
+	__c2rob_printf_pack_4_value_2 = int32(__c2rob_printf_pack_4_value_2_condition_0);
+	__c2rob_printf_pack_4 = {uint64(2), uint64(1), uint64(int64(__c2rob_printf_pack_4_value_1)), uint64(1), uint64(int64(__c2rob_printf_pack_4_value_2))};
+	printf("checks: %d %d\n", __c2rob_printf_pack_4);
+	return checks;
+}
+

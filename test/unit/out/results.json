@@ -1982,5 +1982,93 @@
     "ir": "not_applicable",
     "execution": "not_applicable",
     "exit": 1
+  },
+  {
+    "name": "print_direct_pedido",
+    "translation": "pass",
+    "object": "translation_only",
+    "ir": "translation_only",
+    "execution": "translation_only",
+    "exit": 0
+  },
+  {
+    "name": "print_direct_medicao",
+    "translation": "pass",
+    "object": "translation_only",
+    "ir": "translation_only",
+    "execution": "translation_only",
+    "exit": 0
+  },
+  {
+    "name": "print_direct_chamadas",
+    "translation": "pass",
+    "object": "translation_only",
+    "ir": "translation_only",
+    "execution": "translation_only",
+    "exit": 0
+  },
+  {
+    "name": "print_direct_verbatim",
+    "translation": "pass",
+    "object": "translation_only",
+    "ir": "translation_only",
+    "execution": "translation_only",
+    "exit": 0
+  },
+  {
+    "name": "print_direct_prototype",
+    "translation": "pass",
+    "object": "translation_only",
+    "ir": "translation_only",
+    "execution": "translation_only",
+    "exit": 0
+  },
+  {
+    "name": "print_direct_nested",
+    "translation": "pass",
+    "object": "translation_only",
+    "ir": "translation_only",
+    "execution": "translation_only",
+    "exit": 0
+  },
+  {
+    "name": "print_direct_user_function",
+    "translation": "pass",
+    "object": "skipped",
+    "ir": "skipped",
+    "execution": "skipped",
+    "exit": 0
+  },
+  {
+    "name": "print_direct_include",
+    "translation": "pass",
+    "object": "translation_only",
+    "ir": "translation_only",
+    "execution": "translation_only",
+    "exit": 0
+  },
+  {
+    "name": "print_direct_unterminated",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "print_direct_delimiters",
+    "translation": "pass",
+    "object": "not_applicable",
+    "ir": "not_applicable",
+    "execution": "not_applicable",
+    "exit": 1
+  },
+  {
+    "name": "print_direct_preprocessed",
+    "translation": "pass",
+    "object": "translation_only",
+    "ir": "translation_only",
+    "execution": "translation_only",
+    "exit": 0
   }
 ]

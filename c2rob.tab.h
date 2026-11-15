@@ -76,11 +76,16 @@ extern int yydebug;
     TOK_STRUCT = 277,              /* TOK_STRUCT  */
     TOK_TYPEDEF = 278,             /* TOK_TYPEDEF  */
     TOK_GNU_ATTRIBUTE = 279,       /* TOK_GNU_ATTRIBUTE  */
-    TOK_STATIC = 280,              /* TOK_STATIC  */
-    TOK_VOLATILE = 281,            /* TOK_VOLATILE  */
-    TOK_CONST = 282,               /* TOK_CONST  */
-    TOK_TYPE_SPEC = 283,           /* TOK_TYPE_SPEC  */
-    UMINUS = 284                   /* UMINUS  */
+    TOK_EXTERN = 280,              /* TOK_EXTERN  */
+    TOK_RESTRICT = 281,            /* TOK_RESTRICT  */
+    TOK_ELLIPSIS = 282,            /* TOK_ELLIPSIS  */
+    TOK_PRINT_OPEN = 283,          /* TOK_PRINT_OPEN  */
+    TOK_PRINT_CALL = 284,          /* TOK_PRINT_CALL  */
+    TOK_STATIC = 285,              /* TOK_STATIC  */
+    TOK_VOLATILE = 286,            /* TOK_VOLATILE  */
+    TOK_CONST = 287,               /* TOK_CONST  */
+    TOK_TYPE_SPEC = 288,           /* TOK_TYPE_SPEC  */
+    UMINUS = 289                   /* UMINUS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -89,16 +94,15 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 67 "c2rob.y"
+#line 96 "c2rob.y"
 
     const char *str;
     int64_t itg;
-    double flt;
     Node *node;
     Strings *strings;
     DeclarationSpecifiers *spec;
 
-#line 102 "c2rob.tab.h"
+#line 106 "c2rob.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

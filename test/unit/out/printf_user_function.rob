@@ -1,0 +1,15 @@
+
+int32 printf(int32 n) {
+	return n + 2;
+}
+
+
+int32 main() {
+
+	if printf(3) != 5 {
+		return 1;
+	}
+
+	return printf(10);
+}
+

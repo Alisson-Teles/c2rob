@@ -1,0 +1,87 @@
+{
+  "unit": {
+    "passed": 265,
+    "failed": 0
+  },
+  "integration": {
+    "passed": 265,
+    "failed": 0,
+    "object": {
+      "pass": 162,
+      "not_applicable": 103
+    },
+    "ir": {
+      "pass": 162,
+      "not_applicable": 103
+    },
+    "execution": {
+      "pass": 160,
+      "not_applicable": 103,
+      "skipped_no_calls": 1,
+      "pass_stub": 1
+    }
+  },
+  "stages_unit_counts": {
+    "1": 248,
+    "2": 254,
+    "3": 265
+  },
+  "prior_cases": 248,
+  "prior_successful_rob_files_byte_identical": 154,
+  "corpus": {
+    "total": 142,
+    "recognized_textual_printf_occurrences": 63,
+    "files_with_textual_printf": 34,
+    "arguments_after_format_min_max": [
+      0,
+      5
+    ],
+    "default_preprocess_files": [
+      "dummy.c"
+    ],
+    "before": {
+      "rob": [
+        "board.rob",
+        "dummy.rob",
+        "teste.rob"
+      ],
+      "o": [
+        "board.o",
+        "dummy.o",
+        "teste.o"
+      ],
+      "s": [
+        "board.s",
+        "dummy.s",
+        "teste.s"
+      ]
+    },
+    "after": {
+      "rob": [
+        "board.rob",
+        "dummy.rob",
+        "teste.rob"
+      ],
+      "o": [
+        "board.o",
+        "dummy.o",
+        "teste.o"
+      ],
+      "s": [
+        "board.s",
+        "dummy.s",
+        "teste.s"
+      ]
+    },
+    "before_and_after_unreported_dependency": "board.c: boardsupport.rob not found",
+    "before_and_after_without_diagnostics": [
+      "dummy.c",
+      "teste.c"
+    ],
+    "new_smoke_outside_corpus": [
+      "printf_smoke.rob",
+      "printf_smoke.o",
+      "printf_smoke.s"
+    ]
+  }
+}

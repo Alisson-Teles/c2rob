@@ -1,0 +1,2 @@
+/home/alisson/Documents/C2ROB_printf_validado/c2rob/test/unit/print_direct_delimiters.c:1:48: print/printf: mismatched delimiter in argument list
+/home/alisson/Documents/C2ROB_printf_validado/c2rob/test/unit/print_direct_delimiters.c:1:48: syntax error, unexpected TOK_UNSUPPORTED, expecting TOK_PRINT_CALL

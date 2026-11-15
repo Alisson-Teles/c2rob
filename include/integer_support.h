@@ -92,6 +92,10 @@ class Validator {
 
     Value expression(Node *node, const Scope &scope) {
         if (!node) return {};
+        if (auto *call = dynamic_cast<FunctionCall*>(node); call && call->hasDirectSpelling()) {
+            auto found = functions.find(call->getName());
+            return {call->getDirectSpelling(), found == functions.end() ? "int32" : found->second.result};
+        }
         Value result{node->toStr(0), ""};
         if (auto *literal = dynamic_cast<IntegerToken*>(node)) {
             auto info = sourceIntegerLiteral(literal->getText());

@@ -2111,5 +2111,117 @@
   "pilot_preprocess_label": {
     "preprocess": true,
     "diagnostic": " (preprocessed):"
+  },
+  "print_direct_pedido": {
+    "translation_only": true,
+    "contains": [
+      "use printf;",
+      "printf(\"Pedido recebido\\n\");",
+      "printf(\"Itens: %d | Total: R$ %d\\n\", quantidade, quantidade * preco_unitario);"
+    ],
+    "excludes": [
+      "use stdio;",
+      "use c2rob_printf;",
+      "__c2rob_printf_pack"
+    ]
+  },
+  "print_direct_medicao": {
+    "translation_only": true,
+    "contains": [
+      "printf(\"%s: %.1f C, umidade %u%%\\n\", \"Sala 2\", temperatura, umidade);",
+      "temperatura = float(2.35000000e+01);"
+    ],
+    "excludes": [
+      "bitcast(",
+      "__c2rob_printf_pack"
+    ]
+  },
+  "print_direct_chamadas": {
+    "translation_only": true,
+    "contains": [
+      "while i <= 2 {\n\t\tprintf(\"Chamado %d\\n\", registrar(i));",
+      "\n\tprintf(\"Registros: %d\\n\", registradas);"
+    ],
+    "excludes": [
+      "__c2rob_printf_pack"
+    ]
+  },
+  "print_direct_verbatim": {
+    "translation_only": true,
+    "contains": [
+      "printf(formato, n);",
+      "printf /* opening */ (\n        \"Medição: \\\"print(fake)\\\" \" \"%s %c %u %d %d\\n\",\n        n > 1 ? \"sim\" : \"nao\", '(', (unsigned)(next(n) + 4U),\n        (int[]){1, 2}[0], n /* ) ] } */ + 1);"
+    ],
+    "excludes": [
+      "use print;",
+      "use stdio;",
+      "__c2rob_printf_pack"
+    ]
+  },
+  "print_direct_prototype": {
+    "translation_only": true,
+    "contains": [
+      "int32 printf(char[] fmt, ...);",
+      "n = printf(\"%u\\n\", 7U);",
+      "return printf(\"%d\\n\", n);"
+    ],
+    "excludes": [
+      "use printf;",
+      "__c2rob_printf_pack"
+    ]
+  },
+  "print_direct_nested": {
+    "translation_only": true,
+    "contains": [
+      "use print;\nuse printf;",
+      "printf(\"%d\\n\", print(\"%d\\n\", 19));"
+    ],
+    "excludes": [
+      "use stdio;",
+      "__c2rob_printf_pack"
+    ]
+  },
+  "print_direct_user_function": {
+    "has_main": true,
+    "exit_code": 20,
+    "contains": [
+      "int32 print(int32 value)",
+      "return print ( 19 );"
+    ],
+    "excludes": [
+      "use print;",
+      "use printf;",
+      "__c2rob_printf_pack"
+    ]
+  },
+  "print_direct_include": {
+    "translation_only": true,
+    "contains": [
+      "use print;",
+      "print(\"direct: %d\\n\", 5);"
+    ],
+    "excludes": [
+      "use print;\nuse print;",
+      "use printf;",
+      "__c2rob_printf_pack"
+    ]
+  },
+  "print_direct_unterminated": {
+    "diagnostic": "print/printf: unterminated argument list"
+  },
+  "print_direct_delimiters": {
+    "diagnostic": "print/printf: mismatched delimiter in argument list"
+  },
+  "print_direct_preprocessed": {
+    "translation_only": true,
+    "preprocess": true,
+    "contains": [
+      "int32 printf(char[] fmt, ...);",
+      "printf(\"argc = %u\\n\", 0x10U);"
+    ],
+    "excludes": [
+      "use printf;",
+      "__c2rob_printf_pack"
+    ]
   }
 }

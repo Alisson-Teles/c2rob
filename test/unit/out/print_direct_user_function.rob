@@ -1,0 +1,10 @@
+
+int32 print(int32 value) {
+	return value + 1;
+}
+
+
+int32 main() {
+	return print ( 19 );
+}
+

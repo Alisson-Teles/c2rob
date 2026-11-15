@@ -1,0 +1,582 @@
+--- a/c2rob.y
++++ b/c2rob.y
+@@ -131,10 +131,6 @@
+     if (errorcount == 0) propagateNoInline(program);
+     bool scope_valid = errorcount == 0 && resolveScopeProgram(program);
+     bool printf_valid = scope_valid && cprintf::prepare(program, translate_printf);
+-    if (printf_valid && cprintf::usedBridge) {
+-        yyerror("printf: recognized; argument packets are not enabled yet");
+-        printf_valid = false;
+-    }
+     bool while_valid = printf_valid && validateWhileProgram(program);
+     bool qualifier_valid = while_valid && validateQualifierProgram(program);
+     bool integer_valid = qualifier_valid && validateIntegerProgram(program);
+--- a/include/integer_support.h
++++ b/include/integer_support.h
+@@ -54,6 +54,94 @@
+ class Validator {
+     Scope globals;
+     map<string, FunctionInfo> functions;
++    unsigned nextPrintfPacket = 0;
++    static bool floating(const Value &value) { return cprintf::isFloatingType(value.type); }
++    struct PrintfArgument {
++        vector<string> &lines;
++        string prefix;
++        unsigned nextCondition = 0;
++    };
++
++    string printfPacketName(const Scope &scope) {
++        for (;;) {
++            string name = "__c2rob_printf_pack_" + to_string(nextPrintfPacket++);
++            // The packet also introduces names starting with this prefix + '_'.
++            auto used = [&](const auto &symbols) {
++                string prefix = name + "_";
++                auto it = symbols.lower_bound(prefix);
++                return symbols.contains(name) || (it != symbols.end() && it->first.starts_with(prefix));
++            };
++            if (!used(scope) && !used(functions) && !used(declared_types)) return name;
++        }
++    }
++
++    // Only allow expressions whose evaluated values the emitter can preserve.
++    // In particular, do not accidentally accept a postfix value by serializing
++    // the old AST text; the surrounding arithmetic may otherwise hide it.
++    void checkPrintfArgument(Node *node) {
++        if (auto *unary = dynamic_cast<Unary*>(node)) {
++            if (unary->getOperation() == "++" || unary->getOperation() == "--")
++                throw cwhile::ValidationError{node, "printf: postfix increment/decrement used as a value is not supported"};
++            checkPrintfArgument(unary->getValue());
++        } else if (auto *binary = dynamic_cast<BinaryOp*>(node)) {
++            checkPrintfArgument(binary->getLeft());
++            checkPrintfArgument(binary->getRight());
++        } else if (auto *paren = dynamic_cast<Parenthesis*>(node)) {
++            checkPrintfArgument(paren->getValue());
++        } else if (auto *array = dynamic_cast<LoadArray*>(node)) {
++            checkPrintfArgument(array->getIndex());
++        } else if (auto *call = dynamic_cast<FunctionCall*>(node)) {
++            if (call->getArgs())
++                for (Node *arg : call->getArgs()->getChildren()) checkPrintfArgument(arg);
++        } else if (auto *id = dynamic_cast<Ident*>(node); id && id->getText().starts_with('"')) {
++            throw cwhile::ValidationError{node, "printf: string expressions other than literal arguments are not supported"};
++        }
++    }
++
++    void emitPrintf(FunctionCall *call, const Scope &scope) {
++        const auto &args = call->getArgs()->getChildren();
++        string formatText = cprintf::format(args.front());
++        string packetName = printfPacketName(scope);
++        vector<string> capture;
++        string packet = "uint64(" + to_string(args.size() - 1) + ")";
++        auto word = [&](const string &value) { packet += ", uint64(" + value + ")"; };
++        for (size_t i = 1; i < args.size(); ++i) {
++            Node *arg = args[i];
++            if (auto *literal = dynamic_cast<Ident*>(cprintf::unwrap(arg));
++                    literal && cprintf::looksLikeString(literal)) {
++                auto text = cprintf::bytes(literal, literal->getText());
++                word("6");
++                word(to_string(text.size()));
++                for (unsigned char c : text) word(to_string(c));
++                continue;
++            }
++            checkPrintfArgument(arg);
++            string local = packetName + "_value_" + to_string(i);
++            PrintfArgument context{capture, local + "_condition_"};
++            Value value = asInteger(expression(arg, scope, &context));
++            if (integral(value)) {
++                string target = promoted(value.type);
++                bool isUnsigned = unsignedType(target);
++                word(bits(target) == 64 ? (isUnsigned ? "4" : "3") : (isUnsigned ? "2" : "1"));
++                // Capture once and preserve the C signedness before packing.
++                capture.push_back(local + " = " + castTo(target, value) + ";");
++                packet += ", " + castTo("uint64", {local, target});
++            } else if (floating(value)) {
++                // The C default promotion is float -> double. It is the bits
++                // of the double, not a numeric conversion to uint64, we need.
++                word("5");
++                // Older Robcmp does not reliably propagate casts directly
++                // inside bitcast; materializing the promoted value avoids it.
++                capture.push_back(local + " = double(" + value.text + ");");
++                packet += ", bitcast(" + local + ", uint64)";
++            } else {
++                throw cwhile::ValidationError{arg, "printf: unsupported or unknown argument type at value " + to_string(i)};
++            }
++        }
++        capture.push_back(packetName + " = {" + packet + "};");
++        call->setPrintfCapture(std::move(capture));
++        call->setCheckedExpression("printf(" + formatText + ", " + packetName + ")");
++    }
+ 
+     Symbol symbol(const string &name, const Scope &scope) {
+         size_t dot = name.find('.');
+@@ -90,30 +178,38 @@
+         return {};
+     }
+ 
+-    Value expression(Node *node, const Scope &scope) {
++    Value expression(Node *node, const Scope &scope, PrintfArgument *printfArgument = nullptr) {
+         if (!node) return {};
+-        Value result{node->toStr(0), ""};
++        Value result;
+         if (auto *literal = dynamic_cast<IntegerToken*>(node)) {
+             auto info = sourceIntegerLiteral(literal->getText());
+             result = {info.type == "int32" ? info.digits : info.type + "(" + info.digits + ")",
+                       info.type, false, info.type != "int32"};
++        } else if (auto *literal = dynamic_cast<Float*>(node); literal && printfArgument) {
++            if (literal->isLongDouble())
++                throw cwhile::ValidationError{node, "printf: long double arguments are not supported"};
++            result = {literal->preciseText(), literal->isSingle() ? "float" : "double", false, true};
+         } else if (auto *ident = dynamic_cast<Ident*>(node)) {
+             Symbol sym = symbol(ident->getText(), scope);
+             if (!sym.array) result.type = sym.type;
+         } else if (auto *paren = dynamic_cast<Parenthesis*>(node)) {
+-            result = expression(paren->getValue(), scope);
++            result = expression(paren->getValue(), scope, printfArgument);
+             result.text = "(" + result.text + ")";
+         } else if (auto *unary = dynamic_cast<Unary*>(node)) {
+-            Value value = expression(unary->getValue(), scope);
++            Value value = expression(unary->getValue(), scope, printfArgument);
+             string op = unary->getOperation();
+-            if (integral(value) && op != "++" && op != "--") {
++            if (printfArgument && floating(value) && op == "-") {
++                string minusOne = value.type == "float" ? "-1.0" : "-1.0D";
++                // Multiplication preserves the sign of an IEEE zero as C unary minus does.
++                result = {"((" + value.text + ") * (" + minusOne + "))", value.type, false, true};
++            } else if (integral(value) && op != "++" && op != "--") {
+                 if (op == "!") {
+                     string condition = value.boolean ? value.text : "(" + value.text + ") != 0";
+                     result = {"!(" + condition + ")", "int32", true, true};
+                 } else {
+                     value = asInteger(value);
+                     string type = promoted(value.type);
+-                    bool changed = value.changed || type != "int32" || value.type != type;
++                    bool changed = printfArgument || value.changed || type != "int32" || value.type != type;
+                     string text = op + "(" + castTo(type, value) + ")";
+                     if (op == "~") {
+                         // Avoid Robcmp's FlipOp path; XOR preserves the promoted width.
+@@ -126,24 +222,55 @@
+                 }
+             }
+         } else if (auto *binary = dynamic_cast<BinaryOp*>(node)) {
+-            Value left = expression(binary->getLeft(), scope), right = expression(binary->getRight(), scope);
++            Value left = expression(binary->getLeft(), scope, printfArgument);
+             string op = binary->getOperation();
+-            if (integral(left) && integral(right)) {
+-                if (op == "and" || op == "or") {
+-                    string l = left.boolean ? left.text : "(" + left.text + ") != 0";
+-                    string r = right.boolean ? right.text : "(" + right.text + ") != 0";
+-                    result = {"(" + l + ") " + op + " (" + r + ")", "int32", true, true};
+-                } else {
+-                    left = asInteger(left); right = asInteger(right);
+-                    string type = commonType(promoted(left.type), promoted(right.type));
+-                    bool comparison = op == "<" || op == ">" || op == "<=" || op == ">=" || op == "==" || op == "!=";
+-                    bool changed = left.changed || right.changed || left.type != "int32" || right.type != "int32";
+-                    result = {"(" + castTo(type, left) + " " + op + " " + castTo(type, right) + ")",
+-                              comparison ? "int32" : type, comparison, changed};
++            if (printfArgument && (op == "and" || op == "or")) {
++                // Robcmp emits and/or safely as conditions, but in value
++                // position its short-circuit blocks can leave invalid IR.
++                // Evaluate the right side, including any nested captures,
++                // only inside an explicit if when the C operation needs it.
++                auto &lines = printfArgument->lines;
++                string temp = printfArgument->prefix + to_string(printfArgument->nextCondition++);
++                bool isOr = op == "or";
++                lines.push_back(temp + (isOr ? " = int32(1);" : " = int32(0);"));
++                lines.push_back("if (" + asInteger(left).text + ") " + (isOr ? "==" : "!=") + " 0 {");
++                size_t firstNested = lines.size();
++                Value right = expression(binary->getRight(), scope, printfArgument);
++                if (!integral(left) || !integral(right))
++                    throw cwhile::ValidationError{node, "printf: logical arguments must test integral values"};
++                for (size_t i = firstNested; i < lines.size(); ++i) lines[i].insert(0, "\t");
++                string truth = right.boolean ? right.text : "(" + right.text + ") != 0";
++                lines.push_back("\t" + temp + " = int32(uint32(" + truth + "));");
++                lines.push_back("}");
++                result = {temp, "int32", false, true};
++            } else {
++                Value right = expression(binary->getRight(), scope, printfArgument);
++                if (printfArgument && (floating(left) || floating(right)) &&
++                    (floating(left) || integral(left)) && (floating(right) || integral(right)) &&
++                    (op == "+" || op == "-" || op == "*" || op == "/")) {
++                    string type = left.type == "double" || right.type == "double" ? "double" : "float";
++                    auto typed = [&](Value value) {
++                        value = asInteger(value);
++                        return value.type == type ? "(" + value.text + ")" : type + "(" + value.text + ")";
++                    };
++                    result = {"(" + typed(left) + " " + op + " " + typed(right) + ")", type, false, true};
++                } else if (integral(left) && integral(right)) {
++                    if (op == "and" || op == "or") {
++                        string l = left.boolean ? left.text : "(" + left.text + ") != 0";
++                        string r = right.boolean ? right.text : "(" + right.text + ") != 0";
++                        result = {"(" + l + ") " + op + " (" + r + ")", "int32", true, true};
++                    } else {
++                        left = asInteger(left); right = asInteger(right);
++                        string type = commonType(promoted(left.type), promoted(right.type));
++                        bool comparison = op == "<" || op == ">" || op == "<=" || op == ">=" || op == "==" || op == "!=";
++                        bool changed = printfArgument || left.changed || right.changed || left.type != "int32" || right.type != "int32";
++                        result = {"(" + castTo(type, left) + " " + op + " " + castTo(type, right) + ")",
++                                  comparison ? "int32" : type, comparison, changed};
++                    }
+                 }
+             }
+         } else if (auto *array = dynamic_cast<LoadArray*>(node)) {
+-            Value index = asInteger(expression(array->getIndex(), scope));
++            Value index = asInteger(expression(array->getIndex(), scope, printfArgument));
+             if (index.changed) array->getIndex()->setCheckedExpression(index.text);
+             Symbol sym = symbol(array->getArrayName(), scope);
+             result = {array->getArrayName() + "[" + array->getIndex()->toStr(0) + "]", sym.array ? sym.type : ""};
+@@ -156,7 +283,7 @@
+             size_t index = 0;
+             if (call->getArgs()) {
+                 for (Node *arg : call->getArgs()->getChildren()) {
+-                    Value value = asInteger(expression(arg, scope));
++                    Value value = asInteger(expression(arg, scope, printfArgument));
+                     if (found != functions.end() && index < found->second.parameters.size()) {
+                         string target = found->second.parameters[index];
+                         if (integral(value) && bits(target) && (value.type != target || value.changed)) {
+@@ -243,7 +370,8 @@
+                     ret->getExpr()->setCheckedExpression(castTo(returnType, value));
+             }
+         } else if (auto *call = dynamic_cast<FunctionCall*>(node)) {
+-            expression(call, scope);
++            if (call->isPrintfBridge()) emitPrintf(call, scope);
++            else expression(call, scope);
+         } else if (auto *decl = dynamic_cast<InitializedType*>(node)) {
+             scope[decl->getName()] = {decl->getTypeName()};
+         } else {
+--- a/include/scope_support.h
++++ b/include/scope_support.h
+@@ -91,7 +91,7 @@
+         if (current.contains(source))
+             throw Error{node, "[C2ROB_SCOPE_REDECLARATION] name already declared in this scope: " + source};
+         string target = source;
+-        if (occupied.contains(target)) {
++        if (occupied.contains(target) || (translate_printf && isPrintfInternalName(target))) {
+             do {
+                 target = "__c2rob_scope_" + to_string(nextName++) + "_" + source;
+             } while (used.contains(target));
+--- a/include/while_support.h
++++ b/include/while_support.h
+@@ -281,6 +281,18 @@
+         if (strict && ret->getExpr()) checkValue(ret->getExpr(), scope, functions);
+     } else if (auto *call = dynamic_cast<FunctionCall*>(node)) {
+         if (strict) {
++            if (call->isPrintfBridge()) {
++                // The dedicated validation handles the format and string payloads.
++                // Keep the usual checks for integer expressions inside this loop.
++                for (Node *arg : call->getArgs()->getChildren()) {
++                    while (auto *paren = dynamic_cast<Parenthesis*>(arg)) arg = paren->getValue();
++                    auto *literal = dynamic_cast<Ident*>(arg);
++                    if (literal && literal->getText().starts_with('"')) continue;
++                    auto value = expression(arg, scope, functions);
++                    if (value.kind != Kind::Floating) requireIntegral(value, arg);
++                }
++                return;
++            }
+             auto value = expression(call, scope, functions);
+             if (value.kind != Kind::Void) requireIntegral(value, call);
+         }
+--- a/test/unit/cases.json
++++ b/test/unit/cases.json
+@@ -2112,6 +2112,125 @@
+     "preprocess": true,
+     "diagnostic": " (preprocessed):"
+   },
++  "printf_packets": {
++    "printf": true,
++    "contains": [
++      "use c2rob_printf;",
++      "printf(\"\",",
++      "printf(\"Ready\\n\",",
++      "printf(\"%d %u %lld %llu %.2f %.2f %d %s %%\\n\",",
++      "printf(\"a%d %s\\n\",",
++      "double(x)",
++      "bitcast("
++    ],
++    "excludes": [
++      "use stdio;"
++    ],
++    "has_main": true,
++    "exit_code": 1,
++    "robcmp_opt": "-Oz",
++    "printf_calls": 4,
++    "printf_probe": true,
++    "ir_contains": [
++      "fpext float",
++      "9007199254740993"
++    ]
++  },
++  "printf_blocks": {
++    "printf": true,
++    "contains": [
++      "use c2rob_printf;",
++      "printf(\"middle %d\\n\",",
++      "printf(\"edge %d\\n\",",
++      "printf(\"loop %d\\n\",",
++      "printf(\"done %d\\n\","
++    ],
++    "excludes": [
++      "use stdio;"
++    ],
++    "has_main": true,
++    "exit_code": 2,
++    "robcmp_opt": "-Oz",
++    "printf_probe": true,
++    "printf_external": true
++  },
++  "printf_prototype": {
++    "printf": true,
++    "contains": [
++      "use c2rob_printf;",
++      "printf(\"width %*d %d %d\\n\",",
++      "uint64(4)"
++    ],
++    "excludes": [
++      "use stdio;"
++    ],
++    "has_main": true,
++    "exit_code": 0,
++    "robcmp_opt": "-Oz",
++    "printf_calls": 1,
++    "printf_probe": true
++  },
++  "printf_stub_link": {
++    "printf": true,
++    "contains": [
++      "use c2rob_printf;",
++      "printf(\"value=%d\\n\",",
++      "next()"
++    ],
++    "excludes": [
++      "use stdio;"
++    ],
++    "has_main": true,
++    "exit_code": 1,
++    "robcmp_opt": "-Oz",
++    "printf_calls": 1,
++    "printf_stub": true
++  },
++  "printf_preprocessed": {
++    "printf": true,
++    "contains": [
++      "use c2rob_printf;",
++      "printf(\"macro %d\\n\",",
++      "int32(31)"
++    ],
++    "excludes": [
++      "use stdio;"
++    ],
++    "has_main": true,
++    "exit_code": 0,
++    "robcmp_opt": "-Oz",
++    "printf_calls": 1,
++    "printf_probe": true,
++    "preprocess": true
++  },
++  "printf_user_function": {
++    "printf": true,
++    "contains": [
++      "int32 printf(int32 n) {",
++      "return printf(10);"
++    ],
++    "excludes": [
++      "use c2rob_printf;"
++    ],
++    "has_main": true,
++    "exit_code": 12
++  },
++  "printf_name_collision": {
++    "printf": true,
++    "contains": [
++      "use c2rob_printf;",
++      "printf(\"%d %d\\n\",",
++      "int32(99)"
++    ],
++    "excludes": [
++      "use stdio;"
++    ],
++    "has_main": true,
++    "exit_code": 0,
++    "robcmp_opt": "-Oz",
++    "printf_calls": 1,
++    "printf_probe": true
++  },
+   "printf_dynamic_format": {
+     "printf": true,
+     "diagnostic": "printf: the format must be an ordinary string literal"
+@@ -2124,16 +2243,40 @@
+     "printf": true,
+     "diagnostic": "printf: only calls used as statements are supported"
+   },
++  "printf_postfix_unsupported": {
++    "printf": true,
++    "diagnostic": "printf: postfix increment/decrement used as a value is not supported"
++  },
++  "printf_string_variable": {
++    "printf": true,
++    "diagnostic": "printf: unsupported or unknown argument type"
++  },
+   "printf_nul_format": {
+     "printf": true,
+     "diagnostic": "printf: embedded NUL in the format is not supported"
+   },
++  "printf_scanf_pending": {
++    "printf": true,
++    "diagnostic": "unexpected '&'"
++  },
+   "printf_no_declaration": {
+     "printf": true,
+     "diagnostic": "printf: include <stdio.h> or declare the standard prototype"
+   },
+-  "printf_stub_link": {
++  "printf_long_double_unsupported": {
++    "printf": true,
++    "diagnostic": "printf: long double arguments are not supported"
++  },
++  "printf_literal_values": {
+     "printf": true,
+-    "diagnostic": "printf: recognized; argument packets are not enabled yet"
++    "contains": [
++      "printf(\"a\\303\\247\\303\\243o: %.17g %.17g %.17g %c\\n\",",
++      "bitcast("
++    ],
++    "has_main": true,
++    "exit_code": 0,
++    "robcmp_opt": "-Oz",
++    "printf_calls": 1,
++    "printf_probe": true
+   }
+ }
+--- /dev/null
++++ b/test/unit/printf_blocks.c
+@@ -0,0 +1,25 @@
++#include <stdio.h>
++
++int checks = 0;
++
++int check(int n) {
++    checks++;
++    return n;
++}
++
++int main(void) {
++    int i = 0, seen = 0;
++    while (i < 3) {
++        if (i == 1)
++            printf("middle %d\n", i);
++        else
++            printf("edge %d\n", i + 1);
++        i++;
++    }
++    for (i = 0; i < 2; i++)
++        printf("loop %d\n", i);
++    if (i == 2)
++        printf("done %d\n", i == 2 || check(0));
++    printf("checks: %d %d\n", seen && check(1), (i == 2) && (check(0) || check(7)));
++    return checks;
++}
+--- /dev/null
++++ b/test/unit/printf_literal_values.c
+@@ -0,0 +1,7 @@
++#include <stdio.h> /* The lexer must resume in printf mode after the comment. */
++
++int main(void) {
++    double value = .12345678912345678;
++    printf("ação: %.17g %.17g %.17g %c\n", value, 0.123456789f, 0x1.3p-12, '\x5a');
++    return 0;
++}
+--- /dev/null
++++ b/test/unit/printf_long_double_unsupported.c
+@@ -0,0 +1,3 @@
++#include <stdio.h>
++
++void f(void) { printf("%Lf", 2.45L); }
+--- /dev/null
++++ b/test/unit/printf_name_collision.c
+@@ -0,0 +1,9 @@
++#include <stdio.h>
++
++int __c2rob_printf_pack_0 = 99;
++
++int main(void) {
++    int __c2rob_printf_pack_1_value_1 = -5;
++    printf("%d %d\n", __c2rob_printf_pack_0, __c2rob_printf_pack_1_value_1);
++    return 0;
++}
+--- /dev/null
++++ b/test/unit/printf_packets.c
+@@ -0,0 +1,21 @@
++#include <stdio.h>
++
++int chamadas = 0;
++
++int next(int n) {
++    chamadas++;
++    return n * 2;
++}
++
++void show(signed char n, unsigned int u, long long l, unsigned long long ul,
++          float x, double y) {
++    printf("");
++    printf("Ready\n");
++    printf("%d %u %lld %llu %.2f %.2f %d %s %%\n", n, u, l, ul, x, y, next(3), "ok");
++    printf("a\x25" "d %s\n", 7, "\x41" "B");
++}
++
++int main(void) {
++    show(-2, 4294967295U, -9007199254740993LL, 18446744073709551615ULL, 1, 2);
++    return chamadas;
++}
+--- /dev/null
++++ b/test/unit/printf_postfix_unsupported.c
+@@ -0,0 +1,3 @@
++#include <stdio.h>
++
++void f(int n) { printf("%d", 2 + n++); }
+--- /dev/null
++++ b/test/unit/printf_preprocessed.c
+@@ -0,0 +1,7 @@
++#define FMT "macro %d" "\n"
++#define VALUE 31
++int printf(const char *, ...);
++int main(void) {
++    printf(FMT, VALUE);
++    return 0;
++}
+--- /dev/null
++++ b/test/unit/printf_prototype.c
+@@ -0,0 +1,8 @@
++extern int printf(const char *restrict fmt, ...);
++
++int main(void) {
++    int a = -17;
++    int v[2] = {19, 23};
++    printf("width %*d %d %d\n", 4, a, v[0], v[1]);
++    return 0;
++}
+--- /dev/null
++++ b/test/unit/printf_scanf_pending.c
+@@ -0,0 +1,7 @@
++#include <stdio.h>
++
++void f(void) {
++    int n;
++    scanf("%d", &n);
++    printf("%d\n", n);
++}
+--- /dev/null
++++ b/test/unit/printf_string_variable.c
+@@ -0,0 +1,3 @@
++#include <stdio.h>
++
++void f(char *s) { printf("%s", s); }
+--- /dev/null
++++ b/test/unit/printf_user_function.c
+@@ -0,0 +1,9 @@
++int printf(int n) {
++    return n + 2;
++}
++
++int main(void) {
++    if (printf(3) != 5)
++        return 1;
++    return printf(10);
++}

@@ -91,12 +91,16 @@ def main():
             require(translated, 'C -> ROB')
             for fragment in spec.get('contains', []):
                 assert fragment in translated.stdout, f'Missing {fragment!r}\n{translated.stdout}'
+            for fragment in spec.get('excludes', []):
+                assert fragment not in translated.stdout, f'Unexpected {fragment!r}\n{translated.stdout}'
             golden = ROOT / f'{name}.expected.rob'
             if golden.exists():
                 assert translated.stdout == golden.read_text(), 'Golden ROB regression differs'
             row['translation'] = 'pass'
             print(f'[PASS] {name}: C -> ROB')
-            if not args.robcmp:
+            if spec.get('translation_only'):
+                row.update(object='translation_only', ir='translation_only', execution='translation_only')
+            elif not args.robcmp:
                 row.update(object='skipped', ir='skipped', execution='skipped')
             else:
                 # The adapter supplies an entry point and initializes library-style fixtures.

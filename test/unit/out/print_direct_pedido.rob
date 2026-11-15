@@ -1,0 +1,10 @@
+use printf;
+
+int32 main() {
+	quantidade = int32(3);
+	preco_unitario = int32(12);
+	printf("Pedido recebido\n");
+	printf("Itens: %d | Total: R$ %d\n", quantidade, quantidade * preco_unitario);
+	return 0;
+}
+

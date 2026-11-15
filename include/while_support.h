@@ -172,6 +172,9 @@ Expression expression(Node *node, const Scope &scope, const Functions &functions
         throw ValidationError{node, "while: array field access is not supported; the current emitter performs an early read into aux"};
     } else if (auto *call = dynamic_cast<FunctionCall*>(node)) {
         auto function = functions.find(call->getName());
+        if (call->hasDirectSpelling())
+            return {call->getDirectSpelling(),
+                    function == functions.end() ? Kind::Integer : function->second.result};
         if (function != functions.end()) {
             for (Kind parameter : function->second.parameters)
                 requireIntegral({call->getName() + " (parameter type)", parameter}, node);

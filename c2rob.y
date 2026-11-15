@@ -5,12 +5,41 @@
 #include "while_support.h"
 #include "qualifier_support.h"
 #include "integer_support.h"
+#include <string_view>
 
 int yyerror(const char *s);
 int yylex(void);
 int errorcount = 0;
 int current_unamed_arg = 0;
 extern bool force_print_tree;
+extern set<string> direct_print_names;
+const char *directPrintName(string_view opening);
+void beginDirectPrint(const char *opening);
+
+static set<Node*> stdioImports;
+
+static bool isDirectPrintName(string_view name) {
+    return name == "print" || name == "printf";
+}
+
+static void addDirectPrintImports(Node *program) {
+    if (direct_print_names.empty()) return;
+    auto imports = direct_print_names;
+    auto &nodes = program->getChildren();
+    for (Node *node : nodes) {
+        if (auto *fn = dynamic_cast<Function*>(node)) {
+            imports.erase(fn->getName());
+        } else if (auto *header = dynamic_cast<Ident*>(node)) {
+            for (const auto &name : direct_print_names)
+                if (header->getText() == "use " + name + ";\n")
+                    imports.erase(name);
+        }
+    }
+    if (direct_print_names.contains("printf"))
+        std::erase_if(nodes, [](Node *node) { return stdioImports.contains(node); });
+    for (auto it = imports.rbegin(); it != imports.rend(); ++it)
+        nodes.insert(nodes.begin(), new Ident("use " + *it + ";\n"));
+}
 
 DeclarationSpecifiers *resolveDeclarationSpecifiers(DeclarationSpecifiers *spec) {
     try { spec->resolve(); }
@@ -67,7 +96,6 @@ void propagateNoInline(Node *program) {
 %union {
     const char *str;
     int64_t itg;
-    double flt;
     Node *node;
     Strings *strings;
     DeclarationSpecifiers *spec;
@@ -81,20 +109,21 @@ void propagateNoInline(Node *program) {
 %token <str> TOK_INTEGER_LITERAL
 %token TOK_INCLUDE TOK_STRUCT TOK_TYPEDEF
 %token TOK_GNU_ATTRIBUTE
+%token TOK_EXTERN TOK_RESTRICT TOK_ELLIPSIS
+%token <str> TOK_PRINT_OPEN TOK_PRINT_CALL
 %token TOK_STATIC TOK_VOLATILE TOK_CONST
 %token <str> TOK_TYPE_SPEC
 
 %type<str> TOK_STRING TOK_IDENT TOK_CMP_EQNEQ TOK_CMP_RELAT TOK_UNARY_OPERATOR TOK_ATTRIBUTION
-%type<str> TOK_INCLUDE
+%type<str> TOK_INCLUDE TOK_FLOAT function_open print_call_open
 %type<itg> TOK_INT
-%type<flt> TOK_FLOAT
 %type<node> globals global expr factor array_decl array_init_decl
 %type<node> array_values array_values_decls array_values_decl struct_values_decl
 %type<node> locals local scalar_decl scalar_init_decl attribution
 %type<node> multi_decl multi_declarators multi_declarator
 %type<node> scalar_or_array typedef_decl
 %type<node> func_arg func_args optional_func_args func_decl func_impl function_call func_call_args
-%type<node> function_header
+%type<node> function_header function_declaration
 %type<node> ifstmt elseblock forstmt whilestmt whilebody optional_locals returnstmt include
 %type<node> struct_decl struct_field struct_fields
 %type<spec> declaration_specifiers builtin_specifiers specifier_qualifiers
@@ -103,7 +132,6 @@ void propagateNoInline(Node *program) {
 
 %printer { fprintf(yyo, "%s", $$); } <str>
 %printer { fprintf(yyo, "%lld", static_cast<long long>($$)); } <itg>
-%printer { fprintf(yyo, "%lf", $$); } <flt>
 
 %left TOK_OR
 %left TOK_AND
@@ -131,11 +159,14 @@ program : globals {
     bool while_valid = scope_valid && validateWhileProgram(program);
     bool qualifier_valid = while_valid && validateQualifierProgram(program);
     bool integer_valid = qualifier_valid && validateIntegerProgram(program);
-    if (integer_valid && (errorcount == 0 || force_print_tree))
+    if (integer_valid && (errorcount == 0 || force_print_tree)) {
+        addDirectPrintImports(program);
         cout << program->toStr(-1);
+    }
     } catch (const std::exception &error) { yyerror(error.what()); }
 
-    exit(errorcount != 0 ? EXIT_FAILURE : EXIT_SUCCESS);
+    if (errorcount != 0) YYABORT;
+    YYACCEPT;
 }
 
 globals : globals[gg] global {
@@ -191,8 +222,10 @@ declaration_specifiers
 include : TOK_INCLUDE[name] {
     string name($name);
     size_t start = name.find_first_of("<\"") + 1;
+    bool stdio = name.substr(start - 1) == "<stdio.h>";
     name = name.substr(start, name.length()-3-start);
     $$ = new Ident("use " + name + ";\n");
+    if (stdio) stdioImports.insert($$);
 }
 
 typedef_decl : TOK_TYPEDEF declaration_specifiers[src] TOK_IDENT[name] {
@@ -233,36 +266,57 @@ function_attribute : TOK_GNU_ATTRIBUTE '(' '(' TOK_IDENT[name] ')' ')' {
         yyerror(("unsupported GNU function attribute: " + name).c_str());
 }
 
-function_header : declaration_specifiers[type] TOK_IDENT[name] '(' optional_func_args ')' {
+function_open : TOK_IDENT[name] '(' { $$ = $name; }
+              | TOK_PRINT_OPEN[opening] { $$ = directPrintName($opening); }
+              ;
+
+function_header : declaration_specifiers[type] function_open[name] optional_func_args ')' {
     $$ = makeFunctionHeader($type, $name, $optional_func_args);
 }
 
-function_header : declaration_specifiers[type] '*' TOK_IDENT[name] '(' optional_func_args ')' {
+function_header : declaration_specifiers[type] '*' function_open[name] optional_func_args ')' {
     $$ = makeFunctionHeader($type, $name, $optional_func_args);
     ((Function*)$$)->markPointerResult();
 }
 
-function_header : function_attribute[attr] declaration_specifiers[type] TOK_IDENT[name] '(' optional_func_args ')' {
+function_header : function_attribute[attr] declaration_specifiers[type] function_open[name] optional_func_args ')' {
     auto *function = makeFunctionHeader($type, $name, $optional_func_args);
     if ($attr) function->markNoInline();
     $$ = function;
 }
 
-function_header : declaration_specifiers[type] function_attribute[attr] TOK_IDENT[name] '(' optional_func_args ')' {
+function_header : declaration_specifiers[type] function_attribute[attr] function_open[name] optional_func_args ')' {
     auto *function = makeFunctionHeader($type, $name, $optional_func_args);
     if ($attr) function->markNoInline();
     $$ = function;
 }
 
-func_decl : function_header
+function_header : declaration_specifiers[type] function_open[name] func_args ',' TOK_ELLIPSIS ')' {
+    if (!isDirectPrintName($name))
+        yyerror("variadic prototypes are supported only for print/printf");
+    if ($func_args->getChildren().empty())
+        yyerror("a variadic prototype must have at least one fixed parameter");
+    auto *function = makeFunctionHeader($type, $name, $func_args);
+    function->markVariadic();
+    $$ = function;
+}
+
+func_decl : function_declaration
+          | TOK_EXTERN function_declaration { $$ = $function_declaration; }
+          ;
+
+function_declaration : function_header
           | function_header function_attribute[attr] {
     $$ = $function_header;
     if ($attr) static_cast<Function*>($$)->markNoInline();
 }
 
 func_impl : function_header '{' optional_locals '}' {
-    $$ = $function_header;
-    static_cast<Function*>($$)->setBody($optional_locals);
+    auto *function = static_cast<Function*>($function_header);
+    if (function->isVariadic())
+        yyerror("variadic definitions are not supported by this translator");
+    function->setBody($optional_locals);
+    $$ = function;
 }
 
 // Keep the empty alternative outside the comma-separated list: reject f(, int n).
@@ -300,6 +354,8 @@ pointer_arg : '*' {
 pointer_arg : '*' '*' {
     $$ = 1;
 }
+
+pointer_arg : pointer_arg[ptr] TOK_RESTRICT { $$ = $ptr; }
 
 // An unqualified, unnamed void is the sole zero-parameter marker.
 func_arg : declaration_specifiers[type] {
@@ -564,8 +620,8 @@ factor : TOK_INT[itg] {
     $$ = new Integer($itg);
 }
 
-factor : TOK_FLOAT[flt] {
-    $$ = new Float($flt);
+factor : TOK_FLOAT[text] {
+    $$ = new Float($text);
 }
 
 factor : TOK_STRING[str] {
@@ -602,6 +658,17 @@ function_call : TOK_IDENT[id] '(' ')' {
 
 function_call : TOK_IDENT[id] '(' func_call_args[args] ')' {
     $$ = new FunctionCall($id, $args);
+}
+
+// Reduce immediately after the opening, before fetching an argument token.
+// Normal definitions and prototypes use function_open instead.
+print_call_open : TOK_PRINT_OPEN[opening] {
+    beginDirectPrint($opening);
+    $$ = directPrintName($opening);
+}
+
+function_call : print_call_open[name] TOK_PRINT_CALL[call] {
+    $$ = new FunctionCall($name, string($call));
 }
 
 func_call_args : func_call_args[gg] ',' expr {

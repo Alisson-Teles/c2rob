@@ -1,0 +1,8 @@
+
+int32 printf(char[] fmt, ...);
+
+int32 main() {
+	printf("argc = %u\n", 0x10U);
+	return 0;
+}
+

@@ -1,0 +1,15 @@
+// C2ROB: printf bridge; requires a separately linked implementation.
+use c2rob_printf;
+
+int32 main() {
+	a = int32(-17);
+	v = {int32(19), 23};
+	__c2rob_printf_pack_0_value_1 = int32(4);
+	__c2rob_printf_pack_0_value_2 = int32(a);
+	__c2rob_printf_pack_0_value_3 = int32(v[0]);
+	__c2rob_printf_pack_0_value_4 = int32(v[1]);
+	__c2rob_printf_pack_0 = {uint64(4), uint64(1), uint64(int64(__c2rob_printf_pack_0_value_1)), uint64(1), uint64(int64(__c2rob_printf_pack_0_value_2)), uint64(1), uint64(int64(__c2rob_printf_pack_0_value_3)), uint64(1), uint64(int64(__c2rob_printf_pack_0_value_4))};
+	printf("width %*d %d %d\n", __c2rob_printf_pack_0);
+	return 0;
+}
+

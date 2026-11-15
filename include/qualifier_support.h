@@ -121,7 +121,13 @@ public:
             for (Node *node : fn->getArgs()->getChildren()) {
                 auto *arg = static_cast<FuncArg*>(node);
                 checkQualifiers(arg);
-                if (arg->isSourcePointer() && arg->isSourceConst()) throw cwhile::ValidationError{arg, "declaration: qualified pointer parameters are not supported in this increment"};
+                // The external print prototype borrows a read-only format;
+                // ROB spells that parameter char[]. No body is emitted here.
+                bool printFormat = fn->isVariadic() && !fn->getBody() &&
+                                   node == fn->getArgs()->getChildren().front() &&
+                                   arg->getTypeName() == "char*";
+                if (arg->isSourcePointer() && arg->isSourceConst() && !printFormat)
+                    throw cwhile::ValidationError{arg, "declaration: qualified pointer parameters are not supported in this increment"};
                 scope[arg->getName()] = {arg->getTypeName(), arg->isSourceConst()};
             }
             statements(fn->getBody(), scope);

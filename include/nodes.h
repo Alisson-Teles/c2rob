@@ -8,6 +8,8 @@
 #include <set>
 #include <regex>
 #include <format>
+#include <cmath>
+#include <cstdlib>
 
 extern int errorcount;
 extern int yylineno;
@@ -144,15 +146,21 @@ public:
 
 class Float : public Node {
 protected:
-    float value;
+    string source;
 public:
-    Float(const float v) {
-        value = v;
-    }
+    explicit Float(const string &text) : source(text) {}
 
     virtual string toStr(int il) override {
         if (hasCheckedExpression) return checkedExpression;
-        return to_string(value);
+        char suffix = source.back();
+        if (suffix == 'l' || suffix == 'L') throw runtime_error("long double literals are not supported");
+        // Retain the pilot's spelling for decimal literals it already accepted.
+        if (source.front() != '.' && source.find_first_not_of("0123456789.") == string::npos)
+            return to_string(static_cast<float>(strtod(source.c_str(), nullptr)));
+        bool single = suffix == 'f' || suffix == 'F';
+        double value = single ? static_cast<double>(strtof(source.c_str(), nullptr)) : strtod(source.c_str(), nullptr);
+        if (!std::isfinite(value)) throw runtime_error("floating literal is not finite");
+        return single ? std::format("{:.8e}", value) : std::format("{:.16e}D", value);
     }
 };
 
@@ -618,6 +626,7 @@ protected:
     Node *commands = nullptr;
     bool pointerResult = false;
     bool noInline = false;
+    bool variadic = false;
 public:
     const string getName() override { return name; }
     const string &getTypeName() const { return type; }
@@ -627,6 +636,8 @@ public:
     bool hasPointerResult() const { return pointerResult; }
     void markNoInline() { noInline = true; }
     bool hasNoInline() const { return noInline; }
+    void markVariadic() { variadic = true; }
+    bool isVariadic() const { return variadic; }
     Function(const string t, const string n, Node *a) {
         name = n;
         type = VariableDecl::convertTypeToRob(t);
@@ -654,6 +665,8 @@ public:
         result += name;
         result += '(';
         result += sargs;
+        if (variadic)
+            result += ", ...";
         result += ')';
         if (noInline)
             result += " noinline";
@@ -673,10 +686,13 @@ protected:
     string name;
     Node *args = nullptr;
     bool inExpr = true;
+    string directSpelling;
 public:
     const string getName() override { return name; }
     void setName(const string &text) { name = text; }
     Node *getArgs() const { return args; }
+    bool hasDirectSpelling() const { return !directSpelling.empty(); }
+    const string &getDirectSpelling() const { return directSpelling; }
     FunctionCall(const string n) {
         name = n;
     }
@@ -686,11 +702,15 @@ public:
         args = a;
     }
 
+    FunctionCall(const string &n, const string &source) : name(n), directSpelling(source) {}
+
     void setInExpr(bool v) {
         inExpr = v;
     }
 
     virtual string toStr(int il) override {
+        if (hasDirectSpelling())
+            return inExpr ? directSpelling : identation(il) + directSpelling + ";\n";
         if (hasCheckedExpression)
             return (inExpr ? "" : identation(il)) + checkedExpression + (inExpr ? "" : ";\n");
         string result;

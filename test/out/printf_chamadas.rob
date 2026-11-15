@@ -1,0 +1,20 @@
+use printf;
+registradas = int32(0);
+
+int32 registrar(int32 numero) {
+	registradas++;
+	return 100 + numero;
+}
+
+
+int32 main() {
+	i = int32(1);
+	while i <= 2 {
+		printf("Chamado %d\n", registrar(i));
+		i++;
+	}
+
+	printf("Registros: %d\n", registradas);
+	return int32(int32(uint32(registradas != 2)));
+}
+

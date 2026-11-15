@@ -1,0 +1,2 @@
+// Declaration for a future variadic Robcmp.
+int32 printf(char[] format, ...);

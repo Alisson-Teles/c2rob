@@ -1,0 +1,13 @@
+
+int32 printf(char[] fmt, ...);
+
+int32 main() {
+	n = int32(7);
+	while n > 0 {
+		n = printf("%u\n", 7U);
+		return printf("%d\n", n);
+	}
+
+	return 0;
+}
+

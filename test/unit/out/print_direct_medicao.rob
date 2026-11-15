@@ -1,0 +1,9 @@
+use printf;
+
+int32 main() {
+	temperatura = float(2.35000000e+01);
+	umidade = uint32(uint32(64));
+	printf("%s: %.1f C, umidade %u%%\n", "Sala 2", temperatura, umidade);
+	return 0;
+}
+

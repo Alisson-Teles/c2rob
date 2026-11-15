@@ -1,0 +1,14 @@
+// C2ROB: printf bridge; requires a separately linked implementation.
+use c2rob_printf;
+
+int32 main() {
+	value = double(1.2345678912345678e-01D);
+	__c2rob_printf_pack_0_value_1 = double(value);
+	__c2rob_printf_pack_0_value_2 = double(1.23456791e-01);
+	__c2rob_printf_pack_0_value_3 = double(2.8991699218750000e-04D);
+	__c2rob_printf_pack_0_value_4 = int32(90);
+	__c2rob_printf_pack_0 = {uint64(4), uint64(5), bitcast(__c2rob_printf_pack_0_value_1, uint64), uint64(5), bitcast(__c2rob_printf_pack_0_value_2, uint64), uint64(5), bitcast(__c2rob_printf_pack_0_value_3, uint64), uint64(1), uint64(int64(__c2rob_printf_pack_0_value_4))};
+	printf("a\303\247\303\243o: %.17g %.17g %.17g %c\n", __c2rob_printf_pack_0);
+	return 0;
+}
+

@@ -1,0 +1,10 @@
+use c2rob_printf;
+
+int32 main() {
+    n = int32(7);
+    sem_valores = {uint64(0)};
+    com_valor = {uint64(1), uint64(1), uint64(int64(n))};
+    printf("Pronto\n", sem_valores);
+    printf("n = %d\n", com_valor);
+    return 0;
+}
